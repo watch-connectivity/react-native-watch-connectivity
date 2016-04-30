@@ -1,0 +1,17 @@
+source 'https://github.com/CocoaPods/Specs.git'
+pod 'React', :subspecs => [
+                'RCTImage',
+                'RCTCameraRoll',
+                'RCTNetwork',
+                'RCTText',
+                'RCTWebSocket',
+                'RCTLinkingIOS',
+                'RCTSettings',
+                'RCTGeolocation',
+                'RCTActionSheet'
+             ],
+             :path => '../node_modules/react-native'
+
+pod 'react-native-fbsdkcore', :path => '../node_modules/react-native-fbsdkcore'
+pod 'react-native-fbsdklogin', :path => '../node_modules/react-native-fbsdklogin'
+pod 'react-native-fbsdkshare', :path => '../node_modules/react-native-fbsdkshare'

@@ -1,0 +1,1 @@
+../../../../../node_modules/react-native-fbsdklogin/iOS/RCTFBSDKLoginButtonManager.h

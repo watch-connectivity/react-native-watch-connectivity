@@ -1,0 +1,1 @@
+../../../../../node_modules/react-native-fbsdkcore/iOS/RCTConvert+FBSDKAccessToken.h

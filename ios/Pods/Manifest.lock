@@ -1,0 +1,82 @@
+PODS:
+  - Bolts (1.7.0):
+    - Bolts/AppLinks (= 1.7.0)
+    - Bolts/Tasks (= 1.7.0)
+  - Bolts/AppLinks (1.7.0):
+    - Bolts/Tasks
+  - Bolts/Tasks (1.7.0)
+  - FBSDKCoreKit (4.11.0):
+    - Bolts (~> 1.7)
+  - FBSDKLoginKit (4.11.0):
+    - FBSDKCoreKit
+  - FBSDKShareKit (4.11.0):
+    - FBSDKCoreKit
+  - React (0.24.1):
+    - React/Core (= 0.24.1)
+  - react-native-fbsdkcore (0.0.8):
+    - FBSDKCoreKit
+    - React
+  - react-native-fbsdklogin (0.0.8):
+    - FBSDKCoreKit
+    - FBSDKLoginKit
+    - React
+  - react-native-fbsdkshare (0.0.8):
+    - FBSDKCoreKit
+    - FBSDKShareKit
+    - React
+  - React/Core (0.24.1)
+  - React/RCTActionSheet (0.24.1):
+    - React/Core
+  - React/RCTCameraRoll (0.24.1):
+    - React/Core
+  - React/RCTGeolocation (0.24.1):
+    - React/Core
+  - React/RCTImage (0.24.1):
+    - React/Core
+    - React/RCTNetwork
+  - React/RCTLinkingIOS (0.24.1):
+    - React/Core
+  - React/RCTNetwork (0.24.1):
+    - React/Core
+  - React/RCTSettings (0.24.1):
+    - React/Core
+  - React/RCTText (0.24.1):
+    - React/Core
+  - React/RCTWebSocket (0.24.1):
+    - React/Core
+
+DEPENDENCIES:
+  - react-native-fbsdkcore (from `../node_modules/react-native-fbsdkcore`)
+  - react-native-fbsdklogin (from `../node_modules/react-native-fbsdklogin`)
+  - react-native-fbsdkshare (from `../node_modules/react-native-fbsdkshare`)
+  - React/RCTActionSheet (from `../node_modules/react-native`)
+  - React/RCTCameraRoll (from `../node_modules/react-native`)
+  - React/RCTGeolocation (from `../node_modules/react-native`)
+  - React/RCTImage (from `../node_modules/react-native`)
+  - React/RCTLinkingIOS (from `../node_modules/react-native`)
+  - React/RCTNetwork (from `../node_modules/react-native`)
+  - React/RCTSettings (from `../node_modules/react-native`)
+  - React/RCTText (from `../node_modules/react-native`)
+  - React/RCTWebSocket (from `../node_modules/react-native`)
+
+EXTERNAL SOURCES:
+  React:
+    :path: ../node_modules/react-native
+  react-native-fbsdkcore:
+    :path: ../node_modules/react-native-fbsdkcore
+  react-native-fbsdklogin:
+    :path: ../node_modules/react-native-fbsdklogin
+  react-native-fbsdkshare:
+    :path: ../node_modules/react-native-fbsdkshare
+
+SPEC CHECKSUMS:
+  Bolts: a0058fa3b331c5a1e4402d534f2dae36dbff31e4
+  FBSDKCoreKit: 686ac982723a14ec9ddb85e2f81235d7706c891b
+  FBSDKLoginKit: bade9fc78277764149ccc5bfaadbf13c83175c6a
+  FBSDKShareKit: 2d1746144cfc8a9dbbd24997c34ee0471be51b6a
+  React: 386bbe687faee56ab75bad6132813945d5857403
+  react-native-fbsdkcore: 41561900e8f26faffdf150aae1b2495605487f5c
+  react-native-fbsdklogin: d4c1e156516ac8c17dd46224531fa76ace3d0fb1
+  react-native-fbsdkshare: 6f4fe6174e0225ff81132d5d64345646338ac6da
+
+COCOAPODS: 0.39.0
