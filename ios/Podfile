@@ -11,7 +11,3 @@ pod 'React', :subspecs => [
                 'RCTActionSheet'
              ],
              :path => '../node_modules/react-native'
-
-pod 'react-native-fbsdkcore', :path => '../node_modules/react-native-fbsdkcore'
-pod 'react-native-fbsdklogin', :path => '../node_modules/react-native-fbsdklogin'
-pod 'react-native-fbsdkshare', :path => '../node_modules/react-native-fbsdkshare'

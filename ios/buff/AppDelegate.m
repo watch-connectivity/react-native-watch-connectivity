@@ -8,8 +8,8 @@
  */
 
 #import "AppDelegate.h"
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import "RCTRootView.h"
+#import "WatchBridge.h"
 
 @implementation AppDelegate
 
@@ -54,8 +54,11 @@
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   
-  [[FBSDKApplicationDelegate sharedInstance] application:application
-                           didFinishLaunchingWithOptions:launchOptions];
+  self.watchBridge = [WatchBridge shared];
+  self.session = self.watchBridge.session;
+  
+  NSLog(@"watch bridge initialised");
+
   return YES;
 }
 

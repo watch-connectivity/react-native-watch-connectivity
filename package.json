@@ -1,15 +1,15 @@
 {
-  "name": "buff",
+  "name": "react-native-iwatch-bridge",
   "version": "0.0.1",
-  "private": true,
+  "private": false,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
     "react": "^0.14.8",
-    "react-native": "^0.24.1",
-    "react-native-fbsdkcore": "0.0.8",
-    "react-native-fbsdklogin": "0.0.8",
-    "react-native-fbsdkshare": "0.0.8"
+    "react-native": "^0.24.1"
+  },
+  "devDependencies": {
+    "babel-preset-react-native-stage-0": "^1.0.1"
   }
 }

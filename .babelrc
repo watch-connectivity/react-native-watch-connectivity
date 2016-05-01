@@ -1,0 +1,8 @@
+{
+  "presets": [
+    "react-native-stage-0"
+  ],
+  "ignore": [
+    "node_modules/firebase/**/*.js"
+  ]
+}
