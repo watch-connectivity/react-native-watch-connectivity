@@ -15,7 +15,7 @@ import React, {
   Dimensions,
   Image,
   LayoutAnimation,
-  NativeAppEventEmitter
+  DeviceEventEmitter
 } from 'react-native'
 
 import * as watchBridge from './src/WatchBridge.js'
@@ -32,25 +32,26 @@ class buff extends Component {
       messages:   [],
       reachable:  false,
       loading:    false,
+      text:       '',
       watchState: watchBridge.WatchState.Inactive
     }
   }
 
   keyboardWillHide () {
-    this.keyboardLayout()
+    this.configureNextAnimation()
     this.setState({spacerStyle: {height: 0}})
   }
 
   keyboardWillShow (e) {
     const keyboardHeight = e.endCoordinates.height
-    this.keyboardLayout()
+    this.configureNextAnimation()
     this.setState({spacerStyle: {height: keyboardHeight}})
   }
 
   listenToKeyboard () {
     const subscriptions                = [
-      NativeAppEventEmitter.addListener(EVENT_KEYBOARD_SHOW, ::this.keyboardWillShow),
-      NativeAppEventEmitter.addListener(EVENT_KEYBOARD_HIDE, ::this.keyboardWillHide)
+      DeviceEventEmitter.addListener(EVENT_KEYBOARD_SHOW, ::this.keyboardWillShow),
+      DeviceEventEmitter.addListener(EVENT_KEYBOARD_HIDE, ::this.keyboardWillHide)
     ]
     this.unsubscribeFromKeyboardEvents = () => subscriptions.forEach(fn => fn())
   }
@@ -73,22 +74,24 @@ class buff extends Component {
   }
 
   sendMessage () {
-    const timestamp = new Date().getTime()
-    const text      = this.state.text
-    this.configureNextAnimation()
-    this.setState({loading: true, timeTakenToReachWatch: null, timeTakenToReply: null})
-    watchBridge.sendMessage({text, timestamp}, (err, resp) => {
-      if (!err) {
-        console.log('response received', resp)
-        const timeTakenToReachWatch = resp.elapsed
-        const timeTakenToReply      = new Date().getTime() - parseInt(resp.timestamp)
-        this.configureNextAnimation()
-        this.setState({timeTakenToReachWatch, timeTakenToReply, loading: false})
-      }
-      else {
-        console.error('error sending message to watch', err)
-      }
-    })
+    const text = this.state.text
+    if (text.trim().length) {
+      const timestamp = new Date().getTime()
+      this.configureNextAnimation()
+      this.setState({loading: true, timeTakenToReachWatch: null, timeTakenToReply: null})
+      watchBridge.sendMessage({text, timestamp}, (err, resp) => {
+        if (!err) {
+          console.log('response received', resp)
+          const timeTakenToReachWatch = resp.elapsed
+          const timeTakenToReply      = new Date().getTime() - parseInt(resp.timestamp)
+          this.configureNextAnimation()
+          this.setState({timeTakenToReachWatch, timeTakenToReply, loading: false})
+        }
+        else {
+          console.error('error sending message to watch', err)
+        }
+      })
+    }
   }
 
   receiveWatchReachability (err, reachable) {
@@ -122,15 +125,18 @@ class buff extends Component {
           style={{width: 146, height: 269, marginBottom: ROW_MARGIN}}
           source={{uri: 'Watch'}}
         />
-        <Text style={styles.reachability}>
-          Watch session is <Text style={styles.boldText}>{this.state.watchState.toUpperCase()}</Text> and <Text
-          style={styles.boldText}>{this.state.reachable ? 'REACHABLE' : 'UNREACHABLE'}</Text>
-        </Text>
-        {hasResponse ? <Text style={styles.reachability}>
-          The last message took <Text style={styles.boldText}>{timeTakenToReachWatch + 'ms '}</Text>
-          to reach the watch and <Text style={styles.boldText}>{timeTakenToReply + 'ms '}</Text>
-          for the response to arrive
-        </Text> : null}
+        <View>
+          <Text style={styles.reachability}>
+            Watch session is <Text style={styles.boldText}>{this.state.watchState.toUpperCase()}</Text> and <Text
+            style={styles.boldText}>{this.state.reachable ? 'REACHABLE' : 'UNREACHABLE'}</Text>
+          </Text>
+          {hasResponse ? <Text style={styles.reachability}>
+            The last message took <Text style={styles.boldText}>{timeTakenToReachWatch + 'ms '}</Text>
+            to reach the watch. It then took <Text style={styles.boldText}>{timeTakenToReply + 'ms '}</Text>
+            for the response to arrive
+          </Text> : null}
+        </View>
+
         <TextInput
           style={styles.textInput}
           ref={e => this.textField = e}
@@ -141,12 +147,14 @@ class buff extends Component {
         </TextInput>
         {!this.state.loading ? <TouchableOpacity
           style={styles.button}
+          disabled={!this.state.text.trim().length}
           onPress={::this.sendMessage}
         >
           <Text style={styles.buttonText}>
             CHANGE MESSAGE
           </Text>
         </TouchableOpacity> : <Spinner type="Bounce" color={orange} size={44}/>}
+        <View style={this.state.spacerStyle}/>
       </View>
     )
   }
