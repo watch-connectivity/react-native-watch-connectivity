@@ -7,29 +7,36 @@
 //
 
 import WatchKit
+import WatchConnectivity
 import Foundation
 
-class InterfaceController: WKInterfaceController {
+class InterfaceController: WKInterfaceController, WCSessionDelegate {
+  @IBOutlet weak var label: WKInterfaceLabel!
 
-  var bridge: WatchBridge = WatchBridge.sharedInstance
+  var session: WCSession?
   
-    override func awakeWithContext(context: AnyObject?) {
-        super.awakeWithContext(context)
-      print("Hi there...")
+  override func awakeWithContext(context: AnyObject?) {
+    super.awakeWithContext(context)
+    if WCSession.isSupported() {
+      print("Activating watch session")
+      self.session = WCSession.defaultSession()
+      self.session?.delegate = self
+      self.session?.activateSession()
     }
+  }
 
-    override func willActivate() {
-        // This method is called when watch view controller is about to be visible to user
-      super.willActivate()
-//      let message: [String:AnyObject] = ["message": "yo"]
-//      bridge.sendMessage(message) { (message: Dictionary<String, AnyObject>) in
-//        print("reply received")
-//      }
-    }
+  override func willActivate() {
+    super.willActivate()
+  }
 
-    override func didDeactivate() {
-        // This method is called when watch view controller is no longer visible
-        super.didDeactivate()
-    }
+  override func didDeactivate() {
+    super.didDeactivate()
+  }
+
+  func session(session: WCSession, didReceiveMessage message: [String : AnyObject], replyHandler: ([String : AnyObject]) -> Void) {
+    print("watch received message", message);
+    let text = message["text"] as! String
+    self.label.setText(text)
+  }
 
 }

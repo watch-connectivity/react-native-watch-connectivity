@@ -49,3 +49,8 @@ const unsubscribe = subscribeToFileTransfers(
     }
 )
 ```
+
+#### subscribeToWatchReachability
+
+NOTE: Reachability is VERY buggy in the simulator. See [this](https://forums.developer.apple.com/thread/14518) thread.
+

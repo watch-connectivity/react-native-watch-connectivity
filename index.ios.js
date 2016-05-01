@@ -11,6 +11,9 @@ import React, {
   Text,
   View,
   TouchableOpacity,
+  TextInput,
+  Dimensions,
+  Image,
   DeviceEventEmitter
 } from 'react-native'
 
@@ -22,7 +25,7 @@ class buff extends Component {
     this.state = {
       messages:   [],
       reachable:  false,
-      watchState: watchBridge.WatchState.WCSessionActivationStateInactive
+      watchState: watchBridge.WatchState.Inactive
     }
   }
 
@@ -35,7 +38,9 @@ class buff extends Component {
   }
 
   sendMessage () {
-
+    const timestamp = Math.floor(new Date().getTime() / 1000)
+    const text      = this.state.text
+    watchBridge.sendMessage({text, timestamp})
   }
 
   receiveWatchReachability (err, reachable) {
@@ -55,16 +60,29 @@ class buff extends Component {
   render () {
     return (
       <View style={styles.container}>
-        <Text style={styles.reachability}>Watch Session State: {this.state.watchState}</Text>
+        <Image
+          style={{width: 146, height: 269, marginBottom: ROW_MARGIN}}
+          source={{uri: 'Watch'}}
+        />
         <Text style={styles.reachability}>
-          {this.state.reachable ? 'Watch is reachable' : 'Watch is not reachable'}
+          Watch session is <Text style={styles.boldText}>{this.state.watchState.toUpperCase()}</Text> and <Text
+          style={styles.boldText}>{this.state.reachable ? 'REACHABLE' : 'UNREACHABLE'}</Text>
         </Text>
+        <TextInput
+          style={styles.textInput}
+          ref={e => this.textField = e}
+          value={this.state.text}
+          onChangeText={text => this.setState({text})}
+          placeholder="Message"
+        >
+
+        </TextInput>
         <TouchableOpacity
           style={styles.button}
           onPress={::this.sendMessage}
         >
           <Text style={styles.buttonText}>
-            Send Message
+            CHANGE MESSAGE
           </Text>
         </TouchableOpacity>
       </View>
@@ -88,12 +106,22 @@ class buff extends Component {
   }
 }
 
+const purple = '#34314c'
+const blue   = 'rgb(133, 187, 220)'
+const yellow = '#ffc952'
+const orange = '#ff7473'
+
+const WINDOW_WIDTH = Dimensions.get('window').width
+
+const ROW_MARGIN = 30
+
 const styles = StyleSheet.create({
   container:    {
     flex:            1,
     justifyContent:  'center',
     alignItems:      'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: purple,
+    width:           WINDOW_WIDTH
   },
   welcome:      {
     fontSize:  20,
@@ -106,18 +134,32 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   button:       {
-    borderStyle:     'solid',
     borderRadius:    6,
-    borderColor:     'black',
-    backgroundColor: 'blue',
-    padding:         10
+    backgroundColor: blue,
+    padding:         10,
   },
   buttonText:   {
-    color:    'white',
-    fontSize: 20,
+    color:         'rgb(50, 50, 53)',
+    fontSize:      20,
+    letterSpacing: 0.5,
+    fontWeight:    'bold'
   },
   reachability: {
-    marginBottom: 10
+    marginBottom: ROW_MARGIN,
+    color:        'white'
+  },
+  textInput:    {
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    height:          60,
+    width:           300,
+    color:           'white',
+    marginBottom:    ROW_MARGIN,
+    borderRadius:    6,
+    padding:         20,
+    alignSelf:       'center'
+  },
+  boldText:     {
+    fontWeight: 'bold'
   }
 })
 

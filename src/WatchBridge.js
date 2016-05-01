@@ -103,7 +103,7 @@ export function getWatchState (cb = function () {}) {
   })
 }
 
-export function getWatchReachability (cb = function () {}) {
+export function getWatchReachability (cb) {
   return new Promise(resolve => {
     watchBridge.getReachability(reachability => {
       cb(null, reachability)

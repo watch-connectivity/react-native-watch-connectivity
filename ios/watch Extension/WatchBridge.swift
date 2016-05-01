@@ -10,9 +10,6 @@ import WatchKit
 import WatchConnectivity
 
 class WatchBridge: NSObject, WCSessionDelegate {
-  var exercises: NSArray = []
-  var sets: NSArray = []
-
   static let sharedInstance = WatchBridge()
 
   override init() {
