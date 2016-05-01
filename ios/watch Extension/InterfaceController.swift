@@ -36,7 +36,11 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
   func session(session: WCSession, didReceiveMessage message: [String : AnyObject], replyHandler: ([String : AnyObject]) -> Void) {
     print("watch received message", message);
     let text = message["text"] as! String
+    let timestamp : Double = (message["timestamp"] as! NSNumber).doubleValue
     self.label.setText(text)
+    let currentTimestamp: Double = NSDate().timeIntervalSince1970 * 1000
+    let elapsed : Double = currentTimestamp - timestamp
+    replyHandler(["elapsed":Int(elapsed), "timestamp": round(currentTimestamp)])
   }
 
 }

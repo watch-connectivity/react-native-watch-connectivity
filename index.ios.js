@@ -14,10 +14,16 @@ import React, {
   TextInput,
   Dimensions,
   Image,
-  DeviceEventEmitter
+  LayoutAnimation,
+  NativeAppEventEmitter
 } from 'react-native'
 
 import * as watchBridge from './src/WatchBridge.js'
+import Spinner from 'react-native-spinkit'
+
+const LAYOUT_ANIM_PRESET  = LayoutAnimation.Presets.easeInEaseOut
+const EVENT_KEYBOARD_SHOW = 'keyboardWillShow'
+const EVENT_KEYBOARD_HIDE = 'keyboardWillHide'
 
 class buff extends Component {
   constructor (props) {
@@ -25,11 +31,31 @@ class buff extends Component {
     this.state = {
       messages:   [],
       reachable:  false,
+      loading:    false,
       watchState: watchBridge.WatchState.Inactive
     }
   }
 
-  componentDidMount () {
+  keyboardWillHide () {
+    this.keyboardLayout()
+    this.setState({spacerStyle: {height: 0}})
+  }
+
+  keyboardWillShow (e) {
+    const keyboardHeight = e.endCoordinates.height
+    this.keyboardLayout()
+    this.setState({spacerStyle: {height: keyboardHeight}})
+  }
+
+  listenToKeyboard () {
+    const subscriptions                = [
+      NativeAppEventEmitter.addListener(EVENT_KEYBOARD_SHOW, ::this.keyboardWillShow),
+      NativeAppEventEmitter.addListener(EVENT_KEYBOARD_HIDE, ::this.keyboardWillHide)
+    ]
+    this.unsubscribeFromKeyboardEvents = () => subscriptions.forEach(fn => fn())
+  }
+
+  subscribeToWatchEvents () {
     this.subscriptions = [
       watchBridge.subscribeToMessages(::this.receiveMessage),
       watchBridge.subscribeToWatchState(::this.receiveWatchState),
@@ -37,15 +63,38 @@ class buff extends Component {
     ]
   }
 
+  componentDidMount () {
+    this.listenToKeyboard()
+    this.subscribeToWatchEvents()
+  }
+
+  configureNextAnimation () {
+    LayoutAnimation.configureNext(LAYOUT_ANIM_PRESET)
+  }
+
   sendMessage () {
-    const timestamp = Math.floor(new Date().getTime() / 1000)
+    const timestamp = new Date().getTime()
     const text      = this.state.text
-    watchBridge.sendMessage({text, timestamp})
+    this.configureNextAnimation()
+    this.setState({loading: true, timeTakenToReachWatch: null, timeTakenToReply: null})
+    watchBridge.sendMessage({text, timestamp}, (err, resp) => {
+      if (!err) {
+        console.log('response received', resp)
+        const timeTakenToReachWatch = resp.elapsed
+        const timeTakenToReply      = new Date().getTime() - parseInt(resp.timestamp)
+        this.configureNextAnimation()
+        this.setState({timeTakenToReachWatch, timeTakenToReply, loading: false})
+      }
+      else {
+        console.error('error sending message to watch', err)
+      }
+    })
   }
 
   receiveWatchReachability (err, reachable) {
     if (!err) {
       console.log('received watch reachability', reachable)
+      this.configureNextAnimation()
       this.setState({reachable})
     }
     else {
@@ -53,11 +102,20 @@ class buff extends Component {
     }
   }
 
-  componentWillUnmount () {
+  unsubscribeFromWatchEvents () {
     this.subscriptions.forEach(fn => fn())
   }
 
+  componentWillUnmount () {
+    this.unsubscribeFromWatchEvents()
+    this.unsubscribeFromKeyboardEvents()
+  }
+
   render () {
+    const {timeTakenToReachWatch, timeTakenToReply} = this.state
+
+    const hasResponse = timeTakenToReachWatch && timeTakenToReply
+
     return (
       <View style={styles.container}>
         <Image
@@ -68,6 +126,11 @@ class buff extends Component {
           Watch session is <Text style={styles.boldText}>{this.state.watchState.toUpperCase()}</Text> and <Text
           style={styles.boldText}>{this.state.reachable ? 'REACHABLE' : 'UNREACHABLE'}</Text>
         </Text>
+        {hasResponse ? <Text style={styles.reachability}>
+          The last message took <Text style={styles.boldText}>{timeTakenToReachWatch + 'ms '}</Text>
+          to reach the watch and <Text style={styles.boldText}>{timeTakenToReply + 'ms '}</Text>
+          for the response to arrive
+        </Text> : null}
         <TextInput
           style={styles.textInput}
           ref={e => this.textField = e}
@@ -75,16 +138,15 @@ class buff extends Component {
           onChangeText={text => this.setState({text})}
           placeholder="Message"
         >
-
         </TextInput>
-        <TouchableOpacity
+        {!this.state.loading ? <TouchableOpacity
           style={styles.button}
           onPress={::this.sendMessage}
         >
           <Text style={styles.buttonText}>
             CHANGE MESSAGE
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> : <Spinner type="Bounce" color={orange} size={44}/>}
       </View>
     )
   }
@@ -93,6 +155,7 @@ class buff extends Component {
     if (err) console.error(`Error receiving message`, err)
     else {
       console.log('app received message', payload)
+      this.configureNextAnimation()
       this.setState({messages: [...messages, payload]})
     }
   }
@@ -101,6 +164,7 @@ class buff extends Component {
     if (err) console.error(`Error receiving watch state`, err)
     else {
       console.log('received watch state', watchState)
+      this.configureNextAnimation()
       this.setState({watchState})
     }
   }
@@ -137,6 +201,7 @@ const styles = StyleSheet.create({
     borderRadius:    6,
     backgroundColor: blue,
     padding:         10,
+    height:          44
   },
   buttonText:   {
     color:         'rgb(50, 50, 53)',
@@ -146,7 +211,10 @@ const styles = StyleSheet.create({
   },
   reachability: {
     marginBottom: ROW_MARGIN,
-    color:        'white'
+    color:        'white',
+    marginLeft:   ROW_MARGIN,
+    marginRight:  ROW_MARGIN,
+    textAlign:    'center',
   },
   textInput:    {
     backgroundColor: 'rgba(255, 255, 255, 0.05)',

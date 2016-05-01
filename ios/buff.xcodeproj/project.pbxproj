@@ -25,6 +25,7 @@
 		2716DE2E1CD4AA1B00027DC3 /* watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 2716DE0C1CD4AA1A00027DC3 /* watch.app */; };
 		2716DE451CD4ADF400027DC3 /* WatchBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2716DE441CD4ADF400027DC3 /* WatchBridge.swift */; };
 		2716DE711CD4B3C300027DC3 /* WatchBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 2716DE701CD4B3C300027DC3 /* WatchBridge.m */; };
+		27B457001CD692A400E7F9EE /* libRNSpinkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27B456FF1CD6929600E7F9EE /* libRNSpinkit.a */; };
 		5596E23963E37545CA67588F /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D40E09FFF8B4EA4E3C8E54EC /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +57,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 2716DE0B1CD4AA1A00027DC3;
 			remoteInfo = watch;
+		};
+		27B456FE1CD6929600E7F9EE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 27B456F91CD6929600E7F9EE /* RNSpinkit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D42CB3511B2538DE00FD0AE2;
+			remoteInfo = RNSpinkit;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -113,6 +121,7 @@
 		2716DE441CD4ADF400027DC3 /* WatchBridge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchBridge.swift; sourceTree = "<group>"; };
 		2716DE6F1CD4B3C300027DC3 /* WatchBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WatchBridge.h; sourceTree = "<group>"; };
 		2716DE701CD4B3C300027DC3 /* WatchBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WatchBridge.m; sourceTree = "<group>"; };
+		27B456F91CD6929600E7F9EE /* RNSpinkit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSpinkit.xcodeproj; path = "../node_modules/react-native-spinkit/ios/RNSpinkit.xcodeproj"; sourceTree = "<group>"; };
 		5552B60A4E8E3553C5D62994 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		6F3E622B0FB6925B7ABABBEF /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		D40E09FFF8B4EA4E3C8E54EC /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -130,6 +139,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27B457001CD692A400E7F9EE /* libRNSpinkit.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				5596E23963E37545CA67588F /* libPods.a in Frameworks */,
 			);
@@ -220,9 +230,18 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		27B456FA1CD6929600E7F9EE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				27B456FF1CD6929600E7F9EE /* libRNSpinkit.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				27B456F91CD6929600E7F9EE /* RNSpinkit.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 			);
 			name = Libraries;
@@ -388,6 +407,10 @@
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
 				},
+				{
+					ProductGroup = 27B456FA1CD6929600E7F9EE /* Products */;
+					ProjectRef = 27B456F91CD6929600E7F9EE /* RNSpinkit.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -405,6 +428,13 @@
 			fileType = archive.ar;
 			path = libReact.a;
 			remoteRef = 146834031AC3E56700842450 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		27B456FF1CD6929600E7F9EE /* libRNSpinkit.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNSpinkit.a;
+			remoteRef = 27B456FE1CD6929600E7F9EE /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
