@@ -10,6 +10,7 @@ import React, {
   StyleSheet,
   Text,
   View,
+  TouchableOpacity,
   DeviceEventEmitter
 } from 'react-native'
 
@@ -19,15 +20,32 @@ class buff extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      messages: []
+      messages:   [],
+      reachable:  false,
+      watchState: watchBridge.WatchState.WCSessionActivationStateInactive
     }
   }
 
   componentDidMount () {
     this.subscriptions = [
       watchBridge.subscribeToMessages(::this.receiveMessage),
-      watchBridge.subscribeToWatchState(::this.receiveWatchState)
+      watchBridge.subscribeToWatchState(::this.receiveWatchState),
+      watchBridge.subscribeToWatchReachability(::this.receiveWatchReachability)
     ]
+  }
+
+  sendMessage () {
+
+  }
+
+  receiveWatchReachability (err, reachable) {
+    if (!err) {
+      console.log('received watch reachability', reachable)
+      this.setState({reachable})
+    }
+    else {
+      console.error('error receiving watch reachability', err)
+    }
   }
 
   componentWillUnmount () {
@@ -37,16 +55,18 @@ class buff extends Component {
   render () {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
+        <Text style={styles.reachability}>Watch Session State: {this.state.watchState}</Text>
+        <Text style={styles.reachability}>
+          {this.state.reachable ? 'Watch is reachable' : 'Watch is not reachable'}
         </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={::this.sendMessage}
+        >
+          <Text style={styles.buttonText}>
+            Send Message
+          </Text>
+        </TouchableOpacity>
       </View>
     )
   }
@@ -85,6 +105,20 @@ const styles = StyleSheet.create({
     color:        '#333333',
     marginBottom: 5,
   },
+  button:       {
+    borderStyle:     'solid',
+    borderRadius:    6,
+    borderColor:     'black',
+    backgroundColor: 'blue',
+    padding:         10
+  },
+  buttonText:   {
+    color:    'white',
+    fontSize: 20,
+  },
+  reachability: {
+    marginBottom: 10
+  }
 })
 
 AppRegistry.registerComponent('buff', () => buff)

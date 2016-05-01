@@ -1,15 +1,22 @@
 import {NativeModules, NativeAppEventEmitter, keymirror} from 'react-native'
 const watchBridge = NativeModules.WatchBridge
 
-const EVENT_FILE_TRANSFER_ERROR    = 'WatchFileTransferError'
-const EVENT_FILE_TRANSFER_FINISHED = 'WatchFileTransferFinished'
-const EVENT_RECEIVE_MESSAGE        = 'WatchReceiveMessage'
-const EVENT_WATCH_STATE_CHANGED    = 'WatchStateChanged'
+const EVENT_FILE_TRANSFER_ERROR        = 'WatchFileTransferError'
+const EVENT_FILE_TRANSFER_FINISHED     = 'WatchFileTransferFinished'
+const EVENT_RECEIVE_MESSAGE            = 'WatchReceiveMessage'
+const EVENT_WATCH_STATE_CHANGED        = 'WatchStateChanged'
+const EVENT_WATCH_REACHABILITY_CHANGED = 'WatchReachabilityChanged'
 
 export const WatchState = {
-  WCSessionActivationStateNotActivated: 'WCSessionActivationStateNotActivated',
-  WCSessionActivationStateInactive:     'WCSessionActivationStateInactive',
-  WCSessionActivationStateActivated:    'WCSessionActivationStateActivated'
+  NotActivated: 'NotActivated',
+  Inactive:     'Inactive',
+  Activated:    'Activated'
+}
+
+const _WatchState = {
+  WCSessionActivationStateNotActivated: WatchState.NotActivated,
+  WCSessionActivationStateInactive:     WatchState.Inactive,
+  WCSessionActivationStateActivated:    WatchState.Activated
 }
 
 /**
@@ -78,15 +85,29 @@ export function subscribeToMessages (cb) {
  * @returns {Function}
  */
 export function subscribeToWatchState (cb) {
-  getStateString(cb) // Initial reading
-  return _subscribe(EVENT_WATCH_STATE_CHANGED, payload => cb(null, payload.state))
+  getWatchState(cb) // Initial reading
+  return _subscribe(EVENT_WATCH_STATE_CHANGED, payload => cb(null, _WatchState[payload.state]))
 }
 
-export function getStateString(cb = function () {}) {
+export function subscribeToWatchReachability (cb) {
+  getWatchReachability(cb)
+  return _subscribe(EVENT_WATCH_REACHABILITY_CHANGED, payload => cb(null, payload.reachability))
+}
+
+export function getWatchState (cb = function () {}) {
   return new Promise(resolve => {
     watchBridge.getSessionState(state => {
-      cb(null, state)
-      resolve(state)
+      cb(null, _WatchState[state])
+      resolve(_WatchState[state])
+    })
+  })
+}
+
+export function getWatchReachability (cb = function () {}) {
+  return new Promise(resolve => {
+    watchBridge.getReachability(reachability => {
+      cb(null, reachability)
+      resolve(reachability)
     })
   })
 }

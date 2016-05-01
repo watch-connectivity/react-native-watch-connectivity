@@ -7,6 +7,7 @@
 @interface WatchBridge : NSObject <RCTBridgeModule, WCSessionDelegate>
 
 @property (nonatomic, strong) WCSession* session;
+@property (nonatomic, strong) NSMutableDictionary* replyHandlers;
 
 + (WatchBridge*) shared;
 
