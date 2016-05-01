@@ -6,6 +6,21 @@ Communicate with your apple watch over over the react native bridge
 
 <img height=600 src="https://raw.githubusercontent.com/mtford90/react-native-iwatch-bridge/master/assets/screenshot.png"/>
 
+## Demo
+
+The featured screenshot is from the demo app. To get the demo app going:
+
+```
+git clone https://github.com/mtford90/react-native-iwatch-bridge.git
+cd react-native-iwatch-bridge
+npm install
+cd ios
+pod install
+open buff.xcworkspace
+```
+
+And then run the app!
+
 ## Install
 
 ```bash
