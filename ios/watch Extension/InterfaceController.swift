@@ -54,9 +54,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
   }
   
   func JSONStringify(value: AnyObject,prettyPrinted:Bool = false) -> String{
-    
     let options = prettyPrinted ? NSJSONWritingOptions.PrettyPrinted : NSJSONWritingOptions(rawValue: 0)
-    
     
     if NSJSONSerialization.isValidJSONObject(value) {
       
@@ -65,17 +63,14 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         if let string = NSString(data: data, encoding: NSUTF8StringEncoding) {
           return string as String
         }
-      }catch {
-        
+      }
+      catch {
         print("error")
-        //Access error here
       }
       
     }
     return ""
-    
   }
-  
 
   func session(session: WCSession, didReceiveFile file: WCSessionFile) {
     let data: NSData? = NSData(contentsOfURL: file.fileURL)
