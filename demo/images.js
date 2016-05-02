@@ -1,7 +1,7 @@
 //noinspection NpmUsedModulesInstalled
 import {ImagePickerManager} from 'NativeModules'
 
-export function pickImage (title, data = false) {
+export function pickImage (title, data = false, xtra = {}) {
   return new Promise((resolve, reject) => {
     const options = {
       title:                        title,
@@ -16,7 +16,8 @@ export function pickImage (title, data = false) {
       storageOptions:               {
         skipBackup: true,
         path:       'images'
-      }
+      },
+      ...xtra
     }
 
     ImagePickerManager.showImagePicker(options, response => {

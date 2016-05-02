@@ -72,21 +72,41 @@ export default class Root extends Component {
   }
 
   pickImage () {
-    pickImage('Send Image To Watch').then(image => {
-      const fileURI = image.uri
-      console.log(`transferring ${fileURI} to the watch`)
+    const useDataAPI = !this.state.fileAPI
+    const xtra       = useDataAPI ? {maxWidth: 100, maxHeight: 100} : {}
+    pickImage('Send Image To Watch', useDataAPI, xtra).then(image => {
       this.configureNextAnimation()
       this.setState({loading: true})
       const startTransferTime = new Date().getTime()
-      watchBridge.transferFile(fileURI).then(resp => {
-        const endTransferTime = new Date().getTime()
-        const elapsed         = endTransferTime - startTransferTime
-        console.log(`successfully transferred file in ${elapsed}ms`, resp)
-        this.configureNextAnimation()
-        this.setState({loading: false, fileTransferTime: elapsed})
-      }).catch(err => {
-        console.error('Error transferring file', err)
-      })
+      if (useDataAPI) {
+        const imageData = image.data
+        if (imageData) {
+          watchBridge.sendMessageData(imageData).then(resp => {
+            const endTransferTime = new Date().getTime()
+            const elapsed         = endTransferTime - startTransferTime
+            console.log(`successfully sent message data in ${elapsed}ms`, resp)
+            this.configureNextAnimation()
+            this.setState({loading: false, fileTransferTime: elapsed})
+          }).catch(err => {
+            console.error('Error sending message data', err, err.stack)
+          })
+        }
+      }
+      else {
+        const fileURI = image.uri
+        if (fileURI) {
+          console.log(`transferring ${fileURI} to the watch`)
+          watchBridge.transferFile(fileURI).then(resp => {
+            const endTransferTime = new Date().getTime()
+            const elapsed         = endTransferTime - startTransferTime
+            console.log(`successfully transferred file in ${elapsed}ms`, resp)
+            this.configureNextAnimation()
+            this.setState({loading: false, fileTransferTime: elapsed})
+          }).catch(err => {
+            console.error('Error transferring file', err)
+          })
+        }
+      }
     }).catch(err => {
       console.error(`Error picking image`, err)
     })
@@ -201,7 +221,7 @@ export default class Root extends Component {
             for the response to arrive
           </Text> : null}
           {fileTransferTime ? <Text style={styles.reachability}>
-            The last image took <Text style={styles.boldText}>{fileTransferTime + 'ms'}</Text>
+            The last image took <Text style={styles.boldText}>{fileTransferTime + 'ms '}</Text>
             to transfer using the file transfer API
           </Text> : null}
         </View>

@@ -173,11 +173,11 @@ didReceiveMessage:(NSDictionary<NSString *,id> *)message
 ////////////////////////////////////////////////////////////////////////////////
 
 RCT_EXPORT_METHOD(sendMessageData:(NSString *)str
-                  encoding:(NSStringEncoding)encoding
+                  encoding:(nonnull NSNumber*)encoding
                   replyCallback:(RCTResponseSenderBlock)replyCallback
                   error:(RCTResponseErrorBlock) errorCallback)
 {
-  NSData* data = [str dataUsingEncoding:encoding];
+  NSData* data = [str dataUsingEncoding:(NSStringEncoding)[encoding integerValue]];
   [self.session sendMessageData:data replyHandler:^(NSData * _Nonnull replyMessageData) {
     NSString* responseData = [replyMessageData base64EncodedStringWithOptions:0];
     replyCallback(@[responseData]);

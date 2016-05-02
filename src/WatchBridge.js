@@ -174,8 +174,19 @@ export function transferFile (url, metadata = {}, cb = function () {}) {
  *
  * @param {string} data
  * @param {number} encoding - defaults to utf8
- * @param {sendMessageCallback} [cb]
+ * @param {sendMessageCallback} [cb] - may not be called at all if the watch does not reply
+ * @return {Promise} - may not be resolved if the watch doesn't reply.
  */
-export function sendMessageData(data, encoding = DEFAULT_ENCODING, cb = function () {}) {
-  
+export function sendMessageData (data, encoding = DEFAULT_ENCODING, cb = function () {}) {
+  return new Promise((resolve, reject) => {
+    const replyHandler = resp => {
+      cb(null, resp)
+      resolve(resp)
+    }
+    const errorHandler = err => {
+      cb(err)
+      reject(err)
+    }
+    watchBridge.sendMessageData(data, encoding, replyHandler, errorHandler)
+  })
 }
