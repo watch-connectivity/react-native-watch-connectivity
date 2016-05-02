@@ -73,6 +73,7 @@ export default class Root extends Component {
 
   pickImage () {
     const useDataAPI = !this.state.fileAPI
+    // MessageData API is not intended for large images and so we need to restrict the size
     const xtra       = useDataAPI ? {maxWidth: 100, maxHeight: 100} : {}
     pickImage('Send Image To Watch', useDataAPI, xtra).then(image => {
       this.configureNextAnimation()
