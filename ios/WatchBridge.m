@@ -34,6 +34,8 @@ RCT_EXPORT_MODULE()
     WCSession* session = [WCSession defaultSession];
     session.delegate = self;
     self.session = session;
+    self.transfers = [NSMutableDictionary new];
+    self.replyHandlers = [NSMutableDictionary new];
     [session activateSession];
   }
   return self;
@@ -169,6 +171,30 @@ didReceiveMessage:(NSDictionary<NSString *,id> *)message
 // Files
 ////////////////////////////////////////////////////////////////////////////////
 
+RCT_EXPORT_METHOD(transferFile:(NSString *)url
+                  metaData:(nullable NSDictionary<NSString *,id> *)metaData
+                  callback:(RCTResponseSenderBlock) callback
+                  error:(RCTResponseErrorBlock)error)
+{
+  
+  NSMutableDictionary* mutableMetaData;
+  if (metaData) {
+    mutableMetaData = [metaData mutableCopy];
+  }
+  else {
+    mutableMetaData = [NSMutableDictionary new];
+  }
+  NSString* uuid = [self uuidString];
+  mutableMetaData[@"id"] = uuid;
+  WCSessionFileTransfer* transfer = [self.session transferFile:[NSURL URLWithString:url] metadata:mutableMetaData];
+  NSDictionary* transferInfo = @{@"transfer": transfer, @"callback": callback, @"errorCallback": error};
+  [self.transfers setObject:transferInfo forKey:uuid];
+  NSLog(@"Creating transfer with uuid %@: %@", uuid, self.transfers);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+
 - (void)session:(WCSession *)session
  didReceiveFile:(WCSessionFile *)file {
   NSLog(@"sessionDidReceiveFile: %@", @{@"url": file.fileURL, @"metadata": file.metadata});
@@ -179,13 +205,43 @@ didReceiveMessage:(NSDictionary<NSString *,id> *)message
 - (void)session:(WCSession *)session
 didFinishFileTransfer:(WCSessionFileTransfer *)fileTransfer
           error:(NSError *)error {
-  if (error) {
-    NSLog(@"sessionDidFinishFileTransfer error: %@", error);
+  WCSessionFile* file = fileTransfer.file;
+  NSDictionary<NSString*, id>* metadata = file.metadata;
+  NSString* transferId = metadata[@"id"];
+  if (transferId) {
+    NSURL* fileURL = file.fileURL;
+    NSDictionary* transferInfo = self.transfers[transferId];
+    if (transferInfo) {
+      if (error) {
+        NSLog(@"sessionDidFinishFileTransfer error: %@", error);
+        [self dispatchEventWithName:EVENT_FILE_TRANSFER_ERROR body:@{@"error": error}];
+        RCTResponseErrorBlock callback = transferInfo[@"errorCallback"];
+        callback(error);
+      }
+      else {
+        NSMutableDictionary* dict = [NSMutableDictionary new];
+        if (fileURL) {
+          NSString* uri = [fileURL absoluteString];
+          assert(uri);
+          dict[@"uri"] = uri;
+        }
+        if (metadata) dict[@"metadata"] = metadata;
+        if (transferId) dict[@"id"] = transferId;
+        NSLog(@"sessionDidFinishFileTransfer %@", dict);
+        [self dispatchEventWithName:EVENT_FILE_TRANSFER_FINISHED body:dict];
+        RCTResponseSenderBlock callback = transferInfo[@"callback"];
+        callback(@[dict]);
+      }
+      [self.transfers removeObjectForKey:transferId];
+    }
+    else {
+      NSLog(@"Warning: Transfer ID %@ has no transfer info", transferId);
+    }
   }
   else {
-    WCSessionFile* file = fileTransfer.file;
-    NSLog(@"sessionDidFinishFileTransfer %@", @{@"url": file.fileURL, @"metadata": file.metadata});
+    NSLog(@"Warning: Received transfer without Transfer ID");
   }
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////

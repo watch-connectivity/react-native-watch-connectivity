@@ -12,6 +12,7 @@ import Foundation
 
 class InterfaceController: WKInterfaceController, WCSessionDelegate {
   @IBOutlet weak var label: WKInterfaceLabel!
+  @IBOutlet weak var image: WKInterfaceImage!
 
   var session: WCSession?
   
@@ -43,4 +44,8 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     replyHandler(["elapsed":Int(elapsed), "timestamp": round(currentTimestamp)])
   }
 
+  func session(session: WCSession, didReceiveFile file: WCSessionFile) {
+    let data: NSData? = NSData(contentsOfURL: file.fileURL)
+    self.image.setImageData(data)
+  }
 }

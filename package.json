@@ -2,15 +2,18 @@
   "name": "react-native-iwatch-bridge",
   "version": "0.0.1",
   "private": false,
+  "main": "./src/WatchBridge.js",
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
-  "dependencies": {
-    "react": "^0.14.8",
-    "react-native": "^0.24.1",
-    "react-native-spinkit": "0.0.10"
-  },
   "devDependencies": {
-    "babel-preset-react-native-stage-0": "^1.0.1"
+    "babel-preset-react-native-stage-0": "^1.0.1",
+    "react-native-camera": "^0.3.8",
+    "react-native-spinkit": "0.0.10",
+    "react-native": "^0.24.1",
+    "react": "^0.14.8"
+  },
+  "dependencies": {
+    "react-native-image-picker": "^0.18.15"
   }
 }

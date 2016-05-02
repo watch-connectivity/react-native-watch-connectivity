@@ -38,6 +38,15 @@ const _WatchState = {
  */
 
 /**
+ * Callback used in sendMessage
+ *
+ * @callback transferFileCallback
+ * @param {Error} error
+ * @param {string} transferId
+ */
+
+
+/**
  * Send a message to the watch over the bridge
  * @param {object} message
  * @param {sendMessageCallback} [cb]
@@ -108,6 +117,26 @@ export function getWatchReachability (cb) {
     watchBridge.getReachability(reachability => {
       cb(null, reachability)
       resolve(reachability)
+    })
+  })
+}
+
+/**
+ * Transfer a file stored locally on the device to the iWatch
+ *
+ * @param {string} url - url to a file on the device e.g. a photo/video
+ * @param {object} [metadata]
+ * @param {transferFileCallback} [cb]
+ * @returns {Promise}
+ */
+export function transferFile (url, metadata = {}, cb = function () {}) {
+  return new Promise((resolve, reject) => {
+    watchBridge.transferFile(url, metadata, resp => {
+      resolve(resp)
+      cb(null, resp)
+    }, err => {
+      reject(err)
+      cb(err)
     })
   })
 }

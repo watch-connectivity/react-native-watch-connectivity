@@ -40,3 +40,4 @@ android/app/libs
 android/keystores/debug.keystore
 
 Pods
+npm-debug.log*
