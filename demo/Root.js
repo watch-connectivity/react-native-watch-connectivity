@@ -9,7 +9,8 @@ import React, {
   Dimensions,
   Image,
   LayoutAnimation,
-  DeviceEventEmitter
+  DeviceEventEmitter,
+  Switch
 } from 'react-native'
 
 import * as watchBridge from '../src/WatchBridge.js'
@@ -29,7 +30,8 @@ export default class Root extends Component {
       reachable:  false,
       loading:    false,
       text:       '',
-      watchState: watchBridge.WatchState.Inactive
+      watchState: watchBridge.WatchState.Inactive,
+      fileAPI:    true
     }
   }
 
@@ -78,7 +80,7 @@ export default class Root extends Component {
       const startTransferTime = new Date().getTime()
       watchBridge.transferFile(fileURI).then(resp => {
         const endTransferTime = new Date().getTime()
-        const elapsed = endTransferTime - startTransferTime
+        const elapsed         = endTransferTime - startTransferTime
         console.log(`successfully transferred file in ${elapsed}ms`, resp)
         this.configureNextAnimation()
         this.setState({loading: false, fileTransferTime: elapsed})
@@ -137,25 +139,40 @@ export default class Root extends Component {
     }
     else {
       return (
-        <View style={styles.buttons}>
-          <TouchableOpacity
-            style={styles.button}
-            disabled={!this.state.text.trim().length}
-            onPress={::this.sendMessage}
-          >
-            <Text style={styles.buttonText}>
-              CHANGE MESSAGE
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.cameraButton}
-            onPress={::this.pickImage}
-          >
-            <Image
-              style={styles.cameraImageStyle}
-              source={{uri: 'Camera'}}
+        <View>
+          <View style={styles.buttons}>
+            <TouchableOpacity
+              style={styles.button}
+              disabled={!this.state.text.trim().length}
+              onPress={::this.sendMessage}
+            >
+              <Text style={styles.buttonText}>
+                CHANGE MESSAGE
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.cameraButton}
+              onPress={::this.pickImage}
+            >
+              <Image
+                style={styles.cameraImageStyle}
+                source={{uri: 'Camera'}}
+              />
+            </TouchableOpacity>
+
+          </View>
+          <View style={styles.switch}>
+            <Switch
+              onTintColor={COLORS.orange}
+              style={{marginBottom: 10}}
+              value={this.state.fileAPI}
+              onValueChange={fileAPI => this.setState({fileAPI})}
             />
-          </TouchableOpacity>
+            <Text
+              style={styles.switchLabel}>
+              {this.state.fileAPI ? 'File API' : 'Data API'}
+            </Text>
+          </View>
         </View>
       )
     }
@@ -184,7 +201,8 @@ export default class Root extends Component {
             for the response to arrive
           </Text> : null}
           {fileTransferTime ? <Text style={styles.reachability}>
-            The last image took <Text style={styles.boldText}>{fileTransferTime + 'ms'}</Text> to transfer.
+            The last image took <Text style={styles.boldText}>{fileTransferTime + 'ms'}</Text>
+            to transfer using the file transfer API
           </Text> : null}
         </View>
 
@@ -248,20 +266,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   button:           {
-    borderRadius:    6,
-    backgroundColor: COLORS.blue,
-    padding:         10,
-    height:          44,
-    marginRight:     ROW_MARGIN / 3,
+    borderTopLeftRadius:    6,
+    borderBottomLeftRadius: 6,
+    backgroundColor:        COLORS.blue,
+    padding:                10,
+    height:                 44,
+    marginRight:            1,
   },
   cameraButton:     {
-    backgroundColor: COLORS.blue,
-    width:           56,
-    height:          44,
-    borderRadius:    6,
-    alignItems:      'center',
-    justifyContent:  'center',
-    alignSelf:       'center'
+    backgroundColor:         COLORS.blue,
+    width:                   56,
+    height:                  44,
+    borderTopRightRadius:    6,
+    borderBottomRightRadius: 6,
+    alignItems:              'center',
+    justifyContent:          'center',
+    alignSelf:               'center'
 
   },
   cameraImageStyle: {
@@ -293,6 +313,20 @@ const styles = StyleSheet.create({
   },
   boldText:         {
     fontWeight: 'bold'
+  },
+  switch:           {
+    marginTop:     ROW_MARGIN,
+    flexDirection: 'row',
+    alignSelf:     'center',
+    position:      'relative',
+    right:         24
+  },
+  switchLabel:      {
+    color:      'white',
+    lineHeight: 23,
+    marginLeft: 10,
+    width:      56,
+    position:   'absolute'
   }
 })
 

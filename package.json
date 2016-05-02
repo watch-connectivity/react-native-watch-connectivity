@@ -11,9 +11,7 @@
     "react-native-camera": "^0.3.8",
     "react-native-spinkit": "0.0.10",
     "react-native": "^0.24.1",
-    "react": "^0.14.8"
-  },
-  "dependencies": {
+    "react": "^0.14.8",
     "react-native-image-picker": "^0.18.15"
   }
 }

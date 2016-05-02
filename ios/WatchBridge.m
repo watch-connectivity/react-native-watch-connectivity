@@ -5,6 +5,7 @@
 static const NSString* EVENT_FILE_TRANSFER_ERROR        = @"WatchFileTransferError";
 static const NSString* EVENT_FILE_TRANSFER_FINISHED     = @"WatchFileTransferFinished";
 static const NSString* EVENT_RECEIVE_MESSAGE            = @"WatchReceiveMessage";
+static const NSString* EVENT_RECEIVE_MESSAGE_DATA       = @"WatchReceiveMessageData";
 static const NSString* EVENT_WATCH_STATE_CHANGED        = @"WatchStateChanged";
 static const NSString* EVENT_ACTIVATION_ERROR           = @"WatchActivationError";
 static const NSString* EVENT_WATCH_REACHABILITY_CHANGED = @"WatchReachabilityChanged";
@@ -165,6 +166,33 @@ didReceiveMessage:(NSDictionary<NSString *,id> *)message
 {
   NSLog(@"sessionDidReceiveMessageReplyHandler %@", message);
   [self dispatchEventWithName:EVENT_RECEIVE_MESSAGE body:message];
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Message Data
+////////////////////////////////////////////////////////////////////////////////
+
+RCT_EXPORT_METHOD(sendMessageData:(NSString *)str
+                  encoding:(NSStringEncoding)encoding
+                  replyCallback:(RCTResponseSenderBlock)replyCallback
+                  error:(RCTResponseErrorBlock) errorCallback)
+{
+  NSData* data = [str dataUsingEncoding:encoding];
+  [self.session sendMessageData:data replyHandler:^(NSData * _Nonnull replyMessageData) {
+    NSString* responseData = [replyMessageData base64EncodedStringWithOptions:0];
+    replyCallback(@[responseData]);
+  } errorHandler:^(NSError * _Nonnull error) {
+    errorCallback(error);
+  }];
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+- (void)session:(WCSession *)session
+didReceiveMessageData:(NSData *)messageData
+   replyHandler:(void (^)(NSData * _Nonnull))replyHandler
+{
+  [self dispatchEventWithName:EVENT_RECEIVE_MESSAGE_DATA body:@{@"data": messageData}];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
