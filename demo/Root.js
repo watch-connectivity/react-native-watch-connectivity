@@ -75,10 +75,13 @@ export default class Root extends Component {
       console.log(`transferring ${fileURI} to the watch`)
       this.configureNextAnimation()
       this.setState({loading: true})
+      const startTransferTime = new Date().getTime()
       watchBridge.transferFile(fileURI).then(resp => {
-        console.log('successfully transferred file', resp)
+        const endTransferTime = new Date().getTime()
+        const elapsed = endTransferTime - startTransferTime
+        console.log(`successfully transferred file in ${elapsed}ms`, resp)
         this.configureNextAnimation()
-        this.setState({loading: false})
+        this.setState({loading: false, fileTransferTime: elapsed})
       }).catch(err => {
         console.error('Error transferring file', err)
       })
@@ -163,6 +166,7 @@ export default class Root extends Component {
 
     const hasResponse = timeTakenToReachWatch && timeTakenToReply
 
+    const fileTransferTime = this.state.fileTransferTime
     return (
       <View style={styles.container}>
         <Image
@@ -178,6 +182,9 @@ export default class Root extends Component {
             The last message took <Text style={styles.boldText}>{timeTakenToReachWatch + 'ms '}</Text>
             to reach the watch. It then took <Text style={styles.boldText}>{timeTakenToReply + 'ms '}</Text>
             for the response to arrive
+          </Text> : null}
+          {fileTransferTime ? <Text style={styles.reachability}>
+            The last image took <Text style={styles.boldText}>{fileTransferTime + 'ms'}</Text> to transfer.
           </Text> : null}
         </View>
 
@@ -217,7 +224,7 @@ export default class Root extends Component {
 
 const WINDOW_WIDTH = Dimensions.get('window').width
 
-const ROW_MARGIN = 30
+const ROW_MARGIN = 20
 
 const styles = StyleSheet.create({
   container:        {
