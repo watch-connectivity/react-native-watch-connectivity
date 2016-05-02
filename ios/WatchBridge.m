@@ -182,6 +182,7 @@ RCT_EXPORT_METHOD(sendMessageData:(NSString *)str
     NSString* responseData = [replyMessageData base64EncodedStringWithOptions:0];
     replyCallback(@[responseData]);
   } errorHandler:^(NSError * _Nonnull error) {
+    NSLog(@"Error sending message data %@", error);
     errorCallback(error);
   }];
 }

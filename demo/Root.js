@@ -18,7 +18,8 @@ import Spinner from 'react-native-spinkit'
 import {COLORS} from './constants'
 import {pickImage} from './images'
 
-const LAYOUT_ANIM_PRESET  = LayoutAnimation.Presets.easeInEaseOut
+const LAYOUT_ANIM_PRESET = LayoutAnimation.Presets.easeInEaseOut
+
 const EVENT_KEYBOARD_SHOW = 'keyboardWillShow'
 const EVENT_KEYBOARD_HIDE = 'keyboardWillHide'
 
@@ -74,38 +75,46 @@ export default class Root extends Component {
   pickImage () {
     const useDataAPI = !this.state.fileAPI
     // MessageData API is not intended for large images and so we need to restrict the size
-    const xtra       = useDataAPI ? {maxWidth: 100, maxHeight: 100} : {}
+    const MAX_SIZE   = 300
+    const xtra       = useDataAPI ? {maxWidth: MAX_SIZE, maxHeight: MAX_SIZE} : {}
     pickImage('Send Image To Watch', useDataAPI, xtra).then(image => {
       this.configureNextAnimation()
-      this.setState({loading: true})
-      const startTransferTime = new Date().getTime()
-      if (useDataAPI) {
-        const imageData = image.data
-        if (imageData) {
-          watchBridge.sendMessageData(imageData).then(resp => {
-            const endTransferTime = new Date().getTime()
-            const elapsed         = endTransferTime - startTransferTime
-            console.log(`successfully sent message data in ${elapsed}ms`, resp)
-            this.configureNextAnimation()
-            this.setState({loading: false, fileTransferTime: elapsed})
-          }).catch(err => {
-            console.error('Error sending message data', err, err.stack)
-          })
+      console.log('picked image', image)
+      if (!image.didCancel) {
+        this.setState({loading: true})
+        const startTransferTime = new Date().getTime()
+        if (useDataAPI) {
+          const imageData = image.data
+          if (imageData) {
+            watchBridge.sendMessageData(imageData).then(resp => {
+              const endTransferTime = new Date().getTime()
+              const elapsed         = endTransferTime - startTransferTime
+              console.log(`successfully sent message data in ${elapsed}ms`, resp)
+              this.configureNextAnimation()
+              this.setState({loading: false, fileTransferTime: elapsed, usedDataAPI: useDataAPI})
+            }).catch(err => {
+              console.warn('Error sending message data', err, err.stack)
+              this.configureNextAnimation()
+              this.setState({loading: false})
+            })
+          }
         }
-      }
-      else {
-        const fileURI = image.uri
-        if (fileURI) {
-          console.log(`transferring ${fileURI} to the watch`)
-          watchBridge.transferFile(fileURI).then(resp => {
-            const endTransferTime = new Date().getTime()
-            const elapsed         = endTransferTime - startTransferTime
-            console.log(`successfully transferred file in ${elapsed}ms`, resp)
-            this.configureNextAnimation()
-            this.setState({loading: false, fileTransferTime: elapsed})
-          }).catch(err => {
-            console.error('Error transferring file', err)
-          })
+        else {
+          const fileURI = image.uri
+          if (fileURI) {
+            console.log(`transferring ${fileURI} to the watch`)
+            watchBridge.transferFile(fileURI).then(resp => {
+              const endTransferTime = new Date().getTime()
+              const elapsed         = endTransferTime - startTransferTime
+              console.log(`successfully transferred file in ${elapsed}ms`, resp)
+              this.configureNextAnimation()
+              this.setState({loading: false, fileTransferTime: elapsed, usedDataAPI: useDataAPI})
+            }).catch(err => {
+              console.warn('Error transferring file', err)
+              this.configureNextAnimation()
+              this.setState({loading: false})
+            })
+          }
         }
       }
     }).catch(err => {
@@ -159,12 +168,15 @@ export default class Root extends Component {
       return <Spinner type="Bounce" color={COLORS.orange} size={44}/>
     }
     else {
+      const reachable = this.state.reachable
+
+      const disabledStyle = reachable ? {} : styles.disabled
       return (
         <View>
-          <View style={styles.buttons}>
+          <View style={[styles.buttons, disabledStyle]}>
             <TouchableOpacity
               style={styles.button}
-              disabled={!this.state.text.trim().length}
+              disabled={!this.state.text.trim().length || !reachable}
               onPress={::this.sendMessage}
             >
               <Text style={styles.buttonText}>
@@ -174,6 +186,7 @@ export default class Root extends Component {
             <TouchableOpacity
               style={styles.cameraButton}
               onPress={::this.pickImage}
+              disabled={!reachable}
             >
               <Image
                 style={styles.cameraImageStyle}
@@ -205,6 +218,8 @@ export default class Root extends Component {
     const hasResponse = timeTakenToReachWatch && timeTakenToReply
 
     const fileTransferTime = this.state.fileTransferTime
+
+
     return (
       <View style={styles.container}>
         <Image
@@ -213,8 +228,7 @@ export default class Root extends Component {
         />
         <View>
           <Text style={styles.reachability}>
-            Watch session is <Text style={styles.boldText}>{this.state.watchState.toUpperCase()}</Text> and <Text
-            style={styles.boldText}>{this.state.reachable ? 'REACHABLE' : 'UNREACHABLE'}</Text>
+            Watch session is {this.renderWatchState()} and {this.renderReachabilityText()}
           </Text>
           {hasResponse ? <Text style={styles.reachability}>
             The last message took <Text style={styles.boldText}>{timeTakenToReachWatch + 'ms '}</Text>
@@ -223,7 +237,7 @@ export default class Root extends Component {
           </Text> : null}
           {fileTransferTime ? <Text style={styles.reachability}>
             The last image took <Text style={styles.boldText}>{fileTransferTime + 'ms '}</Text>
-            to transfer using the file transfer API
+            to transfer using the {this.state.usedDataAPI ? 'message data api' : 'file transfer api'}
           </Text> : null}
         </View>
 
@@ -238,6 +252,28 @@ export default class Root extends Component {
         {this.renderButtons()}
         <View style={this.state.spacerStyle}/>
       </View>
+    )
+  }
+
+  renderReachabilityText () {
+    const reachable        = this.state.reachable
+    const style            = [styles.boldText, {color: reachable ? COLORS.green.normal : COLORS.orange}]
+    const reachabilityText = (
+      <Text style={style}>
+        {reachable ? 'REACHABLE' : 'UNREACHABLE'}
+      </Text>
+    )
+    return reachabilityText
+  }
+
+  renderWatchState () {
+    const watchState = this.state.watchState
+    const active     = watchState === watchBridge.WatchState.Activated
+    const style      = [styles.boldText, {color: active ? COLORS.green.normal : COLORS.orange}]
+    return (
+      <Text style={style}>
+        {watchState.toUpperCase()}
+      </Text>
     )
   }
 
@@ -341,6 +377,9 @@ const styles = StyleSheet.create({
     alignSelf:     'center',
     position:      'relative',
     right:         24
+  },
+  disabled:         {
+    opacity: 0.4
   },
   switchLabel:      {
     color:      'white',

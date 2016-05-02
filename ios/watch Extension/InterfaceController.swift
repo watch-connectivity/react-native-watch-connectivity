@@ -43,6 +43,39 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     let elapsed : Double = currentTimestamp - timestamp
     replyHandler(["elapsed":Int(elapsed), "timestamp": round(currentTimestamp)])
   }
+  
+  func session(session: WCSession, didReceiveMessageData messageData: NSData, replyHandler: (NSData) -> Void) {
+    let currentTimestamp: Double = NSDate().timeIntervalSince1970 * 1000
+    let decodedData = NSData(base64EncodedData: messageData, options: NSDataBase64DecodingOptions(rawValue: 0))
+    self.image.setImageData(decodedData)
+    let json : String = JSONStringify(["currentTimestamp": currentTimestamp])
+    let data : NSData = json.dataUsingEncoding(NSUTF8StringEncoding)!
+    replyHandler(data)
+  }
+  
+  func JSONStringify(value: AnyObject,prettyPrinted:Bool = false) -> String{
+    
+    let options = prettyPrinted ? NSJSONWritingOptions.PrettyPrinted : NSJSONWritingOptions(rawValue: 0)
+    
+    
+    if NSJSONSerialization.isValidJSONObject(value) {
+      
+      do{
+        let data = try NSJSONSerialization.dataWithJSONObject(value, options: options)
+        if let string = NSString(data: data, encoding: NSUTF8StringEncoding) {
+          return string as String
+        }
+      }catch {
+        
+        print("error")
+        //Access error here
+      }
+      
+    }
+    return ""
+    
+  }
+  
 
   func session(session: WCSession, didReceiveFile file: WCSessionFile) {
     let data: NSData? = NSData(contentsOfURL: file.fileURL)
