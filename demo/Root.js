@@ -13,15 +13,16 @@ import React, {
   Switch
 } from 'react-native'
 
+import ReachabilityText from './ReachabilityText'
+
 import * as watchBridge from '../src/WatchBridge.js'
 import Spinner from 'react-native-spinkit'
-import {COLORS} from './constants'
 import {pickImage} from './images'
 
 const LAYOUT_ANIM_PRESET = LayoutAnimation.Presets.easeInEaseOut
 
-const EVENT_KEYBOARD_SHOW = 'keyboardWillShow'
-const EVENT_KEYBOARD_HIDE = 'keyboardWillHide'
+import {ROW_MARGIN, COLORS, EVENT_KEYBOARD_SHOW, EVENT_KEYBOARD_HIDE, WINDOW_WIDTH} from './constants'
+
 
 export default class Root extends Component {
   constructor (props) {
@@ -72,16 +73,6 @@ export default class Root extends Component {
     LayoutAnimation.configureNext(LAYOUT_ANIM_PRESET)
   }
 
-  renderFileTransferTimeText (fileTransferTime, usedDataAPI) {
-    return (
-      <Text style={styles.reachability}>
-        The image took
-        <Text style={styles.boldText}>{' ' + fileTransferTime + 'ms '}</Text>
-        to transfer using the {usedDataAPI ? 'message data api' : 'file transfer api'}
-      </Text>
-    )
-  }
-
   pickImage () {
     const useDataAPI = !this.state.fileAPI
     // MessageData API is not intended for large images and so we need to restrict the size
@@ -91,7 +82,7 @@ export default class Root extends Component {
       this.configureNextAnimation()
       console.log('picked image', image)
       if (!image.didCancel) {
-        this.setState({loading: true})
+        this.setLoading();
         const startTransferTime = new Date().getTime()
 
         const onFulfilled = resp => {
@@ -100,11 +91,12 @@ export default class Root extends Component {
           console.log(`successfully transferred in ${elapsed}ms`, resp)
           this.configureNextAnimation()
           this.setState({
-            fileTransferTime:     elapsed,
-            responseTimeInstance: this.renderFileTransferTimeText(elapsed, useDataAPI)
+            fileTransferTime:      elapsed,
+            useDataAPI:            useDataAPI,
+            timeTakenToReachWatch: null,
+            timeTakenToReply:      null
           })
         }
-
 
         const onRejected = err => {
           console.warn('Error sending message data', err, err.stack)
@@ -138,29 +130,27 @@ export default class Root extends Component {
     })
   }
 
+  setLoading() {
+    this.setState({
+      loading:               true,
+      timeTakenToReachWatch: null,
+      timeTakenToReply:      null,
+      fileTransferTime:      null
+    })
+  }
+
   sendMessage () {
     const text = this.state.text
     if (text.trim().length) {
       const timestamp = new Date().getTime()
       this.configureNextAnimation()
-      this.setState({loading: true, timeTakenToReachWatch: null, timeTakenToReply: null})
+      this.setLoading()
 
       watchBridge.sendMessage({text, timestamp}, (err, resp) => {
         if (!err) {
           console.log('response received', resp)
           const timeTakenToReachWatch = resp.elapsed
           const timeTakenToReply      = new Date().getTime() - parseInt(resp.timestamp)
-
-          const responseTimeInstance = (
-            <Text style={styles.reachability}>
-              The last message took <Text style={styles.boldText}>{timeTakenToReachWatch + 'ms '}</Text>
-              to reach the watch. It then took <Text style={styles.boldText}>{timeTakenToReply + 'ms '}</Text>
-              for the response to arrive
-            </Text>
-          )
-
-          this.setState({responseTimeInstance})
-
           this.configureNextAnimation()
           this.setState({timeTakenToReachWatch, timeTakenToReply, loading: false})
         }
@@ -248,10 +238,14 @@ export default class Root extends Component {
           source={{uri: 'Watch'}}
         />
         <View>
-          <Text style={styles.reachability}>
-            Watch session is {this.renderWatchState()} and {this.renderReachabilityText()}
-          </Text>
-          {this.state.responseTimeInstance}
+          <ReachabilityText
+            watchState={this.state.watchState}
+            reachable={this.state.reachable}
+            fileTransferTime={this.state.fileTransferTime}
+            useDataAPI={this.state.useDataAPI}
+            timeTakenToReachWatch={this.state.timeTakenToReachWatch}
+            timeTakenToReply={this.state.timeTakenToReply}
+          />
         </View>
         <TextInput
           style={styles.textInput}
@@ -267,27 +261,6 @@ export default class Root extends Component {
     )
   }
 
-  renderReachabilityText () {
-    const reachable        = this.state.reachable
-    const style            = [styles.boldText, {color: reachable ? COLORS.green.normal : COLORS.orange}]
-    const reachabilityText = (
-      <Text style={style}>
-        {reachable ? 'REACHABLE' : 'UNREACHABLE'}
-      </Text>
-    )
-    return reachabilityText
-  }
-
-  renderWatchState () {
-    const watchState = this.state.watchState
-    const active     = watchState === watchBridge.WatchState.Activated
-    const style      = [styles.boldText, {color: active ? COLORS.green.normal : COLORS.orange}]
-    return (
-      <Text style={style}>
-        {watchState.toUpperCase()}
-      </Text>
-    )
-  }
 
   receiveMessage (err, payload, replyHandler) {
     if (err) console.error(`Error receiving message`, err)
@@ -308,10 +281,6 @@ export default class Root extends Component {
   }
 }
 
-
-const WINDOW_WIDTH = Dimensions.get('window').width
-
-const ROW_MARGIN = 20
 
 const styles = StyleSheet.create({
   container:        {
@@ -362,13 +331,6 @@ const styles = StyleSheet.create({
     fontSize:      20,
     letterSpacing: 0.5,
     fontWeight:    'bold'
-  },
-  reachability:     {
-    marginBottom: ROW_MARGIN,
-    color:        'white',
-    marginLeft:   ROW_MARGIN,
-    marginRight:  ROW_MARGIN,
-    textAlign:    'center',
   },
   textInput:        {
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
