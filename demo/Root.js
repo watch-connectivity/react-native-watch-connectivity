@@ -72,6 +72,16 @@ export default class Root extends Component {
     LayoutAnimation.configureNext(LAYOUT_ANIM_PRESET)
   }
 
+  renderFileTransferTimeText (fileTransferTime, usedDataAPI) {
+    return (
+      <Text style={styles.reachability}>
+        The image took
+        <Text style={styles.boldText}>{' ' + fileTransferTime + 'ms '}</Text>
+        to transfer using the {usedDataAPI ? 'message data api' : 'file transfer api'}
+      </Text>
+    )
+  }
+
   pickImage () {
     const useDataAPI = !this.state.fileAPI
     // MessageData API is not intended for large images and so we need to restrict the size
@@ -83,37 +93,43 @@ export default class Root extends Component {
       if (!image.didCancel) {
         this.setState({loading: true})
         const startTransferTime = new Date().getTime()
+
+        const onFulfilled = resp => {
+          const endTransferTime = new Date().getTime()
+          const elapsed         = endTransferTime - startTransferTime
+          console.log(`successfully transferred in ${elapsed}ms`, resp)
+          this.configureNextAnimation()
+          this.setState({
+            fileTransferTime:     elapsed,
+            responseTimeInstance: this.renderFileTransferTimeText(elapsed, useDataAPI)
+          })
+        }
+
+
+        const onRejected = err => {
+          console.warn('Error sending message data', err, err.stack)
+          this.configureNextAnimation()
+        }
+
+        const onSettled = () => this.setState({loading: false})
+
         if (useDataAPI) {
-          const imageData = image.data
-          if (imageData) {
-            watchBridge.sendMessageData(imageData).then(resp => {
-              const endTransferTime = new Date().getTime()
-              const elapsed         = endTransferTime - startTransferTime
-              console.log(`successfully sent message data in ${elapsed}ms`, resp)
-              this.configureNextAnimation()
-              this.setState({loading: false, fileTransferTime: elapsed, usedDataAPI: useDataAPI})
-            }).catch(err => {
-              console.warn('Error sending message data', err, err.stack)
-              this.configureNextAnimation()
-              this.setState({loading: false})
-            })
-          }
+          if (image.data)
+            watchBridge
+              .sendMessageData(image.data)
+              .then(onFulfilled)
+              .catch(onRejected)
+              .finally(onSettled)
         }
         else {
           const fileURI = image.uri
           if (fileURI) {
             console.log(`transferring ${fileURI} to the watch`)
-            watchBridge.transferFile(fileURI).then(resp => {
-              const endTransferTime = new Date().getTime()
-              const elapsed         = endTransferTime - startTransferTime
-              console.log(`successfully transferred file in ${elapsed}ms`, resp)
-              this.configureNextAnimation()
-              this.setState({loading: false, fileTransferTime: elapsed, usedDataAPI: useDataAPI})
-            }).catch(err => {
-              console.warn('Error transferring file', err)
-              this.configureNextAnimation()
-              this.setState({loading: false})
-            })
+            watchBridge
+              .transferFile(fileURI)
+              .then(onFulfilled)
+              .catch(onRejected)
+              .finally(onSettled)
           }
         }
       }
@@ -128,11 +144,23 @@ export default class Root extends Component {
       const timestamp = new Date().getTime()
       this.configureNextAnimation()
       this.setState({loading: true, timeTakenToReachWatch: null, timeTakenToReply: null})
+
       watchBridge.sendMessage({text, timestamp}, (err, resp) => {
         if (!err) {
           console.log('response received', resp)
           const timeTakenToReachWatch = resp.elapsed
           const timeTakenToReply      = new Date().getTime() - parseInt(resp.timestamp)
+
+          const responseTimeInstance = (
+            <Text style={styles.reachability}>
+              The last message took <Text style={styles.boldText}>{timeTakenToReachWatch + 'ms '}</Text>
+              to reach the watch. It then took <Text style={styles.boldText}>{timeTakenToReply + 'ms '}</Text>
+              for the response to arrive
+            </Text>
+          )
+
+          this.setState({responseTimeInstance})
+
           this.configureNextAnimation()
           this.setState({timeTakenToReachWatch, timeTakenToReply, loading: false})
         }
@@ -213,13 +241,6 @@ export default class Root extends Component {
   }
 
   render () {
-    const {timeTakenToReachWatch, timeTakenToReply} = this.state
-
-    const hasResponse = timeTakenToReachWatch && timeTakenToReply
-
-    const fileTransferTime = this.state.fileTransferTime
-
-
     return (
       <View style={styles.container}>
         <Image
@@ -230,17 +251,8 @@ export default class Root extends Component {
           <Text style={styles.reachability}>
             Watch session is {this.renderWatchState()} and {this.renderReachabilityText()}
           </Text>
-          {hasResponse ? <Text style={styles.reachability}>
-            The last message took <Text style={styles.boldText}>{timeTakenToReachWatch + 'ms '}</Text>
-            to reach the watch. It then took <Text style={styles.boldText}>{timeTakenToReply + 'ms '}</Text>
-            for the response to arrive
-          </Text> : null}
-          {fileTransferTime ? <Text style={styles.reachability}>
-            The last image took <Text style={styles.boldText}>{fileTransferTime + 'ms '}</Text>
-            to transfer using the {this.state.usedDataAPI ? 'message data api' : 'file transfer api'}
-          </Text> : null}
+          {this.state.responseTimeInstance}
         </View>
-
         <TextInput
           style={styles.textInput}
           ref={e => this.textField = e}
