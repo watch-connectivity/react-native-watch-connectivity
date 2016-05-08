@@ -190,3 +190,10 @@ export function sendMessageData (data, encoding = DEFAULT_ENCODING, cb = functio
     watchBridge.sendMessageData(data, encoding, replyHandler, errorHandler)
   })
 }
+
+/**
+ * @param {object} info
+ */
+export function sendUserInfo (info) {
+  watchBridge.sendUserInfo(info)
+}

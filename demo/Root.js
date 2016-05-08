@@ -46,6 +46,7 @@ export default class Root extends Component {
   componentDidMount () {
     this.listenToKeyboard()
     this.subscribeToWatchEvents()
+    watchBridge.sendUserInfo({id: 1, name: 'Mike'})
   }
 
   configureNextAnimation () {

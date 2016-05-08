@@ -16,6 +16,8 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
 
   var session: WCSession?
   
+  ////////////////////////////////////////////////////////////////////////////////
+  
   override func awakeWithContext(context: AnyObject?) {
     super.awakeWithContext(context)
     if WCSession.isSupported() {
@@ -25,14 +27,20 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
       self.session?.activateSession()
     }
   }
+  
+  ////////////////////////////////////////////////////////////////////////////////
 
   override func willActivate() {
     super.willActivate()
   }
+  
+  ////////////////////////////////////////////////////////////////////////////////
 
   override func didDeactivate() {
     super.didDeactivate()
   }
+  
+  ////////////////////////////////////////////////////////////////////////////////
 
   func session(session: WCSession, didReceiveMessage message: [String : AnyObject], replyHandler: ([String : AnyObject]) -> Void) {
     print("watch received message", message);
@@ -44,6 +52,8 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     replyHandler(["elapsed":Int(elapsed), "timestamp": round(currentTimestamp)])
   }
   
+  ////////////////////////////////////////////////////////////////////////////////
+
   func session(session: WCSession, didReceiveMessageData messageData: NSData, replyHandler: (NSData) -> Void) {
     let currentTimestamp: Double = NSDate().timeIntervalSince1970 * 1000
     let decodedData = NSData(base64EncodedData: messageData, options: NSDataBase64DecodingOptions(rawValue: 0))
@@ -52,6 +62,27 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     let data : NSData = json.dataUsingEncoding(NSUTF8StringEncoding)!
     replyHandler(data)
   }
+  
+  ////////////////////////////////////////////////////////////////////////////////
+  
+  func session(session: WCSession, didReceiveFile file: WCSessionFile) {
+    let data: NSData? = NSData(contentsOfURL: file.fileURL)
+    self.image.setImageData(data)
+  }
+  
+  ////////////////////////////////////////////////////////////////////////////////
+  
+  func session(session: WCSession, didReceiveApplicationContext applicationContext: [String : AnyObject]) {
+    print("did receive application context", applicationContext)
+  }
+  
+  ////////////////////////////////////////////////////////////////////////////////
+  
+  func session(session: WCSession, didReceiveUserInfo userInfo: [String : AnyObject]) {
+    print("did receive user info", userInfo)
+  }
+  
+  ////////////////////////////////////////////////////////////////////////////////
   
   func JSONStringify(value: AnyObject,prettyPrinted:Bool = false) -> String{
     let options = prettyPrinted ? NSJSONWritingOptions.PrettyPrinted : NSJSONWritingOptions(rawValue: 0)
@@ -71,9 +102,6 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     }
     return ""
   }
-
-  func session(session: WCSession, didReceiveFile file: WCSessionFile) {
-    let data: NSData? = NSData(contentsOfURL: file.fileURL)
-    self.image.setImageData(data)
-  }
+  
+  ////////////////////////////////////////////////////////////////////////////////
 }

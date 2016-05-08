@@ -11,6 +11,10 @@ static const NSString* EVENT_ACTIVATION_ERROR           = @"WatchActivationError
 static const NSString* EVENT_WATCH_REACHABILITY_CHANGED = @"WatchReachabilityChanged";
 
 @implementation WatchBridge
+{
+  RCTResponseSenderBlock _userInfoSuccessCallback;
+  RCTResponseErrorBlock _userInfoErrorCallback;
+}
 
 RCT_EXPORT_MODULE()
 
@@ -280,6 +284,16 @@ didFinishFileTransfer:(WCSessionFileTransfer *)fileTransfer
 - (void)session:(WCSession *)session
 didReceiveApplicationContext:(NSDictionary<NSString *,id> *)applicationContext {
   NSLog(@"sessionDidReceiveApplicationContext %@", applicationContext);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// User Info
+////////////////////////////////////////////////////////////////////////////////
+
+RCT_EXPORT_METHOD(sendUserInfo:(NSDictionary<NSString *,id> *)userInfo
+                  success:(RCTResponseSenderBlock)callback
+                  error:(RCTResponseErrorBlock)error) {
+  [self.session transferUserInfo:userInfo];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
