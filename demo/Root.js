@@ -21,10 +21,13 @@ import {pickImage} from './images'
 
 import WatchImage from './WatchImage'
 import DualButton from './DualButton'
+import LabledSwitch from './LabledSwitch'
 
 const LAYOUT_ANIM_PRESET = LayoutAnimation.Presets.easeInEaseOut
 
-import {ROW_MARGIN, COLORS, EVENT_KEYBOARD_SHOW, EVENT_KEYBOARD_HIDE, WINDOW_WIDTH} from './constants'
+import {ROW_MARGIN, COLORS, WINDOW_WIDTH, MAX_IMAGE_SIZE} from './constants'
+
+import {listenToKeyboard} from './keyboard'
 
 
 export default class Root extends Component {
@@ -40,23 +43,11 @@ export default class Root extends Component {
     }
   }
 
-  keyboardWillHide () {
-    this.configureNextAnimation()
-    this.setState({spacerStyle: {height: 0}})
-  }
-
-  keyboardWillShow (e) {
-    const keyboardHeight = e.endCoordinates.height
-    this.configureNextAnimation()
-    this.setState({spacerStyle: {height: keyboardHeight}})
-  }
-
   listenToKeyboard () {
-    const subscriptions                = [
-      DeviceEventEmitter.addListener(EVENT_KEYBOARD_SHOW, ::this.keyboardWillShow),
-      DeviceEventEmitter.addListener(EVENT_KEYBOARD_HIDE, ::this.keyboardWillHide)
-    ]
-    this.unsubscribeFromKeyboardEvents = () => subscriptions.forEach(fn => fn())
+    this.unsubscribeFromKeyboardEvents = listenToKeyboard(height => {
+      this.configureNextAnimation()
+      this.setState({spacerStyle: {height}})
+    })
   }
 
   subscribeToWatchEvents () {
@@ -78,12 +69,9 @@ export default class Root extends Component {
 
   pickImage () {
     const useDataAPI = !this.state.fileAPI
-    // MessageData API is not intended for large images and so we need to restrict the size
-    const MAX_SIZE   = 300
-    const xtra       = useDataAPI ? {maxWidth: MAX_SIZE, maxHeight: MAX_SIZE} : {}
+    const xtra       = useDataAPI ? {maxWidth: MAX_IMAGE_SIZE, maxHeight: MAX_IMAGE_SIZE} : {}
     pickImage('Send Image To Watch', useDataAPI, xtra).then(image => {
       this.configureNextAnimation()
-      console.log('picked image', image)
       if (!image.didCancel) {
         this.setLoading();
         const startTransferTime = new Date().getTime()
@@ -185,38 +173,25 @@ export default class Root extends Component {
   }
 
   renderButtons () {
-    if (this.state.loading) {
-      return <Spinner type="Bounce" color={COLORS.orange} size={44}/>
-    }
-    else {
-      const reachable = this.state.reachable
-
-      const disabledStyle = reachable ? {} : styles.disabled
-      const noText        = !this.state.text.trim().length
-      return (
-        <View>
-          <DualButton
-            textButtonDisabled={noText || !reachable}
-            imageButtonDisabled={!reachable}
-            onTextButtonPress={::this.sendMessage}
-            onImageButtonPress={::this.pickImage}
-            disabled={!reachable}
-          />
-          <View style={styles.switch}>
-            <Switch
-              onTintColor={COLORS.orange}
-              style={{marginBottom: 10}}
-              value={this.state.fileAPI}
-              onValueChange={fileAPI => this.setState({fileAPI})}
-            />
-            <Text
-              style={styles.switchLabel}>
-              {this.state.fileAPI ? 'File API' : 'Data API'}
-            </Text>
-          </View>
-        </View>
-      )
-    }
+    const {reachable, fileAPI, text}  = this.state
+    return (
+      <View>
+        <DualButton
+          textButtonDisabled={!text.trim().length || !reachable}
+          imageButtonDisabled={!reachable}
+          onTextButtonPress={::this.sendMessage}
+          onImageButtonPress={::this.pickImage}
+          disabled={!reachable}
+        />
+        <LabledSwitch
+          label={this.state.fileAPI ? 'File API' : 'Data API'}
+          switchProps={{
+              value: fileAPI,
+              onValueChange: fileAPI => this.setState({fileAPI})
+            }}
+        />
+      </View>
+    )
   }
 
   render () {
@@ -241,7 +216,8 @@ export default class Root extends Component {
           placeholder="Message"
         >
         </TextInput>
-        {this.renderButtons()}
+        {this.state.loading && <Spinner type="Bounce" color={COLORS.orange} size={44}/>}
+        {!this.state.loading && this.renderButtons()}
         <View style={this.state.spacerStyle}/>
       </View>
     )
@@ -269,24 +245,24 @@ export default class Root extends Component {
 
 
 const styles = StyleSheet.create({
-  container:        {
+  container:    {
     flex:            1,
     justifyContent:  'center',
     alignItems:      'center',
     backgroundColor: COLORS.purple,
     width:           WINDOW_WIDTH
   },
-  welcome:          {
+  welcome:      {
     fontSize:  20,
     textAlign: 'center',
     margin:    10,
   },
-  instructions:     {
+  instructions: {
     textAlign:    'center',
     color:        '#333333',
     marginBottom: 5,
   },
-  textInput:        {
+  textInput:    {
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
     height:          60,
     width:           300,
@@ -296,22 +272,9 @@ const styles = StyleSheet.create({
     padding:         20,
     alignSelf:       'center'
   },
-  switch:           {
-    marginTop:     ROW_MARGIN,
-    flexDirection: 'row',
-    alignSelf:     'center',
-    position:      'relative',
-    right:         24
-  },
-  disabled:         {
+  disabled:     {
     opacity: 0.4
   },
-  switchLabel:      {
-    color:      'white',
-    lineHeight: 23,
-    marginLeft: 10,
-    width:      56,
-    position:   'absolute'
-  }
+
 })
 

@@ -21,5 +21,7 @@ export const WINDOW_WIDTH = Dimensions.get('window').width
 
 export const ROW_MARGIN = 20
 
-export const EVENT_KEYBOARD_SHOW = 'keyboardWillShow'
-export const EVENT_KEYBOARD_HIDE = 'keyboardWillHide'
+
+
+// MessageData API is not intended for large images and so we need to restrict the size
+export const MAX_IMAGE_SIZE   = 300
