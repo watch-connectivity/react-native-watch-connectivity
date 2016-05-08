@@ -19,6 +19,9 @@ import * as watchBridge from '../src/WatchBridge.js'
 import Spinner from 'react-native-spinkit'
 import {pickImage} from './images'
 
+import WatchImage from './WatchImage'
+import DualButton from './DualButton'
+
 const LAYOUT_ANIM_PRESET = LayoutAnimation.Presets.easeInEaseOut
 
 import {ROW_MARGIN, COLORS, EVENT_KEYBOARD_SHOW, EVENT_KEYBOARD_HIDE, WINDOW_WIDTH} from './constants'
@@ -130,7 +133,7 @@ export default class Root extends Component {
     })
   }
 
-  setLoading() {
+  setLoading () {
     this.setState({
       loading:               true,
       timeTakenToReachWatch: null,
@@ -189,30 +192,16 @@ export default class Root extends Component {
       const reachable = this.state.reachable
 
       const disabledStyle = reachable ? {} : styles.disabled
+      const noText        = !this.state.text.trim().length
       return (
         <View>
-          <View style={[styles.buttons, disabledStyle]}>
-            <TouchableOpacity
-              style={styles.button}
-              disabled={!this.state.text.trim().length || !reachable}
-              onPress={::this.sendMessage}
-            >
-              <Text style={styles.buttonText}>
-                CHANGE MESSAGE
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.cameraButton}
-              onPress={::this.pickImage}
-              disabled={!reachable}
-            >
-              <Image
-                style={styles.cameraImageStyle}
-                source={{uri: 'Camera'}}
-              />
-            </TouchableOpacity>
-
-          </View>
+          <DualButton
+            textButtonDisabled={noText || !reachable}
+            imageButtonDisabled={!reachable}
+            onTextButtonPress={::this.sendMessage}
+            onImageButtonPress={::this.pickImage}
+            disabled={!reachable}
+          />
           <View style={styles.switch}>
             <Switch
               onTintColor={COLORS.orange}
@@ -233,10 +222,7 @@ export default class Root extends Component {
   render () {
     return (
       <View style={styles.container}>
-        <Image
-          style={{width: 146, height: 269, marginBottom: ROW_MARGIN}}
-          source={{uri: 'Watch'}}
-        />
+        <WatchImage/>
         <View>
           <ReachabilityText
             watchState={this.state.watchState}
@@ -300,38 +286,6 @@ const styles = StyleSheet.create({
     color:        '#333333',
     marginBottom: 5,
   },
-  buttons:          {
-    flexDirection: 'row',
-  },
-  button:           {
-    borderTopLeftRadius:    6,
-    borderBottomLeftRadius: 6,
-    backgroundColor:        COLORS.blue,
-    padding:                10,
-    height:                 44,
-    marginRight:            1,
-  },
-  cameraButton:     {
-    backgroundColor:         COLORS.blue,
-    width:                   56,
-    height:                  44,
-    borderTopRightRadius:    6,
-    borderBottomRightRadius: 6,
-    alignItems:              'center',
-    justifyContent:          'center',
-    alignSelf:               'center'
-
-  },
-  cameraImageStyle: {
-    width:  34.68,
-    height: 24.31,
-  },
-  buttonText:       {
-    color:         'rgb(50, 50, 53)',
-    fontSize:      20,
-    letterSpacing: 0.5,
-    fontWeight:    'bold'
-  },
   textInput:        {
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
     height:          60,
@@ -341,9 +295,6 @@ const styles = StyleSheet.create({
     borderRadius:    6,
     padding:         20,
     alignSelf:       'center'
-  },
-  boldText:         {
-    fontWeight: 'bold'
   },
   switch:           {
     marginTop:     ROW_MARGIN,
