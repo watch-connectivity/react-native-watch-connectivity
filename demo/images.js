@@ -1,7 +1,9 @@
 //noinspection NpmUsedModulesInstalled
 import {ImagePickerManager} from 'NativeModules'
+import {MAX_IMAGE_SIZE} from './constants'
 
-export function pickImage (title, data = false, xtra = {}) {
+export function pickImage (title, data = false) {
+  const xtra = data ? {maxWidth: MAX_IMAGE_SIZE, maxHeight: MAX_IMAGE_SIZE} : {}
   return new Promise((resolve, reject) => {
     const options = {
       title:                        title,

@@ -1,34 +1,17 @@
-import React, {
-  AppRegistry,
-  Component,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  TextInput,
-  Dimensions,
-  Image,
-  LayoutAnimation,
-  DeviceEventEmitter,
-  Switch
-} from 'react-native'
-
-import ReachabilityText from './ReachabilityText'
+import React, {Component, StyleSheet, Text, View, TextInput, LayoutAnimation} from 'react-native'
+import Spinner from 'react-native-spinkit'
 
 import * as watchBridge from '../src/WatchBridge.js'
-import Spinner from 'react-native-spinkit'
 import {pickImage} from './images'
+import {listenToKeyboard} from './keyboard'
+import {ROW_MARGIN, COLORS, WINDOW_WIDTH, MAX_IMAGE_SIZE} from './constants'
 
+import ReachabilityText from './ReachabilityText'
 import WatchImage from './WatchImage'
 import DualButton from './DualButton'
 import LabledSwitch from './LabledSwitch'
 
 const LAYOUT_ANIM_PRESET = LayoutAnimation.Presets.easeInEaseOut
-
-import {ROW_MARGIN, COLORS, WINDOW_WIDTH, MAX_IMAGE_SIZE} from './constants'
-
-import {listenToKeyboard} from './keyboard'
-
 
 export default class Root extends Component {
   constructor (props) {
@@ -67,54 +50,40 @@ export default class Root extends Component {
     LayoutAnimation.configureNext(LAYOUT_ANIM_PRESET)
   }
 
+  _pickImage () {
+    return pickImage('Send Image To Watch', !this.state.fileAPI)
+  }
+
   pickImage () {
-    const useDataAPI = !this.state.fileAPI
-    const xtra       = useDataAPI ? {maxWidth: MAX_IMAGE_SIZE, maxHeight: MAX_IMAGE_SIZE} : {}
-    pickImage('Send Image To Watch', useDataAPI, xtra).then(image => {
+    const fileAPI = this.state.fileAPI
+    this._pickImage().then(image => {
       this.configureNextAnimation()
       if (!image.didCancel) {
         this.setLoading();
         const startTransferTime = new Date().getTime()
+        let promise
 
-        const onFulfilled = resp => {
+        if (fileAPI && image.uri) promise = watchBridge.transferFile(image.uri)
+        else if (image.data) promise = watchBridge.sendMessageData(image.data)
+        else promise = Promise.reject()
+
+        promise.then(resp => {
           const endTransferTime = new Date().getTime()
           const elapsed         = endTransferTime - startTransferTime
           console.log(`successfully transferred in ${elapsed}ms`, resp)
           this.configureNextAnimation()
           this.setState({
             fileTransferTime:      elapsed,
-            useDataAPI:            useDataAPI,
+            useDataAPI:            !fileAPI,
             timeTakenToReachWatch: null,
             timeTakenToReply:      null
           })
-        }
-
-        const onRejected = err => {
+        }).catch(err => {
           console.warn('Error sending message data', err, err.stack)
           this.configureNextAnimation()
-        }
-
-        const onSettled = () => this.setState({loading: false})
-
-        if (useDataAPI) {
-          if (image.data)
-            watchBridge
-              .sendMessageData(image.data)
-              .then(onFulfilled)
-              .catch(onRejected)
-              .finally(onSettled)
-        }
-        else {
-          const fileURI = image.uri
-          if (fileURI) {
-            console.log(`transferring ${fileURI} to the watch`)
-            watchBridge
-              .transferFile(fileURI)
-              .then(onFulfilled)
-              .catch(onRejected)
-              .finally(onSettled)
-          }
-        }
+        }).finally(() => {
+          this.setState({loading: false})
+        })
       }
     }).catch(err => {
       console.error(`Error picking image`, err)
