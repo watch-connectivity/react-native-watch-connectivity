@@ -115,7 +115,12 @@ export function subscribeToFileTransfers (cb) {
  * @return {sendMessageCallback} unsubscribe
  */
 export function subscribeToMessages (cb) {
-  return _subscribe(EVENT_RECEIVE_MESSAGE, cb)
+  return _subscribe(EVENT_RECEIVE_MESSAGE, payload => {
+    console.log('received message payload', payload)
+    const messageId    = payload.id
+    const replyHandler = messageId ? resp => watchBridge.replyToMessageWithId(messageId, resp) : null
+    cb(null, payload, replyHandler)
+  })
 }
 
 /**

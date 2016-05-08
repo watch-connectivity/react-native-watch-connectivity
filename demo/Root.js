@@ -219,12 +219,20 @@ export default class Root extends Component {
   }
 
 
-  receiveMessage (err, payload, replyHandler) {
+  receiveMessage (err, message, replyHandler) {
     if (err) console.error(`Error receiving message`, err)
     else {
-      console.log('app received message', payload)
+      console.log('app received message', message)
+      if (message.message === 'ping') {
+        if (replyHandler) {
+          replyHandler({message: 'pong'})
+        }
+        else {
+          console.error('no reply handler...')
+        }
+      }
       this.configureNextAnimation()
-      this.setState({messages: [...messages, payload]})
+      this.setState({messages: [...this.state.messages, message]})
     }
   }
 

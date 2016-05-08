@@ -24,7 +24,6 @@
 		2716DE281CD4AA1B00027DC3 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2716DE271CD4AA1B00027DC3 /* ComplicationController.swift */; };
 		2716DE2A1CD4AA1B00027DC3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2716DE291CD4AA1B00027DC3 /* Assets.xcassets */; };
 		2716DE2E1CD4AA1B00027DC3 /* watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 2716DE0C1CD4AA1A00027DC3 /* watch.app */; };
-		2716DE451CD4ADF400027DC3 /* WatchBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2716DE441CD4ADF400027DC3 /* WatchBridge.swift */; };
 		2716DE711CD4B3C300027DC3 /* WatchBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 2716DE701CD4B3C300027DC3 /* WatchBridge.m */; };
 		27B457001CD692A400E7F9EE /* libRNSpinkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27B456FF1CD6929600E7F9EE /* libRNSpinkit.a */; };
 		5596E23963E37545CA67588F /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D40E09FFF8B4EA4E3C8E54EC /* libPods.a */; };
@@ -127,7 +126,6 @@
 		2716DE271CD4AA1B00027DC3 /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
 		2716DE291CD4AA1B00027DC3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2716DE2B1CD4AA1B00027DC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2716DE441CD4ADF400027DC3 /* WatchBridge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchBridge.swift; sourceTree = "<group>"; };
 		2716DE6F1CD4B3C300027DC3 /* WatchBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WatchBridge.h; sourceTree = "<group>"; };
 		2716DE701CD4B3C300027DC3 /* WatchBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WatchBridge.m; sourceTree = "<group>"; };
 		27B456F91CD6929600E7F9EE /* RNSpinkit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSpinkit.xcodeproj; path = "../node_modules/react-native-spinkit/ios/RNSpinkit.xcodeproj"; sourceTree = "<group>"; };
@@ -227,7 +225,6 @@
 		2716DE1C1CD4AA1A00027DC3 /* watch Extension */ = {
 			isa = PBXGroup;
 			children = (
-				2716DE441CD4ADF400027DC3 /* WatchBridge.swift */,
 				2716DE1F1CD4AA1B00027DC3 /* InterfaceController.swift */,
 				2716DE211CD4AA1B00027DC3 /* ExtensionDelegate.swift */,
 				2716DE231CD4AA1B00027DC3 /* NotificationController.swift */,
@@ -590,7 +587,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2716DE451CD4ADF400027DC3 /* WatchBridge.swift in Sources */,
 				2716DE241CD4AA1B00027DC3 /* NotificationController.swift in Sources */,
 				2716DE221CD4AA1B00027DC3 /* ExtensionDelegate.swift in Sources */,
 				2716DE281CD4AA1B00027DC3 /* ComplicationController.swift in Sources */,

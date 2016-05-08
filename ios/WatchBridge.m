@@ -140,18 +140,10 @@ RCT_EXPORT_METHOD(sendMessage:(NSDictionary *)message
 ////////////////////////////////////////////////////////////////////////////////
 
 RCT_EXPORT_METHOD(replyToMessageWithId:(NSString*) messageId
-                  withMessage:(NSDictionary<NSString *,id> *)message
-                  success:(RCTResponseSenderBlock)callback
-                  error:(RCTResponseErrorBlock)error {
+                  withMessage:(NSDictionary<NSString *,id> *)message) {
   void (^replyHandler)(NSDictionary<NSString *,id> * _Nonnull) =  self.replyHandlers[messageId];
-  if (replyHandler) {
-    replyHandler(message);
-  }
-  else {
-    NSError* err = [[NSError alloc] initWithDomain:@"com.mtford.watchbridge" code:0 userInfo:@{@"missing_id": messageId}];
-    error(err);
-  }
-})
+  replyHandler(message);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -167,8 +159,13 @@ didReceiveMessage:(NSDictionary<NSString *,id> *)message {
 didReceiveMessage:(NSDictionary<NSString *,id> *)message
    replyHandler:(void (^)(NSDictionary<NSString *,id> * _Nonnull))replyHandler
 {
+  
   NSLog(@"sessionDidReceiveMessageReplyHandler %@", message);
-  [self dispatchEventWithName:EVENT_RECEIVE_MESSAGE body:message];
+  NSString* messageId = [self uuidString];
+  NSMutableDictionary* mutableMessage = [message mutableCopy];
+  mutableMessage[@"id"] = messageId;
+  self.replyHandlers[messageId] = replyHandler;
+  [self dispatchEventWithName:EVENT_RECEIVE_MESSAGE body:mutableMessage];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
