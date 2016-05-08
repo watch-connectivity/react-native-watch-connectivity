@@ -1,12 +1,13 @@
 import {NativeModules, NativeAppEventEmitter, keymirror} from 'react-native'
 const watchBridge = NativeModules.WatchBridge
 
-const EVENT_FILE_TRANSFER_ERROR        = 'WatchFileTransferError'
-const EVENT_FILE_TRANSFER_FINISHED     = 'WatchFileTransferFinished'
-const EVENT_RECEIVE_MESSAGE            = 'WatchReceiveMessage'
-const EVENT_WATCH_STATE_CHANGED        = 'WatchStateChanged'
-const EVENT_WATCH_REACHABILITY_CHANGED = 'WatchReachabilityChanged'
-const EVENT_WATCH_USER_INFO_RECEIVED   = 'WatchUserInfoReceived'
+const EVENT_FILE_TRANSFER_ERROR          = 'WatchFileTransferError'
+const EVENT_FILE_TRANSFER_FINISHED       = 'WatchFileTransferFinished'
+const EVENT_RECEIVE_MESSAGE              = 'WatchReceiveMessage'
+const EVENT_WATCH_STATE_CHANGED          = 'WatchStateChanged'
+const EVENT_WATCH_REACHABILITY_CHANGED   = 'WatchReachabilityChanged'
+const EVENT_WATCH_USER_INFO_RECEIVED     = 'WatchUserInfoReceived'
+const EVENT_APPLICATION_CONTEXT_RECEIVED = 'WatchApplicationContextReceived'
 
 export const WatchState = {
   NotActivated: 'NotActivated',
@@ -137,6 +138,12 @@ export function subscribeToUserInfo (cb) {
   return _subscribe(EVENT_WATCH_USER_INFO_RECEIVED, payload => cb(null, payload))
 }
 
+
+export function subscribeToApplicationContext (cb) {
+  getApplicationContext(cb)
+  return _subscribe(EVENT_APPLICATION_CONTEXT_RECEIVED, payload => cb(null, payload))
+}
+
 export function getWatchState (cb = function () {}) {
   return new Promise(resolve => {
     watchBridge.getSessionState(state => {
@@ -160,6 +167,15 @@ export function getUserInfo (cb) {
     watchBridge.getUserInfo(info => {
       cb(null, info)
       resolve(info)
+    })
+  })
+}
+
+export function getApplicationContext (cb) {
+  return new Promise(resolve => {
+    watchBridge.getApplicationContext(context => {
+      cb(null, context)
+      resolve(context)
     })
   })
 }
@@ -211,4 +227,11 @@ export function sendMessageData (data, encoding = DEFAULT_ENCODING, cb = functio
  */
 export function sendUserInfo (info) {
   watchBridge.sendUserInfo(info)
+}
+
+/**
+ * @param {object} context
+ */
+export function updateApplicationContext (context) {
+  watchBridge.updateApplicationContext(context)
 }

@@ -2,15 +2,15 @@
 #import "RCTConvert.h"
 #import "RCTEventDispatcher.h"
 
-static const NSString* EVENT_FILE_TRANSFER_ERROR        = @"WatchFileTransferError";
-static const NSString* EVENT_FILE_TRANSFER_FINISHED     = @"WatchFileTransferFinished";
-static const NSString* EVENT_RECEIVE_MESSAGE            = @"WatchReceiveMessage";
-static const NSString* EVENT_RECEIVE_MESSAGE_DATA       = @"WatchReceiveMessageData";
-static const NSString* EVENT_WATCH_STATE_CHANGED        = @"WatchStateChanged";
-static const NSString* EVENT_ACTIVATION_ERROR           = @"WatchActivationError";
-static const NSString* EVENT_WATCH_REACHABILITY_CHANGED = @"WatchReachabilityChanged";
-static const NSString* EVENT_WATCH_USER_INFO_RECEIVED   = @"WatchUserInfoReceived";
-
+static const NSString* EVENT_FILE_TRANSFER_ERROR            = @"WatchFileTransferError";
+static const NSString* EVENT_FILE_TRANSFER_FINISHED         = @"WatchFileTransferFinished";
+static const NSString* EVENT_RECEIVE_MESSAGE                = @"WatchReceiveMessage";
+static const NSString* EVENT_RECEIVE_MESSAGE_DATA           = @"WatchReceiveMessageData";
+static const NSString* EVENT_WATCH_STATE_CHANGED            = @"WatchStateChanged";
+static const NSString* EVENT_ACTIVATION_ERROR               = @"WatchActivationError";
+static const NSString* EVENT_WATCH_REACHABILITY_CHANGED     = @"WatchReachabilityChanged";
+static const NSString* EVENT_WATCH_USER_INFO_RECEIVED       = @"WatchUserInfoReceived";
+static const NSString* EVENT_APPLICATION_CONTEXT_RECEIVED   = @"WatchApplicationContextReceived";
 
 @implementation WatchBridge
 
@@ -273,16 +273,29 @@ didFinishFileTransfer:(WCSessionFileTransfer *)fileTransfer
   else {
     NSLog(@"Warning: Received transfer without Transfer ID");
   }
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Context
 ////////////////////////////////////////////////////////////////////////////////
 
+RCT_EXPORT_METHOD(updateApplicationContext:(NSDictionary<NSString *,id> *)context) {
+  [self.session updateApplicationContext:context error:nil];
+  [self dispatchEventWithName:EVENT_APPLICATION_CONTEXT_RECEIVED body:context];
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+RCT_EXPORT_METHOD(getApplicationContext:(RCTResponseSenderBlock)callback) {
+  callback(@[self.session.applicationContext]);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 - (void)session:(WCSession *)session
 didReceiveApplicationContext:(NSDictionary<NSString *,id> *)applicationContext {
   NSLog(@"sessionDidReceiveApplicationContext %@", applicationContext);
+  [self dispatchEventWithName:EVENT_APPLICATION_CONTEXT_RECEIVED body:self.session.applicationContext];
 }
 
 ////////////////////////////////////////////////////////////////////////////////

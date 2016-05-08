@@ -35,7 +35,7 @@ export default class Root extends Component {
     })
   }
 
-  receiveUserInfo(err, userInfo) {
+  receiveUserInfo (err, userInfo) {
     if (!err) {
       console.log('received user info', userInfo)
       this.setState({userInfo})
@@ -45,12 +45,23 @@ export default class Root extends Component {
     }
   }
 
+  receiveApplicationContext (err, applicationContext) {
+    if (!err) {
+      console.log('received application context', applicationContext)
+      this.setState({applicationContext})
+    }
+    else {
+      console.error('error receiving application context', err)
+    }
+  }
+
   subscribeToWatchEvents () {
     this.subscriptions = [
       watchBridge.subscribeToMessages(::this.receiveMessage),
       watchBridge.subscribeToWatchState(::this.receiveWatchState),
       watchBridge.subscribeToWatchReachability(::this.receiveWatchReachability),
-      watchBridge.subscribeToUserInfo(::this.receiveUserInfo)
+      watchBridge.subscribeToUserInfo(::this.receiveUserInfo),
+      watchBridge.subscribeToApplicationContext(::this.receiveApplicationContext),
     ]
   }
 
@@ -58,6 +69,7 @@ export default class Root extends Component {
     this.listenToKeyboard()
     this.subscribeToWatchEvents()
     watchBridge.sendUserInfo({id: 1, name: 'Mike'})
+    watchBridge.updateApplicationContext({context: 'context'})
   }
 
   configureNextAnimation () {
