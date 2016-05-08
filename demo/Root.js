@@ -1,10 +1,12 @@
-import React, {Component, StyleSheet, Text, View, TextInput, LayoutAnimation} from 'react-native'
+const React = require('react-native')
+const {Component, StyleSheet, View, TextInput, LayoutAnimation} = React
+
 import Spinner from 'react-native-spinkit'
 
 import * as watchBridge from '../src/WatchBridge.js'
 import {pickImage} from './images'
 import {listenToKeyboard} from './keyboard'
-import {ROW_MARGIN, COLORS, WINDOW_WIDTH, MAX_IMAGE_SIZE} from './constants'
+import {ROW_MARGIN, COLORS, WINDOW_WIDTH} from './constants'
 
 import ReachabilityText from './ReachabilityText'
 import WatchImage from './WatchImage'

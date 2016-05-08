@@ -1,3 +1,4 @@
+//noinspection NpmUsedModulesInstalled
 import Dimensions from 'Dimensions'
 
 const purple = '#34314c'
