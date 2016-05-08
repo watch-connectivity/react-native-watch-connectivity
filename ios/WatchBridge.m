@@ -9,12 +9,10 @@ static const NSString* EVENT_RECEIVE_MESSAGE_DATA       = @"WatchReceiveMessageD
 static const NSString* EVENT_WATCH_STATE_CHANGED        = @"WatchStateChanged";
 static const NSString* EVENT_ACTIVATION_ERROR           = @"WatchActivationError";
 static const NSString* EVENT_WATCH_REACHABILITY_CHANGED = @"WatchReachabilityChanged";
+static const NSString* EVENT_WATCH_USER_INFO_RECEIVED   = @"WatchUserInfoReceived";
+
 
 @implementation WatchBridge
-{
-  RCTResponseSenderBlock _userInfoSuccessCallback;
-  RCTResponseErrorBlock _userInfoErrorCallback;
-}
 
 RCT_EXPORT_MODULE()
 
@@ -41,6 +39,7 @@ RCT_EXPORT_MODULE()
     self.session = session;
     self.transfers = [NSMutableDictionary new];
     self.replyHandlers = [NSMutableDictionary new];
+    self.userInfo = [NSDictionary<NSString*, id> new];
     [session activateSession];
   }
   return self;
@@ -290,10 +289,14 @@ didReceiveApplicationContext:(NSDictionary<NSString *,id> *)applicationContext {
 // User Info
 ////////////////////////////////////////////////////////////////////////////////
 
-RCT_EXPORT_METHOD(sendUserInfo:(NSDictionary<NSString *,id> *)userInfo
-                  success:(RCTResponseSenderBlock)callback
-                  error:(RCTResponseErrorBlock)error) {
+RCT_EXPORT_METHOD(sendUserInfo:(NSDictionary<NSString *,id> *)userInfo) {
   [self.session transferUserInfo:userInfo];
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+RCT_EXPORT_METHOD(getUserInfo:(RCTResponseSenderBlock)callback) {
+  callback(@[self.userInfo]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -301,6 +304,8 @@ RCT_EXPORT_METHOD(sendUserInfo:(NSDictionary<NSString *,id> *)userInfo
 - (void)session:(WCSession *)session
 didReceiveUserInfo:(NSDictionary<NSString *,id> *)userInfo {
   NSLog(@"sessionDidReceiveUserInfo %@", userInfo);
+  self.userInfo = userInfo;
+  [self dispatchEventWithName:EVENT_WATCH_USER_INFO_RECEIVED body:userInfo];
 }
 
 ////////////////////////////////////////////////////////////////////////////////

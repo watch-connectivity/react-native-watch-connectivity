@@ -35,11 +35,22 @@ export default class Root extends Component {
     })
   }
 
+  receiveUserInfo(err, userInfo) {
+    if (!err) {
+      console.log('received user info', userInfo)
+      this.setState({userInfo})
+    }
+    else {
+      console.error('error receiving user info', err)
+    }
+  }
+
   subscribeToWatchEvents () {
     this.subscriptions = [
       watchBridge.subscribeToMessages(::this.receiveMessage),
       watchBridge.subscribeToWatchState(::this.receiveWatchState),
-      watchBridge.subscribeToWatchReachability(::this.receiveWatchReachability)
+      watchBridge.subscribeToWatchReachability(::this.receiveWatchReachability),
+      watchBridge.subscribeToUserInfo(::this.receiveUserInfo)
     ]
   }
 

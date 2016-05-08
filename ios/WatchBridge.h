@@ -9,6 +9,7 @@
 @property (nonatomic, strong) WCSession* session;
 @property (nonatomic, strong) NSMutableDictionary* replyHandlers;
 @property (nonatomic, strong) NSMutableDictionary* transfers;
+@property (nonatomic, strong) NSDictionary<NSString*, id>* userInfo;
 
 + (WatchBridge*) shared;
 

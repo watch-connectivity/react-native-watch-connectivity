@@ -80,6 +80,8 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
   
   func session(session: WCSession, didReceiveUserInfo userInfo: [String : AnyObject]) {
     print("did receive user info", userInfo)
+    // Send the bullshit user info back to the device just to demonstrate it works ;)
+    session.transferUserInfo(userInfo)
   }
   
   ////////////////////////////////////////////////////////////////////////////////

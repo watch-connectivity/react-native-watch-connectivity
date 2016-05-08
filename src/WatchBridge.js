@@ -6,6 +6,7 @@ const EVENT_FILE_TRANSFER_FINISHED     = 'WatchFileTransferFinished'
 const EVENT_RECEIVE_MESSAGE            = 'WatchReceiveMessage'
 const EVENT_WATCH_STATE_CHANGED        = 'WatchStateChanged'
 const EVENT_WATCH_REACHABILITY_CHANGED = 'WatchReachabilityChanged'
+const EVENT_WATCH_USER_INFO_RECEIVED   = 'WatchUserInfoReceived'
 
 export const WatchState = {
   NotActivated: 'NotActivated',
@@ -131,6 +132,11 @@ export function subscribeToWatchReachability (cb) {
   return _subscribe(EVENT_WATCH_REACHABILITY_CHANGED, payload => cb(null, payload.reachability))
 }
 
+export function subscribeToUserInfo (cb) {
+  getUserInfo(cb)
+  return _subscribe(EVENT_WATCH_USER_INFO_RECEIVED, payload => cb(null, payload))
+}
+
 export function getWatchState (cb = function () {}) {
   return new Promise(resolve => {
     watchBridge.getSessionState(state => {
@@ -145,6 +151,15 @@ export function getWatchReachability (cb) {
     watchBridge.getReachability(reachability => {
       cb(null, reachability)
       resolve(reachability)
+    })
+  })
+}
+
+export function getUserInfo (cb) {
+  return new Promise(resolve => {
+    watchBridge.getUserInfo(info => {
+      cb(null, info)
+      resolve(info)
     })
   })
 }
