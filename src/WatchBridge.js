@@ -1,5 +1,5 @@
 import {NativeModules, NativeAppEventEmitter, keymirror} from 'react-native'
-const watchBridge = NativeModules.WatchBridge
+const watch = NativeModules.WatchBridge
 
 const EVENT_FILE_TRANSFER_ERROR          = 'WatchFileTransferError'
 const EVENT_FILE_TRANSFER_FINISHED       = 'WatchFileTransferFinished'
@@ -50,14 +50,16 @@ export const Encoding = {
 const DEFAULT_ENCODING = Encoding.NSUTF8StringEncoding
 
 /**
- * Callback used in subscribeToFileTransfers
+ * Callback used in sendMessage
  *
- * @callback fileTransferCallback
+ * @callback transferFileCallback
  * @param {Error} error
- * @param {object} res
- * @param {string} fileURL
- * @param {object} metaData
+ * @param {string} transferId
  */
+
+////////////////////////////////////////////////////////////////////////////////
+// Messages
+////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Callback used in sendMessage
@@ -68,45 +70,12 @@ const DEFAULT_ENCODING = Encoding.NSUTF8StringEncoding
  */
 
 /**
- * Callback used in sendMessage
- *
- * @callback transferFileCallback
- * @param {Error} error
- * @param {string} transferId
- */
-
-
-/**
  * Send a message to the watch over the bridge
  * @param {object} message
  * @param {sendMessageCallback} [cb]
  */
 export function sendMessage (message, cb) {
-  return watchBridge.sendMessage(message, reply => cb(null, reply), err => cb(err))
-}
-
-/**
- * Add listener to event
- * @param {string} event
- * @param {function} cb
- * @return {function} unsubscribe
- * @private
- */
-export function _subscribe (event, cb) {
-  return ::NativeAppEventEmitter.addListener(event, cb).remove
-}
-
-/**
- *
- * @param {fileTransferCallback} cb
- * @return {function} unsubscribe
- */
-export function subscribeToFileTransfers (cb) {
-  const subscriptions = [
-    _subscribe(EVENT_FILE_TRANSFER_FINISHED, res => cb(null, res)),
-    _subscribe(EVENT_FILE_TRANSFER_ERROR, (err, res) => cb(err, res)),
-  ]
-  return () => subscriptions.forEach(fn => fn())
+  return watch.sendMessage(message, reply => cb(null, reply), err => cb(err))
 }
 
 /**
@@ -118,92 +87,14 @@ export function subscribeToMessages (cb) {
   return _subscribe(EVENT_RECEIVE_MESSAGE, payload => {
     console.log('received message payload', payload)
     const messageId    = payload.id
-    const replyHandler = messageId ? resp => watchBridge.replyToMessageWithId(messageId, resp) : null
+    const replyHandler = messageId ? resp => watch.replyToMessageWithId(messageId, resp) : null
     cb(null, payload, replyHandler)
   })
 }
 
-/**
- *
- * @param cb
- * @returns {Function}
- */
-export function subscribeToWatchState (cb) {
-  getWatchState(cb) // Initial reading
-  return _subscribe(EVENT_WATCH_STATE_CHANGED, payload => cb(null, _WatchState[payload.state]))
-}
-
-export function subscribeToWatchReachability (cb) {
-  getWatchReachability(cb)
-  return _subscribe(EVENT_WATCH_REACHABILITY_CHANGED, payload => cb(null, payload.reachability))
-}
-
-export function subscribeToUserInfo (cb) {
-  getUserInfo(cb)
-  return _subscribe(EVENT_WATCH_USER_INFO_RECEIVED, payload => cb(null, payload))
-}
-
-
-export function subscribeToApplicationContext (cb) {
-  getApplicationContext(cb)
-  return _subscribe(EVENT_APPLICATION_CONTEXT_RECEIVED, payload => cb(null, payload))
-}
-
-export function getWatchState (cb = function () {}) {
-  return new Promise(resolve => {
-    watchBridge.getSessionState(state => {
-      cb(null, _WatchState[state])
-      resolve(_WatchState[state])
-    })
-  })
-}
-
-export function getWatchReachability (cb) {
-  return new Promise(resolve => {
-    watchBridge.getReachability(reachability => {
-      cb(null, reachability)
-      resolve(reachability)
-    })
-  })
-}
-
-export function getUserInfo (cb) {
-  return new Promise(resolve => {
-    watchBridge.getUserInfo(info => {
-      cb(null, info)
-      resolve(info)
-    })
-  })
-}
-
-export function getApplicationContext (cb) {
-  return new Promise(resolve => {
-    watchBridge.getApplicationContext(context => {
-      cb(null, context)
-      resolve(context)
-    })
-  })
-}
-
-/**
- * Transfer a file stored locally on the device to the iWatch
- *
- * @param {string} url - url to a file on the device e.g. a photo/video
- * @param {object} [metadata]
- * @param {transferFileCallback} [cb]
- * @returns {Promise}
- */
-export function transferFile (url, metadata = {}, cb = function () {}) {
-  return new Promise((resolve, reject) => {
-    watchBridge.transferFile(url, metadata, resp => {
-      resolve(resp)
-      cb(null, resp)
-    }, err => {
-      reject(err)
-      cb(err)
-    })
-  })
-}
+////////////////////////////////////////////////////////////////////////////////
+// Message Data
+////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Send a message to the watch over the bridge
@@ -223,20 +114,179 @@ export function sendMessageData (data, encoding = DEFAULT_ENCODING, cb = functio
       cb(err)
       reject(err)
     }
-    watchBridge.sendMessageData(data, encoding, replyHandler, errorHandler)
+    watch.sendMessageData(data, encoding, replyHandler, errorHandler)
   })
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Files
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Callback used in subscribeToFileTransfers
+ *
+ * @callback fileTransferCallback
+ * @param {Error} error
+ * @param {object} res
+ * @param {string} fileURL
+ * @param {object} metaData
+ */
+
+/**
+ *
+ * @param {fileTransferCallback} cb
+ * @return {function} unsubscribe
+ */
+export function subscribeToFileTransfers (cb) {
+  const subscriptions = [
+    _subscribe(EVENT_FILE_TRANSFER_FINISHED, res => cb(null, res)),
+    _subscribe(EVENT_FILE_TRANSFER_ERROR, (err, res) => cb(err, res)),
+  ]
+  return () => subscriptions.forEach(fn => fn())
+}
+
+/**
+ * Transfer a file stored locally on the device to the iWatch
+ *
+ * @param {string} uri - uri to a file on the device e.g. a photo/video
+ * @param {object} [metadata]
+ * @param {transferFileCallback} [cb]
+ * @returns {Promise}
+ */
+export function transferFile (uri, metadata = {}, cb = function () {}) {
+  return new Promise((resolve, reject) => {
+    watch.transferFile(uri, metadata, resp => {
+      resolve(resp)
+      cb(null, resp)
+    }, err => {
+      reject(err)
+      cb(err)
+    })
+  })
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Watch State
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ *
+ * @param cb
+ * @returns {Function}
+ */
+export function subscribeToWatchState (cb) {
+  getWatchState(cb) // Initial reading
+  return _subscribe(EVENT_WATCH_STATE_CHANGED, payload => cb(null, _WatchState[payload.state]))
+}
+
+export function getWatchState (cb = function () {}) {
+  return new Promise(resolve => {
+    watch.getSessionState(state => {
+      cb(null, _WatchState[state])
+      resolve(_WatchState[state])
+    })
+  })
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Reachability
+////////////////////////////////////////////////////////////////////////////////
+
+export function subscribeToWatchReachability (cb) {
+  getWatchReachability(cb)
+  return _subscribe(EVENT_WATCH_REACHABILITY_CHANGED, payload => cb(null, payload.reachability))
+}
+
+/**
+ *
+ * @param {Function} cb
+ * @returns {Promise}
+ */
+export function getWatchReachability (cb) {
+  return new Promise(resolve => {
+    watch.getReachability(reachability => {
+      cb(null, reachability)
+      resolve(reachability)
+    })
+  })
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// User Info
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ *
+ * @param {Function} cb
+ * @returns {Function}
+ */
+export function subscribeToUserInfo (cb) {
+  getUserInfo(cb)
+  return _subscribe(EVENT_WATCH_USER_INFO_RECEIVED, payload => cb(null, payload))
 }
 
 /**
  * @param {object} info
  */
 export function sendUserInfo (info) {
-  watchBridge.sendUserInfo(info)
+  watch.sendUserInfo(info)
 }
+
+export function getUserInfo (cb) {
+  return new Promise(resolve => {
+    watch.getUserInfo(info => {
+      cb(null, info)
+      resolve(info)
+    })
+  })
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Application Context
+////////////////////////////////////////////////////////////////////////////////
 
 /**
  * @param {object} context
  */
 export function updateApplicationContext (context) {
-  watchBridge.updateApplicationContext(context)
+  watch.updateApplicationContext(context)
+}
+
+/**
+ *
+ * @param {function} cb
+ * @returns {Function} - unsubscribe function
+ */
+export function subscribeToApplicationContext (cb) {
+  getApplicationContext(cb)
+  return _subscribe(EVENT_APPLICATION_CONTEXT_RECEIVED, payload => cb(null, payload))
+}
+
+/**
+ *
+ * @param {function} cb
+ * @returns {Promise}
+ */
+export function getApplicationContext (cb) {
+  return new Promise(resolve => {
+    watch.getApplicationContext(context => {
+      cb(null, context)
+      resolve(context)
+    })
+  })
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Helpers
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Add listener to event
+ * @param {string} event
+ * @param {function} cb
+ * @return {function} unsubscribe
+ * @private
+ */
+export function _subscribe (event, cb) {
+  return ::NativeAppEventEmitter.addListener(event, cb).remove
 }

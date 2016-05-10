@@ -34,42 +34,109 @@ npm install react-native-watch-bridge
 
 ## Usage
 
-### import
+**ES6**
 
 ```js
-import * as watchBridge from 'react-native-watch-bridge'
+import * as watch from 'react-native-watch-bridge'
 ```
+
+**ES5**
 
 ```js
-var watchBridge = require('react-native-watch-bridge')
+var watch = require('react-native-watch-bridge')
 ```
 
-### api
-
-#### sendMessage
+### Reachability
 
 ```js
-sendMessage(
-    {
-        key: 'value'
-    },
-    (err, reply) => {
-      // ...
-    }
-)
+// Monitor reachability
+const unsubscribe = watch.subscribeToWatchReachability(watchIsReachable => {
+    this.setState({watchIsReachable})
+})
+
+// Get current reachability
+watch.getReachability(watchIsReachable => {
+  // ...
+})
 ```
 
-#### subscribeToFileTransfers
+### Watch State
 
 ```js
-const unsubscribe = subscribeToFileTransfers(
-    (err, res) => {
-      const {fileURL, metadata} = res
-    }
-)
+// Monitor watch state
+const unsubscribe = watch.subscribeToWatchState(watchState => {
+    console.log('watchState', watchState) // NotActivated, Inactive, Activated
+})
+
+// Get current watch state
+watch.getWatchState(watchState => {
+    console.log('watchState', watchState) // NotActivated, Inactive, Activated
+})
 ```
 
-#### subscribeToWatchReachability
+### Messages
 
-NOTE: Reachability is VERY buggy in the simulator. See [this](https://forums.developer.apple.com/thread/14518) thread.
+#### Send Message
+
+Send messages and receive replies
+
+```js
+watch.sendMessage({text: "Hi watch!"}, (err, replyMessage) => {
+    console.log("Received reply from watch", replyMessage)
+})
+```
+
+#### Receive Message
+
+Recieve messages and send responses
+
+```js
+const unsubscribe = watch.subscribeToMessages((err, message, reply) => {
+    if (!err) reply({text: "message received!"})
+})
+```
+
+### Message Data
+
+TODO: Undocumented & partially implemented
+
+### Files
+
+#### Send Files
+
+```js
+const uri = 'file://...' // e.g. a photo/video obtained using react-native-image-picker
+
+watch.transferFile(uri).then(() => {
+  // ...
+}).catch(err => {
+  // ... handle error
+})
+```
+
+#### Receive Files
+
+TODO: Not implemented or documented
+
+### User Info
+
+```
+const unsubscribe = watch.subscribeToUserInfo((err, info) => {
+    // ...
+})
+```
+
+```
+watch.sendUserInfo({name: 'Mike', id: 5})
+```
+
+```
+watch.getUserInfo().then(info => {
+    // ...
+}).catch(err => {
+    // ...
+})
+```
+
+###
 
