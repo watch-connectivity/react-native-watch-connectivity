@@ -1,20 +1,18 @@
-**THIS IS A WORK IN PROGRESS - DO NOT ATTEMPT TO USE**
-
-# React Native Watch Bridge
+# React Native Watch Connectivity
 
 Communicate with your apple watch apps over the react native bridge.
 
 **Note:** This library does not allow you to write your iWatch apps in React Native but rather allows your RN iOS app to communicate with a watch app written in Obj-C/Swift.
 
-<img height=600 src="https://raw.githubusercontent.com/mtford90/react-native-iwatch-bridge/master/assets/screenshot.png"/>
+<img height=600 src="https://raw.githubusercontent.com/mtford90/react-native-watch-connectivity/master/assets/screenshot.png"/>
 
 ## Demo
 
 The featured screenshot is from the demo app. To get the demo app going:
 
 ```
-git clone https://github.com/mtford90/react-native-iwatch-bridge.git
-cd react-native-iwatch-bridge
+git clone https://github.com/mtford90/react-native-watch-connectivity.git
+cd react-native-watch-connectivity
 npm install
 cd ios
 pod install
@@ -26,24 +24,23 @@ And then run the app!
 ## Install
 
 ```bash
-npm install react-native-watch-bridge
+npm install react-native-watch-connectivity
 ```
 
-* Include WatchBridge.swift in your watch extension target
-* Include WatchBridge.h/WatchBridge.m in your app target
+Then add `node_modules/react-native-watch-connectivity/RNWatch.xcodeproj` to your project and ensure that libRNWatch.a is present in the **Link Binary With Libraries** build phase
 
 ## Usage
 
 **ES6**
 
 ```js
-import * as watch from 'react-native-watch-bridge'
+import * as watch from 'react-native-watch-connectivity'
 ```
 
 **ES5**
 
 ```js
-var watch = require('react-native-watch-bridge')
+var watch = require('react-native-watch-connectivity')
 ```
 
 ### Reachability
