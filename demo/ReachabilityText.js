@@ -1,7 +1,7 @@
 import React, {StyleSheet, Text, View} from 'react-native'
 import {ROW_MARGIN, COLORS} from './constants'
 
-import {WatchState} from '../src/WatchBridge.js'
+import {WatchState} from '../Libraries/RNWatch/RNWatch.ios'
 
 
 export default class Reachability extends React.Component {

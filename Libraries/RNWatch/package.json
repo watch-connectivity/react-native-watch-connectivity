@@ -1,0 +1,10 @@
+{
+  "name": "react-native-watch-connectivity",
+  "version": "1.0",
+  "main": "./RNWatch.ios.js",
+  "keywords": "react-native",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/npm/mtford90/react-native-watch-connectivity.git"
+  }
+}

@@ -2,7 +2,7 @@
   "name": "react-native-iwatch-bridge",
   "version": "0.0.1",
   "private": false,
-  "main": "./src/WatchBridge.js",
+  "main": "./Libraries/RNWatch/RNWatch.ios.js",
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },

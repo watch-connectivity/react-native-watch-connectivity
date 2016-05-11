@@ -3,7 +3,7 @@ const {Component, StyleSheet, View, TextInput, LayoutAnimation} = React
 
 import Spinner from 'react-native-spinkit'
 
-import * as watchBridge from '../src/WatchBridge.js'
+import * as watch from '../Libraries/RNWatch/RNWatch.ios'
 import {pickImage} from './images'
 import {listenToKeyboard} from './keyboard'
 import {ROW_MARGIN, COLORS, WINDOW_WIDTH} from './constants'
@@ -23,7 +23,7 @@ export default class Root extends Component {
       reachable:  false,
       loading:    false,
       text:       '',
-      watchState: watchBridge.WatchState.Inactive,
+      watchState: watch.WatchState.Inactive,
       fileAPI:    true
     }
   }
@@ -57,19 +57,19 @@ export default class Root extends Component {
 
   subscribeToWatchEvents () {
     this.subscriptions = [
-      watchBridge.subscribeToMessages(::this.receiveMessage),
-      watchBridge.subscribeToWatchState(::this.receiveWatchState),
-      watchBridge.subscribeToWatchReachability(::this.receiveWatchReachability),
-      watchBridge.subscribeToUserInfo(::this.receiveUserInfo),
-      watchBridge.subscribeToApplicationContext(::this.receiveApplicationContext),
+      watch.subscribeToMessages(::this.receiveMessage),
+      watch.subscribeToWatchState(::this.receiveWatchState),
+      watch.subscribeToWatchReachability(::this.receiveWatchReachability),
+      watch.subscribeToUserInfo(::this.receiveUserInfo),
+      watch.subscribeToApplicationContext(::this.receiveApplicationContext),
     ]
   }
 
   componentDidMount () {
     this.listenToKeyboard()
     this.subscribeToWatchEvents()
-    watchBridge.sendUserInfo({id: 1, name: 'Mike'})
-    watchBridge.updateApplicationContext({context: 'context'})
+    watch.sendUserInfo({id: 1, name: 'Mike'})
+    watch.updateApplicationContext({context: 'context'})
   }
 
   configureNextAnimation () {
@@ -89,8 +89,8 @@ export default class Root extends Component {
         const startTransferTime = new Date().getTime()
         let promise
 
-        if (fileAPI && image.uri) promise = watchBridge.transferFile(image.uri)
-        else if (image.data) promise = watchBridge.sendMessageData(image.data)
+        if (fileAPI && image.uri) promise = watch.transferFile(image.uri)
+        else if (image.data) promise = watch.sendMessageData(image.data)
         else promise = Promise.reject()
 
         promise.then(resp => {
@@ -132,7 +132,7 @@ export default class Root extends Component {
       this.configureNextAnimation()
       this.setLoading()
 
-      watchBridge.sendMessage({text, timestamp}, (err, resp) => {
+      watch.sendMessage({text, timestamp}, (err, resp) => {
         if (!err) {
           console.log('response received', resp)
           const timeTakenToReachWatch = resp.elapsed
