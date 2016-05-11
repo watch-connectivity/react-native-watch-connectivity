@@ -1,3 +1,5 @@
+***WARNING***: This library is a work in progress
+
 # React Native Watch Connectivity
 
 Communicate with your apple watch apps over the react native bridge.
