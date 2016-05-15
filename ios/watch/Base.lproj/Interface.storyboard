@@ -13,19 +13,24 @@
                         <label width="1" alignment="left" text="iWatch Bridge" textAlignment="center" id="cAP-1r-aPy">
                             <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
                         </label>
-                        <imageView width="1" height="62" alignment="left" image="Camera" contentMode="scaleAspectFit" id="4j7-sx-KhQ"/>
-                        <label width="136" height="67.5" alignment="center" text="Use the app to change both this message and the image" textAlignment="center" numberOfLines="0" id="d17-oj-qpi">
+                        <imageView width="1" height="44" alignment="left" image="Camera" contentMode="scaleAspectFit" id="4j7-sx-KhQ"/>
+                        <label width="136" height="51.5" alignment="center" text="Use the app to change this message" textAlignment="center" numberOfLines="0" id="d17-oj-qpi">
                             <accessibilityTraits key="accessibilityTraits" staticText="YES" updatesFrequently="YES"/>
                             <fontDescription key="font" type="system" pointSize="14"/>
+                        </label>
+                        <label width="136" height="23.5" alignment="center" text="0 Pongs" textAlignment="center" numberOfLines="0" id="5jo-BZ-Eqm">
+                            <accessibilityTraits key="accessibilityTraits" staticText="YES" updatesFrequently="YES"/>
+                            <fontDescription key="font" type="boldSystem" pointSize="14"/>
                         </label>
                     </items>
                     <connections>
                         <outlet property="image" destination="4j7-sx-KhQ" id="Br9-Ny-K13"/>
                         <outlet property="label" destination="d17-oj-qpi" id="KBf-Um-y2r"/>
+                        <outlet property="pongs" destination="5jo-BZ-Eqm" id="iSv-Dk-d38"/>
                     </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="235" y="350"/>
+            <point key="canvasLocation" x="113" y="321"/>
         </scene>
         <!--Glance Interface Controller-->
         <scene sceneID="BOz-TT-tkC">

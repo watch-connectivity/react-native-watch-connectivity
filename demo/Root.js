@@ -24,7 +24,8 @@ export default class Root extends Component {
       loading:    false,
       text:       '',
       watchState: watch.WatchState.Inactive,
-      fileAPI:    true
+      fileAPI:    true,
+      pings:      0
     }
   }
 
@@ -192,7 +193,7 @@ export default class Root extends Component {
   render () {
     return (
       <View style={styles.container}>
-        <WatchImage/>
+        <WatchImage pings={this.state.pings}/>
         <View>
           <ReachabilityText
             watchState={this.state.watchState}
@@ -218,12 +219,12 @@ export default class Root extends Component {
     )
   }
 
-
   receiveMessage (err, message, replyHandler) {
     if (err) console.error(`Error receiving message`, err)
     else {
       console.log('app received message', message)
       if (message.message === 'ping') {
+        this.setState({pings: this.state.pings + 1})
         if (replyHandler) {
           replyHandler({message: 'pong'})
         }

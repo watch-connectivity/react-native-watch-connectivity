@@ -10,9 +10,13 @@ import WatchKit
 import WatchConnectivity
 import Foundation
 
+
+
 class InterfaceController: WKInterfaceController, WCSessionDelegate {
   @IBOutlet weak var label: WKInterfaceLabel!
+  @IBOutlet weak var pongs: WKInterfaceLabel!
   @IBOutlet weak var image: WKInterfaceImage!
+  var numPongs: Int = 0
 
   var session: WCSession?
   
@@ -82,10 +86,18 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     print("did receive user info", userInfo)
     // Send the bullshit user info back to the device just to demonstrate it works ;)
     session.transferUserInfo(userInfo)
-    print("sending ping")
+    self.sendPing(session)
+
+  }
+  
+  func sendPing(session: WCSession) {
+    print("Sending ping")
     session.sendMessage(["message": "ping"], replyHandler: { (dict) in
-      print("pong received", dict)
-      }, errorHandler: nil)
+      print("Received pong")
+      self.numPongs += 1
+      self.pongs.setText(String(format: "%i Pongs", self.numPongs))
+      self.sendPing(session)
+    }, errorHandler: nil)
   }
   
   ////////////////////////////////////////////////////////////////////////////////
