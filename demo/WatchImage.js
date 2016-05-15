@@ -47,18 +47,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   numPingsText: {
-    color:        'white',
-    fontWeight:   'bold',
-    fontSize:     36,
-    textAlign:    'center',
-    position:     'relative',
-    right:        1
+    color:      'white',
+    fontWeight: 'bold',
+    fontSize:   36,
+    textAlign:  'center',
+    right:      1,
+    width:      100,
   },
   pingsText:    {
     color:      'white',
     fontWeight: 'bold',
     fontSize:   11,
-    textAlign:  'center'
+    textAlign:  'center',
+    width:      100,
   },
   container:    {
     ...imageSize,
