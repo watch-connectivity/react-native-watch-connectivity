@@ -1,13 +1,10 @@
-import React, {
-  Image,
-  Component,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Text
-} from 'react-native'
+import ReactNative from 'react-native'
+import React from 'react'
 
 import {COLORS} from './constants'
+
+const {Image, View, StyleSheet, TouchableOpacity, Text} = ReactNative
+const {Component} = React
 
 export default class DualButton extends Component {
   static defaultProps = {

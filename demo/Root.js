@@ -1,5 +1,5 @@
-const React = require('react-native')
-const {Component, StyleSheet, View, TextInput, LayoutAnimation} = React
+import ReactNative from 'react-native'
+import React from 'react'
 
 import Spinner from 'react-native-spinkit'
 
@@ -12,6 +12,9 @@ import ReachabilityText from './ReachabilityText'
 import WatchImage from './WatchImage'
 import DualButton from './DualButton'
 import LabledSwitch from './LabledSwitch'
+
+const {StyleSheet, View, TextInput, LayoutAnimation} = ReactNative,
+      {Component} = React
 
 const LAYOUT_ANIM_PRESET = LayoutAnimation.Presets.easeInEaseOut
 

@@ -4,14 +4,21 @@
   "private": true,
   "main": "./Libraries/RNWatch/RNWatch.ios.js",
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start"
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "startReset": "watchman watch-del-all && node node_modules/react-native/local-cli/cli.js start --reset-cache"
   },
   "devDependencies": {
     "babel-preset-react-native-stage-0": "^1.0.1",
     "react-native-camera": "^0.3.8",
     "react-native-spinkit": "0.0.10",
-    "react-native": "^0.24.1",
-    "react": "^0.14.8",
+    "react-native": "^0.26.0",
+    "react": "^15.1.0",
     "react-native-image-picker": "^0.18.15"
+  },
+  "dependencies": {
+    "react": "^15.0.2",
+    "react-native": "^0.26.0",
+    "react-native-image-picker": "^0.18.17",
+    "react-native-spinkit": "^0.1.1"
   }
 }

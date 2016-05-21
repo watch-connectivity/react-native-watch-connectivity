@@ -1,20 +1,10 @@
-import React, {
-  AppRegistry,
-  Component,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  TextInput,
-  Dimensions,
-  Image,
-  LayoutAnimation,
-  Navigator
-} from 'react-native'
-
+import ReactNative from 'react-native'
+import React from 'react'
 import Root from './demo/Root'
 import {COLORS} from './demo/constants'
 
+const {AppRegistry, Navigator} = ReactNative
+const {Component} = React
 
 class buff extends Component {
 
@@ -61,11 +51,5 @@ class buff extends Component {
   }
 
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  }
-})
 
 AppRegistry.registerComponent('buff', () => buff)

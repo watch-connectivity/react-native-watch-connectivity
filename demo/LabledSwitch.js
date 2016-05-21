@@ -1,5 +1,10 @@
-import React, {Component, View, StyleSheet, Switch, Text} from 'react-native'
+import React from 'react'
+import ReactNative  from 'react-native'
+
 import {COLORS, ROW_MARGIN} from './constants'
+
+const {View, StyleSheet, Switch, Text} = ReactNative,
+      {Component} = React
 
 export default class LabledSwitch extends Component {
   static defaultProps = {

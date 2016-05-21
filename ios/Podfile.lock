@@ -1,23 +1,24 @@
 PODS:
-  - React/Core (0.24.1)
-  - React/RCTActionSheet (0.24.1):
+  - React/Core (0.26.0)
+  - React/RCTActionSheet (0.26.0):
     - React/Core
-  - React/RCTCameraRoll (0.24.1):
+  - React/RCTCameraRoll (0.26.0):
     - React/Core
-  - React/RCTGeolocation (0.24.1):
+    - React/RCTImage
+  - React/RCTGeolocation (0.26.0):
     - React/Core
-  - React/RCTImage (0.24.1):
+  - React/RCTImage (0.26.0):
     - React/Core
     - React/RCTNetwork
-  - React/RCTLinkingIOS (0.24.1):
+  - React/RCTLinkingIOS (0.26.0):
     - React/Core
-  - React/RCTNetwork (0.24.1):
+  - React/RCTNetwork (0.26.0):
     - React/Core
-  - React/RCTSettings (0.24.1):
+  - React/RCTSettings (0.26.0):
     - React/Core
-  - React/RCTText (0.24.1):
+  - React/RCTText (0.26.0):
     - React/Core
-  - React/RCTWebSocket (0.24.1):
+  - React/RCTWebSocket (0.26.0):
     - React/Core
 
 DEPENDENCIES:
@@ -36,6 +37,6 @@ EXTERNAL SOURCES:
     :path: ../node_modules/react-native
 
 SPEC CHECKSUMS:
-  React: 386bbe687faee56ab75bad6132813945d5857403
+  React: 77cf2f128076f6e41b33dd7217a725874cd5e931
 
 COCOAPODS: 0.39.0

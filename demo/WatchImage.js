@@ -1,12 +1,10 @@
-import React, {
-  Image,
-  Component,
-  StyleSheet,
-  View,
-  Text
-} from 'react-native'
+import ReactNative from 'react-native'
+import React from 'react'
 
 import {ROW_MARGIN} from './constants'
+
+const {Image, StyleSheet, View, Text} = ReactNative
+const {Component} = React
 
 export default class WatchImage extends Component {
   static defaultProps = {

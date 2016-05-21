@@ -1,10 +1,13 @@
-import React, {StyleSheet, Text, View} from 'react-native'
-import {ROW_MARGIN, COLORS} from './constants'
+import ReactNative from 'react-native'
+import React from 'react'
 
+import {ROW_MARGIN, COLORS} from './constants'
 import {WatchState} from '../Libraries/RNWatch/RNWatch.ios'
 
+const {StyleSheet, Text, View} = ReactNative,
+      {Component} = React
 
-export default class Reachability extends React.Component {
+export default class Reachability extends Component {
   renderReachabilityText () {
     const reachable        = this.props.reachable
     const style            = [styles.boldText, {color: reachable ? COLORS.green.normal : COLORS.orange}]

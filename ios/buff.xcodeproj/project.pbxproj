@@ -711,7 +711,10 @@
 				);
 				INFOPLIST_FILE = buff/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lc++",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.bufftek.buff;
 				PRODUCT_NAME = buff;
 			};
@@ -730,7 +733,10 @@
 				);
 				INFOPLIST_FILE = buff/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lc++",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.bufftek.buff;
 				PRODUCT_NAME = buff;
 			};
