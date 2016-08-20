@@ -5,15 +5,27 @@
   "main": "./Libraries/RNWatch/RNWatch.ios.js",
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "startReset": "watchman watch-del-all && node node_modules/react-native/local-cli/cli.js start --reset-cache"
+    "startReset": "watchman watch-del-all && node node_modules/react-native/local-cli/cli.js start --reset-cache",
+    "build": "babel Libraries/RNWatch/RNWatch.ios.js > Libraries/RNWatch/RNWatch.ios.build.js"
+  },
+  "babel": {
+    "presets": [
+      "react-native",
+      "react-native-stage-0"
+    ],
+    "ignore": [
+      "node_modules/firebase/**/*.js"
+    ]
   },
   "devDependencies": {
+    "babel": "^6.5.2",
+    "babel-cli": "^6.11.4",
     "babel-preset-react-native-stage-0": "^1.0.1",
-    "react-native-camera": "^0.3.8",
-    "react-native-spinkit": "0.0.10",
-    "react-native": "^0.26.0",
     "react": "^15.1.0",
-    "react-native-image-picker": "^0.18.15"
+    "react-native": "^0.26.0",
+    "react-native-camera": "^0.3.8",
+    "react-native-image-picker": "^0.18.15",
+    "react-native-spinkit": "0.0.10"
   },
   "dependencies": {
     "react": "^15.0.2",
