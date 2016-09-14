@@ -10,8 +10,6 @@ import WatchKit
 import WatchConnectivity
 import Foundation
 
-
-
 class InterfaceController: WKInterfaceController, WCSessionDelegate {
   @IBOutlet weak var label: WKInterfaceLabel!
   @IBOutlet weak var pongs: WKInterfaceLabel!
@@ -30,6 +28,9 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
       self.session?.delegate = self
       self.session?.activateSession()
     }
+    
+
+
   }
   
   ////////////////////////////////////////////////////////////////////////////////
