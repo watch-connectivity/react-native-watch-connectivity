@@ -4,7 +4,7 @@ Communicate with your apple watch apps over the react native bridge.
 
 **Note:** This library does not allow you to write your iWatch apps in React Native but rather allows your RN iOS app to communicate with a watch app written in Obj-C/Swift.
 
-<img height=600 src="https://raw.githubusercontent.com/mtford90/react-native-watch-connectivity/master/assets/screenshot.png"/>
+<img height=600 src="https://github.com/mtford90/react-native-watch-connectivity/blob/06001bb1d15bcdb9607c35d75c7c7ab463c71e86/assets/screenshot.png?raw=true"/>
 
 ## Demo
 
