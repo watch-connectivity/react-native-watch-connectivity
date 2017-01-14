@@ -11,7 +11,7 @@ import {ROW_MARGIN, COLORS, WINDOW_WIDTH} from './constants'
 import ReachabilityText from './ReachabilityText'
 import WatchImage from './WatchImage'
 import DualButton from './DualButton'
-import LabledSwitch from './LabledSwitch'
+import LabeledSwitch from './LabeledSwitch'
 
 const {StyleSheet, View, TextInput, LayoutAnimation} = ReactNative,
       {Component} = React
@@ -182,7 +182,7 @@ export default class Root extends Component {
           onImageButtonPress={::this.pickImage}
           disabled={!reachable}
         />
-        <LabledSwitch
+        <LabeledSwitch
           label={this.state.fileAPI ? 'File API' : 'Data API'}
           switchProps={{
               value: fileAPI,

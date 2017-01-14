@@ -1,18 +1,28 @@
-import ReactNative from 'react-native'
-import React from 'react'
-import Root from './demo/Root'
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ * @flow
+ */
+
+import React, {Component} from 'react';
+
+import {
+  AppRegistry,
+  StyleSheet,
+  Text,
+  View,
+  Navigator,
+} from 'react-native';
 import {COLORS} from './demo/constants'
+import Root from './demo/Root'
 
-const {AppRegistry, Navigator} = ReactNative
-const {Component} = React
-
-class buff extends Component {
+export default class rnwatch extends Component {
 
   constructor (props) {
     super(props)
     this.state = {
       routes: {
-        root:   {
+        root: {
           component: Root
         }
       }
@@ -34,14 +44,9 @@ class buff extends Component {
     return route.config
   }
 
-  receiveImage (selectedImage) {
-    this.setState({selectedImage})
-  }
-
   render () {
     return (
       <Navigator
-        ref={e => this.navigator = e}
         renderScene={::this.renderScene}
         configureScene={::this.configureScene}
         initialRoute={this.state.routes.root}
@@ -52,4 +57,4 @@ class buff extends Component {
 
 }
 
-AppRegistry.registerComponent('buff', () => buff)
+AppRegistry.registerComponent('rnwatch', () => rnwatch);

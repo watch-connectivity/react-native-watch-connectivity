@@ -1,5 +1,7 @@
 //noinspection NpmUsedModulesInstalled
-import {ImagePickerManager} from 'NativeModules'
+
+import ImagePicker from 'react-native-image-picker'
+
 import {MAX_IMAGE_SIZE} from './constants'
 
 export function pickImage (title, data = false) {
@@ -22,9 +24,12 @@ export function pickImage (title, data = false) {
       ...xtra
     }
 
-    ImagePickerManager.showImagePicker(options, response => {
+    ImagePicker.showImagePicker(options, response => {
       const {error} = response
-      if (error) {
+      if (response.didCancel) {
+        // Do nothing
+      }
+      else if (error) {
         reject(error)
       }
       else {

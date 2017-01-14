@@ -1,3 +1,3 @@
-rootProject.name = 'buff'
+rootProject.name = 'rnwatch'
 
 include ':app'

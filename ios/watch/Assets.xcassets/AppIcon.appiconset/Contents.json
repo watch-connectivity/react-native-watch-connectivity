@@ -3,6 +3,7 @@
     {
       "size" : "24x24",
       "idiom" : "watch",
+      "filename" : "48pt.png",
       "scale" : "2x",
       "role" : "notificationCenter",
       "subtype" : "38mm"
@@ -10,6 +11,7 @@
     {
       "size" : "27.5x27.5",
       "idiom" : "watch",
+      "filename" : "55pt.png",
       "scale" : "2x",
       "role" : "notificationCenter",
       "subtype" : "42mm"
@@ -17,18 +19,21 @@
     {
       "size" : "29x29",
       "idiom" : "watch",
+      "filename" : "58pt.png",
       "role" : "companionSettings",
       "scale" : "2x"
     },
     {
       "size" : "29x29",
       "idiom" : "watch",
+      "filename" : "87pt.png",
       "role" : "companionSettings",
       "scale" : "3x"
     },
     {
       "size" : "40x40",
       "idiom" : "watch",
+      "filename" : "40pt.png",
       "scale" : "2x",
       "role" : "appLauncher",
       "subtype" : "38mm"
@@ -36,6 +41,7 @@
     {
       "size" : "86x86",
       "idiom" : "watch",
+      "filename" : "172pt.png",
       "scale" : "2x",
       "role" : "quickLook",
       "subtype" : "38mm"
@@ -43,6 +49,7 @@
     {
       "size" : "98x98",
       "idiom" : "watch",
+      "filename" : "196pt.png",
       "scale" : "2x",
       "role" : "quickLook",
       "subtype" : "42mm"
