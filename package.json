@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "build": "babel Libraries/RNWatch/RNWatch.ios.js > Libraries/RNWatch/RNWatch.ios.build.js"
   },
   "dependencies": {
     "react": "15.4.2",
