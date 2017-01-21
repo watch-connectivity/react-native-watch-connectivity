@@ -29,6 +29,12 @@ Then add `node_modules/react-native-watch-connectivity/RNWatch.xcodeproj` to you
 
 ## Usage
 
+### WatchOS
+
+Use Apple's watch API as normal. See the demo app for examples of this - the WatchOS code in swift can be seen [here](https://github.com/mtford90/react-native-watch-connectivity/tree/master/ios)
+
+### React Native
+
 **ES6**
 
 ```js
@@ -41,7 +47,7 @@ import * as watch from 'react-native-watch-connectivity'
 var watch = require('react-native-watch-connectivity')
 ```
 
-### Reachability
+#### Reachability
 
 ```js
 // Monitor reachability
@@ -55,7 +61,7 @@ watch.getReachability(watchIsReachable => {
 })
 ```
 
-### Watch State
+#### Watch State
 
 ```js
 // Monitor watch state
@@ -69,9 +75,9 @@ watch.getWatchState(watchState => {
 })
 ```
 
-### Messages
+#### Messages
 
-#### Send Message
+##### Send Message
 
 Send messages and receive replies
 
@@ -81,7 +87,7 @@ watch.sendMessage({text: "Hi watch!"}, (err, replyMessage) => {
 })
 ```
 
-#### Receive Message
+##### Receive Message
 
 Recieve messages and send responses
 
@@ -91,9 +97,9 @@ const unsubscribe = watch.subscribeToMessages((err, message, reply) => {
 })
 ```
 
-### Files
+#### Files
 
-#### Send Files
+##### Send Files
 
 ```js
 const uri = 'file://...' // e.g. a photo/video obtained using react-native-image-picker
@@ -105,11 +111,11 @@ watch.transferFile(uri).then(() => {
 })
 ```
 
-#### Receive Files
+##### Receive Files
 
 TODO: Not implemented or documented
 
-### User Info
+#### User Info
 
 ```
 const unsubscribe = watch.subscribeToUserInfo((err, info) => {
@@ -128,6 +134,3 @@ watch.getUserInfo().then(info => {
     // ...
 })
 ```
-
-###
-
