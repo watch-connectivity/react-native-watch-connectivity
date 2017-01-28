@@ -75,6 +75,40 @@ watch.getWatchState(watchState => {
 })
 ```
 
+### User Info
+
+```js
+const unsubscribe = watch.subscribeToUserInfo((err, info) => {
+    // ...
+})
+```
+
+```js
+watch.sendUserInfo({name: 'Mike', id: 5})
+```
+
+```js
+watch.getUserInfo().then(info => {
+    // ...
+}).catch(err => {
+    // ...
+})
+```
+
+### Application Context
+
+```js
+const unsubscribe = watch.subscribeToApplicationContext((err, info) => {
+    // ...
+})
+
+watch.updateApplicationContext({foo: 'bar'})
+
+watch.getApplicationContext().then(context => {
+  // ...
+})
+```
+
 #### Messages
 
 ##### Send Message
@@ -114,23 +148,3 @@ watch.transferFile(uri).then(() => {
 ##### Receive Files
 
 TODO: Not implemented or documented
-
-#### User Info
-
-```
-const unsubscribe = watch.subscribeToUserInfo((err, info) => {
-    // ...
-})
-```
-
-```
-watch.sendUserInfo({name: 'Mike', id: 5})
-```
-
-```
-watch.getUserInfo().then(info => {
-    // ...
-}).catch(err => {
-    // ...
-})
-```
