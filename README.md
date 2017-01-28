@@ -1,7 +1,5 @@
 # React Native Watch Connectivity
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/mtford90/react-native-watch-connectivity.svg)](https://greenkeeper.io/)
-
 Communicate with your apple watch apps over the react native bridge.
 
 **Note:** This library does not allow you to write your iWatch apps in React Native but rather allows your RN iOS app to communicate with a watch app written in Obj-C/Swift.
