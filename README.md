@@ -148,3 +148,22 @@ watch.transferFile(uri).then(() => {
 ##### Receive Files
 
 TODO: Not implemented or documented
+
+## Development
+
+Development is performed using the demo app. Set up as follows:
+
+```bash
+git clone https://github.com/mtford90/react-native-watch-connectivity.git
+cd react-native-watch-connectivity
+npm install
+open ios/rnwatch.xcworkspace
+```
+
+### Release
+
+```bash
+npm run build # babel compilation
+git add Libraries/RNWatch/RNWatch.ios.build.js
+git commit -m "New Feature"
+```
