@@ -25,7 +25,15 @@ And then run the app!
 npm install react-native-watch-connectivity
 ```
 
-Then add `node_modules/react-native-watch-connectivity/RNWatch.xcodeproj` to your project and ensure that libRNWatch.a is present in the **Link Binary With Libraries** build phase
+### Automatic Linking
+
+```bash
+react-native link
+```
+
+### Manual Linking
+
+Add `node_modules/react-native-watch-connectivity/RNWatch.xcodeproj` to your project and ensure that libRNWatch.a is present in the **Link Binary With Libraries** build phase
 
 ## Usage
 
