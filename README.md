@@ -25,15 +25,51 @@ And then run the app!
 npm install react-native-watch-connectivity
 ```
 
-### Automatic Linking
+First of all you'll need to link the library to your iOS project. You can do this automatically by using:
 
 ```bash
 react-native link
 ```
 
-### Manual Linking
+Or else you can do this manually by adding  `node_modules/react-native-watch-connectivity/RNWatch.xcodeproj` to your project and ensuring that libRNWatch.a is present in the **Link Binary With Libraries** build phase.
 
-Add `node_modules/react-native-watch-connectivity/RNWatch.xcodeproj` to your project and ensure that libRNWatch.a is present in the **Link Binary With Libraries** build phase
+Once you've linked the project, you then need to modify `AppDelegate.h`:
+
+```
+#import <UIKit/UIKit.h>
+
+@import WatchConnectivity;
+@class WatchBridge;
+
+@interface AppDelegate : UIResponder <UIApplicationDelegate>
+
+@property (nonatomic, strong) UIWindow *window;
+@property(nonatomic, strong) WatchBridge *watchBridge;
+@property(nonatomic, strong) WCSession *session;
+
+@end
+```
+
+and then `AppDelegate.m`:
+
+```
+#import "AppDelegate.h"
+
+// ...
+
+#import "WatchBridge.h"
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+  // ...
+
+  self.watchBridge = [WatchBridge shared];
+  self.session = self.watchBridge.session;
+
+  NSLog(@"watch bridge initialised");
+  
+  return YES;
+```
 
 ## Usage
 
@@ -175,3 +211,7 @@ npm run build # babel compilation
 git add Libraries/RNWatch/RNWatch.ios.build.js
 git commit -m "New Feature"
 ```
+
+## Troubleshooting
+
+Compare your app and the example app, ensuring everything is configured the same - otherwise raise an issue.
