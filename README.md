@@ -214,4 +214,6 @@ git commit -m "New Feature"
 
 ## Troubleshooting
 
-Compare your app and the example app, ensuring everything is configured the same - otherwise raise an issue.
+Note that communication between the iOS simulator and iWatch simulator can be ridiculously slow - it's much faster when using actual devices. I've seen response times of up to 2 minutes when using the simulator & have no idea why.
+
+If the issue is not related to the above, compare your app and the example app, ensuring everything is configured the same - otherwise raise an issue and i'll be happy to help.
