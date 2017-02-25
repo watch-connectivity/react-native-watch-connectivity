@@ -100,7 +100,7 @@ const unsubscribe = watch.subscribeToWatchReachability(watchIsReachable => {
 })
 
 // Get current reachability
-watch.getReachability(watchIsReachable => {
+watch.getWatchReachability(watchIsReachable => {
   // ...
 })
 ```
