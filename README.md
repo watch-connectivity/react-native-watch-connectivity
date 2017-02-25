@@ -119,7 +119,7 @@ watch.getWatchState(watchState => {
 })
 ```
 
-### User Info
+#### User Info
 
 ```js
 const unsubscribe = watch.subscribeToUserInfo((err, info) => {
@@ -139,7 +139,7 @@ watch.getUserInfo().then(info => {
 })
 ```
 
-### Application Context
+#### Application Context
 
 ```js
 const unsubscribe = watch.subscribeToApplicationContext((err, info) => {
