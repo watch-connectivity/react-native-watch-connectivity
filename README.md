@@ -14,7 +14,7 @@ The featured screenshot is from the demo app. To get the demo app going:
 git clone https://github.com/mtford90/react-native-watch-connectivity.git
 cd react-native-watch-connectivity
 npm install
-open ios/rnwatch.xcworkspace
+open ios/rnwatch.xcodeproj
 ```
 
 And then run the app!
