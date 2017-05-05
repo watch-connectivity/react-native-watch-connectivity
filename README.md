@@ -95,12 +95,14 @@ var watch = require('react-native-watch-connectivity')
 
 ```js
 // Monitor reachability
-const unsubscribe = watch.subscribeToWatchReachability(watchIsReachable => {
+const unsubscribe = watch.subscribeToWatchReachability((err, watchIsReachable) => {
+  if (!err) {
     this.setState({watchIsReachable})
+  }
 })
 
 // Get current reachability
-watch.getWatchReachability(watchIsReachable => {
+watch.getWatchReachability((err, watchIsReachable) => {
   // ...
 })
 ```
@@ -109,13 +111,17 @@ watch.getWatchReachability(watchIsReachable => {
 
 ```js
 // Monitor watch state
-const unsubscribe = watch.subscribeToWatchState(watchState => {
+const unsubscribe = watch.subscribeToWatchState((err, watchState) => {
+  if (!err) {
     console.log('watchState', watchState) // NotActivated, Inactive, Activated
+  }
 })
 
 // Get current watch state
-watch.getWatchState(watchState => {
-    console.log('watchState', watchState) // NotActivated, Inactive, Activated
+watch.getWatchState((err, watchState) => {
+    if (!err) {
+      console.log('watchState', watchState) // NotActivated, Inactive, Activated
+    }
 })
 ```
 
