@@ -33,6 +33,14 @@ react-native link
 
 Or else you can do this manually by adding  `node_modules/react-native-watch-connectivity/RNWatch.xcodeproj` to your project and ensuring that libRNWatch.a is present in the **Link Binary With Libraries** build phase.
 
+Alternatively, if you're using CocoaPods, you can add the following to your Podfile:
+
+```
+pod 'RNWatch', :path => '../node_modules/react-native-watch-connectivity'
+```
+
+and run ``pod install``.
+
 Once you've linked the project, you then need to modify `AppDelegate.h`:
 
 ```
