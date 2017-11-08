@@ -1,5 +1,6 @@
 {
   "name": "rnwatch",
+  "description":"Communicate with your apple watch apps over the react native bridge.",
   "version": "0.1.7",
   "private": true,
   "scripts": {
