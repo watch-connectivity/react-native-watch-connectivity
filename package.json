@@ -20,7 +20,7 @@
     "apple-watch"
   ],
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start"
+    "start": "react-native start"
   },
   "repository": {
     "type": "git",

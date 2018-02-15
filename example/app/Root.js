@@ -21,6 +21,15 @@ const LAYOUT_ANIM_PRESET = LayoutAnimation.Presets.easeInEaseOut
 export default class Root extends Component {
   constructor (props) {
     super(props)
+
+    this.pickImage = this.pickImage.bind(this)
+    this.receiveMessage = this.receiveMessage.bind(this)
+    this.receiveWatchState = this.receiveWatchState.bind(this)
+    this.receiveWatchReachability = this.receiveWatchReachability.bind(this)
+    this.receiveUserInfo = this.receiveUserInfo.bind(this)
+    this.receiveApplicationContext = this.receiveApplicationContext.bind(this)
+    this.sendMessage = this.sendMessage.bind(this)
+
     this.state = {
       messages:   [],
       reachable:  false,
@@ -61,11 +70,11 @@ export default class Root extends Component {
 
   subscribeToWatchEvents () {
     this.subscriptions = [
-      watch.subscribeToMessages(this.receiveMessage.bind(this)),
-      watch.subscribeToWatchState(this.receiveWatchState.bind(this)),
-      watch.subscribeToWatchReachability(this.receiveWatchReachability.bind(this)),
-      watch.subscribeToUserInfo(this.receiveUserInfo.bind(this)),
-      watch.subscribeToApplicationContext(this.receiveApplicationContext.bind(this)),
+      watch.subscribeToMessages(this.receiveMessage),
+      watch.subscribeToWatchState(this.receiveWatchState),
+      watch.subscribeToWatchReachability(this.receiveWatchReachability),
+      watch.subscribeToUserInfo(this.receiveUserInfo),
+      watch.subscribeToApplicationContext(this.receiveApplicationContext),
     ]
   }
 
@@ -213,8 +222,7 @@ export default class Root extends Component {
           value={this.state.text}
           onChangeText={text => this.setState({text})}
           placeholder="Message"
-        >
-        </TextInput>
+        />
         {this.state.loading && <Spinner type="Bounce" color={COLORS.orange} size={44}/>}
         {!this.state.loading && this.renderButtons()}
         <View style={this.state.spacerStyle}/>
