@@ -1,6 +1,6 @@
 # React Native Watch Connectivity
 
-Communicate with your apple watch apps over the react native bridge.
+Communicate with your Apple Watch apps over the React Native bridge.
 
 **Note:** This library does not allow you to write your iWatch apps in React Native but rather allows your RN iOS app to communicate with a watch app written in Obj-C/Swift.
 
@@ -8,13 +8,13 @@ Communicate with your apple watch apps over the react native bridge.
 
 ## Demo
 
-The featured screenshot is from the demo app. To get the demo app going:
+The featured screenshot is from the example app. To run the example:
 
 ```
 git clone https://github.com/mtford90/react-native-watch-connectivity.git
 cd react-native-watch-connectivity
 npm install
-open ios/rnwatch.xcodeproj
+open example/ios/rnwatch.xcodeproj
 ```
 
 And then run the app!
@@ -25,13 +25,17 @@ And then run the app!
 npm install react-native-watch-connectivity
 ```
 
+### Link
+
 First of all you'll need to link the library to your iOS project. You can do this automatically by using:
 
 ```bash
 react-native link
 ```
 
-Or else you can do this manually by adding  `node_modules/react-native-watch-connectivity/RNWatch.xcodeproj` to your project and ensuring that libRNWatch.a is present in the **Link Binary With Libraries** build phase.
+#### Manual Linking
+
+Or you can link the library manually by adding  `node_modules/react-native-watch-connectivity/ios/RNWatch.xcodeproj` to your project and ensuring that libRNWatch.a is present in the **Link Binary With Libraries** build phase.
 
 Alternatively, if you're using CocoaPods, you can add the following to your Podfile:
 
@@ -40,6 +44,8 @@ pod 'RNWatch', :path => '../node_modules/react-native-watch-connectivity'
 ```
 
 and run ``pod install``.
+
+### Setup
 
 Once you've linked the project, you then need to modify `AppDelegate.h`:
 
@@ -75,7 +81,7 @@ and then `AppDelegate.m`:
   self.session = self.watchBridge.session;
 
   NSLog(@"watch bridge initialised");
-  
+
   return YES;
 ```
 
@@ -83,7 +89,7 @@ and then `AppDelegate.m`:
 
 ### WatchOS
 
-Use Apple's watch API as normal. See the demo app for examples of this - the WatchOS code in swift can be seen [here](https://github.com/mtford90/react-native-watch-connectivity/tree/master/ios)
+Use Apple's Watch API as normal. See the example app for examples of this - the WatchOS code in Swift can be seen [here](https://github.com/mtford90/react-native-watch-connectivity/tree/master/example/ios/watch Extension)
 
 ### React Native
 
@@ -206,25 +212,6 @@ watch.transferFile(uri).then(() => {
 ##### Receive Files
 
 TODO: Not implemented or documented
-
-## Development
-
-Development is performed using the demo app. Set up as follows:
-
-```bash
-git clone https://github.com/mtford90/react-native-watch-connectivity.git
-cd react-native-watch-connectivity
-npm install
-open ios/rnwatch.xcworkspace
-```
-
-### Release
-
-```bash
-npm run build # babel compilation
-git add Libraries/RNWatch/RNWatch.ios.build.js
-git commit -m "New Feature"
-```
 
 ## Troubleshooting
 
