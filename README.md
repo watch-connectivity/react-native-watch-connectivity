@@ -69,11 +69,14 @@ var watch = require('react-native-watch-connectivity')
 
 ```js
 // Monitor reachability
-const unsubscribe = watch.subscribeToWatchReachability((err, watchIsReachable) => {
+this.unsubscribeWatchReachability = watch.subscribeToWatchReachability((err, watchIsReachable) => {
   if (!err) {
     this.setState({watchIsReachable})
   }
 })
+
+// somewhere in componentWillUnmount()
+this.unsubscribeWatchReachability()
 
 // Get current reachability
 watch.getWatchReachability((err, watchIsReachable) => {
@@ -85,7 +88,7 @@ watch.getWatchReachability((err, watchIsReachable) => {
 
 ```js
 // Monitor watch state
-const unsubscribe = watch.subscribeToWatchState((err, watchState) => {
+this.unsubscribeWatchState = watch.subscribeToWatchState((err, watchState) => {
   if (!err) {
     console.log('watchState', watchState) // NotActivated, Inactive, Activated
   }
@@ -102,7 +105,7 @@ watch.getWatchState((err, watchState) => {
 #### User Info
 
 ```js
-const unsubscribe = watch.subscribeToUserInfo((err, info) => {
+this.unsubscribeUserInfo = watch.subscribeToUserInfo((err, info) => {
     // ...
 })
 ```
@@ -122,7 +125,7 @@ watch.getUserInfo().then(info => {
 #### Application Context
 
 ```js
-const unsubscribe = watch.subscribeToApplicationContext((err, info) => {
+this.unsubscribeApplicationContext = watch.subscribeToApplicationContext((err, info) => {
     // ...
 })
 
@@ -150,7 +153,7 @@ watch.sendMessage({text: "Hi watch!"}, (err, replyMessage) => {
 Recieve messages and send responses
 
 ```js
-const unsubscribe = watch.subscribeToMessages((err, message, reply) => {
+this.unsubscribeMessages = watch.subscribeToMessages((err, message, reply) => {
     if (!err) reply({text: "message received!"})
 })
 ```
