@@ -38,15 +38,6 @@ RCT_EXPORT_MODULE()
 // Init
 ////////////////////////////////////////////////////////////////////////////////
 
-+ (WatchBridge*) shared {
-  static WatchBridge *sharedMyManager = nil;
-  static dispatch_once_t onceToken;
-  dispatch_once(&onceToken, ^{
-    sharedMyManager = [[self alloc] init];
-  });
-  return sharedMyManager;
-}
-
 - (instancetype)init {
   self = [super init];
   if ([WCSession isSupported]) {
@@ -59,6 +50,16 @@ RCT_EXPORT_MODULE()
     [session activateSession];
   }
   return self;
+}
+
+- (NSArray<NSString *> *)supportedEvents {
+  return @[
+    EVENT_FILE_TRANSFER_ERROR, EVENT_FILE_TRANSFER_FINISHED,
+    EVENT_RECEIVE_MESSAGE, EVENT_RECEIVE_MESSAGE_DATA,
+    EVENT_WATCH_STATE_CHANGED, EVENT_ACTIVATION_ERROR,
+    EVENT_WATCH_REACHABILITY_CHANGED,
+    EVENT_WATCH_USER_INFO_RECEIVED, EVENT_APPLICATION_CONTEXT_RECEIVED
+  ];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -341,8 +342,7 @@ didReceiveUserInfo:(NSDictionary<NSString *,id> *)userInfo {
 -(void)dispatchEventWithName:(const NSString*) name
                         body:(NSDictionary<NSString *,id> *)body {
   NSLog(@"dispatch %@: %@", name, body);
-  [self.bridge.eventDispatcher sendAppEventWithName:(NSString*)name
-                                               body:body];
+  [self sendEventWithName:name body:body];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
