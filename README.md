@@ -45,51 +45,11 @@ pod 'RNWatch', :path => '../node_modules/react-native-watch-connectivity'
 
 and run ``pod install``.
 
-### Setup
-
-Once you've linked the project, you then need to modify `AppDelegate.h`:
-
-```
-#import <UIKit/UIKit.h>
-
-@import WatchConnectivity;
-@class WatchBridge;
-
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
-
-@property (nonatomic, strong) UIWindow *window;
-@property(nonatomic, strong) WatchBridge *watchBridge;
-@property(nonatomic, strong) WCSession *session;
-
-@end
-```
-
-and then `AppDelegate.m`:
-
-```
-#import "AppDelegate.h"
-
-// ...
-
-#import "WatchBridge.h"
-
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-  // ...
-
-  self.watchBridge = [WatchBridge shared];
-  self.session = self.watchBridge.session;
-
-  NSLog(@"watch bridge initialised");
-
-  return YES;
-```
-
 ## Usage
 
 ### WatchOS
 
-Use Apple's Watch API as normal. See the example app for examples of this - the WatchOS code in Swift can be seen [here](https://github.com/mtford90/react-native-watch-connectivity/tree/master/example/ios/watch Extension)
+Use Apple's Watch API as usual. See the [example WatchOS Swift code](https://github.com/mtford90/react-native-watch-connectivity/tree/master/example/ios/watch Extension) for how to do this.
 
 ### React Native
 
