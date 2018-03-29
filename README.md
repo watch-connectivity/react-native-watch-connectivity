@@ -222,8 +222,12 @@ open ios/rnwatch.xcworkspace
 
 ```bash
 npm run build # babel compilation
-git add Libraries/RNWatch/RNWatch.ios.build.js
+cd Libraries/RNWatch
+git add RNWatch.ios.build.js
 git commit -m "New Feature"
+npm version
+git push origin master --tags
+npm publish
 ```
 
 ## Troubleshooting
