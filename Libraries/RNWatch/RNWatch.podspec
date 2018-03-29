@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.version        = package['version']
   s.summary        = package['description']
   s.homepage       = package['repository']['url']
-  s.author         = 'Michael Ford <mtford@gmail.com>'
+  s.author         = 'Michael Ford <mtford@gmail.com>, Artem Goryaev'
   s.license        = 'BSD'
   s.source         = { :git => s.homepage, :tag => s.version }
 
