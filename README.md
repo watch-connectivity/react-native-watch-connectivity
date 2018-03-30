@@ -115,6 +115,15 @@ watch.getWatchReachability((err, watchIsReachable) => {
 })
 ```
 
+#### Install Status
+
+```js
+// Get current reachability
+watch.isWatchAppInstalled((isAppInstalled) => {
+  // ...
+})
+```
+
 #### Watch State
 
 ```js
