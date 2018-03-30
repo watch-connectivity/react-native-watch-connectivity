@@ -120,6 +120,22 @@ RCT_EXPORT_METHOD(getReachability: (RCTResponseSenderBlock) callback) {
   NSLog(@"sessionReachabilityDidChange: %@",  reachable ? @"YES" : @"NO");
   [self dispatchEventWithName:EVENT_WATCH_REACHABILITY_CHANGED body:@{@"reachability": [NSNumber numberWithBool:reachable]}];
 }
+    
+////////////////////////////////////////////////////////////////////////////////
+// isWatchAppInstalled
+////////////////////////////////////////////////////////////////////////////////
+
+RCT_EXPORT_METHOD(getIsWatchApInstalled: (RCTResponseSenderBlock) callback) {
+  callback(@[[NSNumber numberWithBool:self.session.isWatchAppInstalled]]);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// isPaired
+////////////////////////////////////////////////////////////////////////////////
+
+RCT_EXPORT_METHOD(getIsPaired: (RCTResponseSenderBlock) callback) {
+  callback(@[[NSNumber numberWithBool:self.session.isPaired]]);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Messages

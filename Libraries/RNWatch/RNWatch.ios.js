@@ -217,6 +217,42 @@ export function getWatchReachability (cb = () => {}) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// isPaired
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ *
+ * @param {Function} [cb]
+ * @returns {Promise}
+ */
+export function getIsPaired(cb = () => {}) {
+    return new Promise(resolve => {
+        watch.getIsPaired(isPaired => {
+            cb(null, isPaired);
+            resolve(isPaired);
+        });
+    });
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// isWatchAppInstalled
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ *
+ * @param {Function} [cb]
+ * @returns {Promise}
+ */
+export function getIsWatchApInstalled(cb = () => {}) {
+    return new Promise(resolve => {
+        watch.getIsWatchApInstalled(isWatchAppInstalled => {
+            cb(null, isWatchAppInstalled);
+            resolve(isWatchAppInstalled);
+        });
+    });
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // User Info
 ////////////////////////////////////////////////////////////////////////////////
 
