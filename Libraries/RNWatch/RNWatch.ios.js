@@ -243,9 +243,9 @@ export function getIsPaired(cb = () => {}) {
  * @param {Function} [cb]
  * @returns {Promise}
  */
-export function getIsWatchApInstalled(cb = () => {}) {
+export function getIsWatchAppInstalled(cb = () => {}) {
     return new Promise(resolve => {
-        watch.getIsWatchApInstalled(isWatchAppInstalled => {
+        watch.getIsWatchAppInstalled(isWatchAppInstalled => {
             cb(null, isWatchAppInstalled);
             resolve(isWatchAppInstalled);
         });

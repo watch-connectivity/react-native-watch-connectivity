@@ -125,7 +125,7 @@ RCT_EXPORT_METHOD(getReachability: (RCTResponseSenderBlock) callback) {
 // isWatchAppInstalled
 ////////////////////////////////////////////////////////////////////////////////
 
-RCT_EXPORT_METHOD(getIsWatchApInstalled: (RCTResponseSenderBlock) callback) {
+RCT_EXPORT_METHOD(getIsWatchAppInstalled: (RCTResponseSenderBlock) callback) {
   callback(@[[NSNumber numberWithBool:self.session.isWatchAppInstalled]]);
 }
 
