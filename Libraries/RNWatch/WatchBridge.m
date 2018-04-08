@@ -309,7 +309,7 @@ RCT_EXPORT_METHOD(getApplicationContext:(RCTResponseSenderBlock)callback) {
 didReceiveApplicationContext:(NSDictionary<NSString *,id> *)applicationContext {
   NSLog(@"sessionDidReceiveApplicationContext %@", applicationContext);
   [self.session updateApplicationContext:applicationContext error:nil];
-  [self dispatchEventWithName:EVENT_APPLICATION_CONTEXT_RECEIVED body:self.session.applicationContext];
+  [self dispatchEventWithName:EVENT_APPLICATION_CONTEXT_RECEIVED body:applicationContext];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
