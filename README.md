@@ -51,7 +51,7 @@ and run `pod install`.
 
 ### WatchOS
 
-Use Apple's Watch API as usual. See the <a href="example/ios/watch Extension">example WatchOS Swift code</a> for how to do this.
+Use Apple's Watch API as usual. See the <a href="example/ios/WatchExtension">example WatchOS Swift code</a> for how to do this.
 
 ### iOS
 
