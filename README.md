@@ -1,6 +1,6 @@
 # React Native Watch Connectivity
 
-Communicate with your apple watch apps over the react native bridge.
+Communicate with your Apple Watch apps over the React Native bridge.
 
 **Note:** This library does not allow you to write your iWatch apps in React Native but rather allows your RN iOS app to communicate with a watch app written in Obj-C/Swift.
 
@@ -8,13 +8,13 @@ Communicate with your apple watch apps over the react native bridge.
 
 ## Demo
 
-The featured screenshot is from the demo app. To get the demo app going:
+The featured screenshot is from the example app. To run the example:
 
 ```
 git clone https://github.com/mtford90/react-native-watch-connectivity.git
 cd react-native-watch-connectivity
 npm install
-open ios/rnwatch.xcodeproj
+open example/ios/rnwatch.xcodeproj
 ```
 
 And then run the app!
@@ -22,8 +22,12 @@ And then run the app!
 ## Install
 
 ```bash
-npm install react-native-watch-connectivity
+npm install react-native-watch-connectivity --save
+# or
+yarn add react-native-watch-connectivity
 ```
+
+### Link
 
 First of all you'll need to link the library to your iOS project. You can do this automatically by using:
 
@@ -31,7 +35,9 @@ First of all you'll need to link the library to your iOS project. You can do thi
 react-native link
 ```
 
-Or else you can do this manually by adding  `node_modules/react-native-watch-connectivity/RNWatch.xcodeproj` to your project and ensuring that libRNWatch.a is present in the **Link Binary With Libraries** build phase.
+#### Manual Linking
+
+Or you can link the library manually by adding `node_modules/react-native-watch-connectivity/ios/RNWatch.xcodeproj` to your project and ensuring that `libRNWatch.a` is present in the **Link Binary With Libraries** build phase.
 
 Alternatively, if you're using CocoaPods, you can add the following to your Podfile:
 
@@ -39,78 +45,60 @@ Alternatively, if you're using CocoaPods, you can add the following to your Podf
 pod 'RNWatch', :path => '../node_modules/react-native-watch-connectivity'
 ```
 
-and run ``pod install``.
-
-Once you've linked the project, you then need to modify `AppDelegate.h`:
-
-```
-#import <UIKit/UIKit.h>
-
-@import WatchConnectivity;
-@class WatchBridge;
-
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
-
-@property (nonatomic, strong) UIWindow *window;
-@property(nonatomic, strong) WatchBridge *watchBridge;
-@property(nonatomic, strong) WCSession *session;
-
-@end
-```
-
-and then `AppDelegate.m`:
-
-```
-#import "AppDelegate.h"
-
-// ...
-
-#import "WatchBridge.h"
-
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-  // ...
-
-  self.watchBridge = [WatchBridge shared];
-  self.session = self.watchBridge.session;
-
-  NSLog(@"watch bridge initialised");
-  
-  return YES;
-```
+and run `pod install`.
 
 ## Usage
 
 ### WatchOS
 
-Use Apple's watch API as normal. See the demo app for examples of this - the WatchOS code in swift can be seen [here](https://github.com/mtford90/react-native-watch-connectivity/tree/master/ios)
+Use Apple's Watch API as usual. See the <a href="example/ios/watch Extension">example WatchOS Swift code</a> for how to do this.
+
+### iOS
+
+Unlike with previous versions of this library, a `WCSession` is now activated automatically when you include this library. No code in `AppDelegate.m` is needed.
 
 ### React Native
 
 **ES6**
 
 ```js
-import * as watch from 'react-native-watch-connectivity'
+import * as Watch from 'react-native-watch-connectivity'
 ```
 
 **ES5**
 
 ```js
-var watch = require('react-native-watch-connectivity')
+var Watch = require('react-native-watch-connectivity')
 ```
 
 #### Reachability
 
 ```js
 // Monitor reachability
-const unsubscribe = watch.subscribeToWatchReachability((err, watchIsReachable) => {
-  if (!err) {
-    this.setState({watchIsReachable})
+this.unsubscribeWatchReachability = Watch.subscribeToWatchReachability(
+  (err, watchIsReachable) => {
+    if (!err) {
+      this.setState({ watchIsReachable })
+    }
   }
-})
+)
+
+// somewhere in componentWillUnmount()
+this.unsubscribeWatchReachability()
 
 // Get current reachability
-watch.getWatchReachability((err, watchIsReachable) => {
+Watch.getWatchReachability((err, watchIsReachable) => {
+  // ...
+})
+```
+
+#### Install & Pairing Status
+
+```js
+Watch.getIsWatchAppInstalled((err, isAppInstalled) => {
+  // ...
+})
+Watch.getIsPaired((err, isPaired) => {
   // ...
 })
 ```
@@ -119,50 +107,55 @@ watch.getWatchReachability((err, watchIsReachable) => {
 
 ```js
 // Monitor watch state
-const unsubscribe = watch.subscribeToWatchState((err, watchState) => {
+this.unsubscribeWatchState = Watch.subscribeToWatchState((err, watchState) => {
   if (!err) {
     console.log('watchState', watchState) // NotActivated, Inactive, Activated
   }
 })
 
 // Get current watch state
-watch.getWatchState((err, watchState) => {
-    if (!err) {
-      console.log('watchState', watchState) // NotActivated, Inactive, Activated
-    }
+Watch.getWatchState((err, watchState) => {
+  if (!err) {
+    console.log('watchState', watchState) // NotActivated, Inactive, Activated
+  }
 })
 ```
 
 #### User Info
 
 ```js
-const unsubscribe = watch.subscribeToUserInfo((err, info) => {
-    // ...
+this.unsubscribeUserInfo = Watch.subscribeToUserInfo((err, info) => {
+  // ...
 })
 ```
 
 ```js
-watch.sendUserInfo({name: 'Mike', id: 5})
+Watch.sendUserInfo({ name: 'Mike', id: 5 })
 ```
 
 ```js
-watch.getUserInfo().then(info => {
+watch
+  .getUserInfo()
+  .then(info => {
     // ...
-}).catch(err => {
+  })
+  .catch(err => {
     // ...
-})
+  })
 ```
 
 #### Application Context
 
 ```js
-const unsubscribe = watch.subscribeToApplicationContext((err, info) => {
+this.unsubscribeApplicationContext = Watch.subscribeToApplicationContext(
+  (err, info) => {
     // ...
-})
+  }
+)
 
-watch.updateApplicationContext({foo: 'bar'})
+Watch.updateApplicationContext({ foo: 'bar' })
 
-watch.getApplicationContext().then(context => {
+Watch.getApplicationContext().then(context => {
   // ...
 })
 ```
@@ -174,8 +167,8 @@ watch.getApplicationContext().then(context => {
 Send messages and receive replies
 
 ```js
-watch.sendMessage({text: "Hi watch!"}, (err, replyMessage) => {
-    console.log("Received reply from watch", replyMessage)
+Watch.sendMessage({ text: 'Hi watch!' }, (err, replyMessage) => {
+  console.log('Received reply from watch', replyMessage)
 })
 ```
 
@@ -184,8 +177,8 @@ watch.sendMessage({text: "Hi watch!"}, (err, replyMessage) => {
 Recieve messages and send responses
 
 ```js
-const unsubscribe = watch.subscribeToMessages((err, message, reply) => {
-    if (!err) reply({text: "message received!"})
+this.unsubscribeMessages = Watch.subscribeToMessages((err, message, reply) => {
+  if (!err) reply({ text: 'message received!' })
 })
 ```
 
@@ -196,35 +189,19 @@ const unsubscribe = watch.subscribeToMessages((err, message, reply) => {
 ```js
 const uri = 'file://...' // e.g. a photo/video obtained using react-native-image-picker
 
-watch.transferFile(uri).then(() => {
-  // ...
-}).catch(err => {
-  // ... handle error
-})
+watch
+  .transferFile(uri)
+  .then(() => {
+    // ...
+  })
+  .catch(err => {
+    // ... handle error
+  })
 ```
 
 ##### Receive Files
 
 TODO: Not implemented or documented
-
-## Development
-
-Development is performed using the demo app. Set up as follows:
-
-```bash
-git clone https://github.com/mtford90/react-native-watch-connectivity.git
-cd react-native-watch-connectivity
-npm install
-open ios/rnwatch.xcworkspace
-```
-
-### Release
-
-```bash
-npm run build # babel compilation
-git add Libraries/RNWatch/RNWatch.ios.build.js
-git commit -m "New Feature"
-```
 
 ## Troubleshooting
 

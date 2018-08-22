@@ -1,24 +1,46 @@
 {
-  "name": "rnwatch",
-  "version": "0.1.7",
-  "private": true,
-  "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
-    "build": "babel Libraries/RNWatch/RNWatch.ios.js > Libraries/RNWatch/RNWatch.ios.build.js"
+  "name": "react-native-watch-connectivity",
+  "version": "0.3.0-beta.1",
+  "description": "React Native library to enable communication with Apple Watch app",
+  "main": "lib/RNWatch.ios.js",
+  "author": {
+    "name": "Michael Ford",
+    "email": "mtford@gmail.com"
   },
-  "dependencies": {
-    "react": "15.4.2",
-    "react-native": "^0.41.2",
-    "react-native-camera": "^0.6.0",
-    "react-native-image-picker": "^0.25.6",
-    "react-native-spinkit": "^1.0.2"
+  "contributors": [
+    {
+      "name": "Petr Bela",
+      "email": "github@petrbela.com"
+    }
+  ],
+  "keywords": [
+    "react-native",
+    "ios",
+    "watch",
+    "apple-watch"
+  ],
+  "scripts": {
+    "start": "react-native start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mtford90/react-native-watch-connectivity.git"
+  },
+  "peerDependencies": {
+    "react": ">=15.1",
+    "react-native": ">=0.40"
   },
   "devDependencies": {
     "babel-jest": "18.0.0",
     "babel-preset-react-native": "1.9.1",
     "babel-preset-react-native-stage-0": "1.0.1",
     "jest": "18.1.0",
-    "react-test-renderer": "15.4.2"
+    "react": "^16.2.0",
+    "react-native": "^0.52.2",
+    "react-native-image-picker": "^0.25.6",
+    "react-native-spinkit": "^1.0.2",
+    "react-navigation": "^1.0.3",
+    "react-test-renderer": "^16.2.0"
   },
   "jest": {
     "preset": "react-native"
