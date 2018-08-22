@@ -1,4 +1,4 @@
-#import "WatchBridge.h"
+#import "RNWatch.h"
 
 // import RCTConvert.h
 #if __has_include("RCTConvert.h")
@@ -28,31 +28,41 @@ static const NSString* EVENT_WATCH_REACHABILITY_CHANGED     = @"WatchReachabilit
 static const NSString* EVENT_WATCH_USER_INFO_RECEIVED       = @"WatchUserInfoReceived";
 static const NSString* EVENT_APPLICATION_CONTEXT_RECEIVED   = @"WatchApplicationContextReceived";
 
-@implementation WatchBridge
+static RNWatch* sharedInstance;
+
+@implementation RNWatch
 
 RCT_EXPORT_MODULE()
-
-@synthesize bridge = _bridge;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Init
 ////////////////////////////////////////////////////////////////////////////////
 
-- (instancetype)init {
-  self = [super init];
++ (BOOL) requiresMainQueueSetup {
+  return YES;
+}
+
++ (RNWatch*) sharedInstance {
+  return sharedInstance;
+}
+
+- (instancetype) init {
+  sharedInstance = [super init];
+  self.replyHandlers = [NSCache new];
+  self.transfers = [NSMutableDictionary new];
+  self.userInfo = [NSDictionary<NSString*, id> new];
+
   if ([WCSession isSupported]) {
     WCSession* session = [WCSession defaultSession];
     session.delegate = self;
     self.session = session;
-    self.transfers = [NSMutableDictionary new];
-    self.replyHandlers = [NSMutableDictionary new];
-    self.userInfo = [NSDictionary<NSString*, id> new];
-    [session activateSession];
+    [self.session activateSession];
   }
-  return self;
+
+  return sharedInstance;
 }
 
-- (NSArray<NSString *> *)supportedEvents {
+- (NSArray<NSString*>*) supportedEvents {
   return @[
     EVENT_FILE_TRANSFER_ERROR, EVENT_FILE_TRANSFER_FINISHED,
     EVENT_RECEIVE_MESSAGE, EVENT_RECEIVE_MESSAGE_DATA,
@@ -139,6 +149,22 @@ RCT_EXPORT_METHOD(getReachability: (RCTResponseSenderBlock) callback) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// isWatchAppInstalled
+////////////////////////////////////////////////////////////////////////////////
+
+RCT_EXPORT_METHOD(getIsWatchAppInstalled: (RCTResponseSenderBlock) callback) {
+  callback(@[[NSNumber numberWithBool:self.session.isWatchAppInstalled]]);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// isPaired
+////////////////////////////////////////////////////////////////////////////////
+
+RCT_EXPORT_METHOD(getIsPaired: (RCTResponseSenderBlock) callback) {
+  callback(@[[NSNumber numberWithBool:self.session.isPaired]]);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Messages
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -146,19 +172,28 @@ RCT_EXPORT_METHOD(sendMessage:(NSDictionary *)message
                   replyCallback:(RCTResponseSenderBlock)replyCallback
                   error:(RCTResponseErrorBlock) errorCallback)
 {
+  __block BOOL replied = false;
   [self.session sendMessage:message
-               replyHandler:^(NSDictionary<NSString *,id> * _Nonnull replyMessage) {
-    replyCallback(@[replyMessage]);
-  } errorHandler:^(NSError * _Nonnull error) {
-    errorCallback(error);
-  }];
+    replyHandler:^(NSDictionary<NSString *,id> * _Nonnull replyMessage) {
+      if (!replied) { // prevent Illegal callback invocation
+        replyCallback(@[replyMessage]);
+        replied = true;
+      }
+    }
+    errorHandler:^(NSError * _Nonnull error) {
+      if (!replied) { // prevent Illegal callback invocation
+        errorCallback(error);
+        replied = true;
+      }
+    }
+  ];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 RCT_EXPORT_METHOD(replyToMessageWithId:(NSString*) messageId
                   withMessage:(NSDictionary<NSString *,id> *)message) {
-  void (^replyHandler)(NSDictionary<NSString *,id> * _Nonnull) =  self.replyHandlers[messageId];
+  void (^replyHandler)(NSDictionary<NSString *,id> * _Nonnull) =  [self.replyHandlers objectForKey:messageId];
   replyHandler(message);
 }
 
@@ -176,12 +211,12 @@ didReceiveMessage:(NSDictionary<NSString *,id> *)message {
 didReceiveMessage:(NSDictionary<NSString *,id> *)message
    replyHandler:(void (^)(NSDictionary<NSString *,id> * _Nonnull))replyHandler
 {
-  
+
   NSLog(@"sessionDidReceiveMessageReplyHandler %@", message);
   NSString* messageId = [self uuidString];
   NSMutableDictionary* mutableMessage = [message mutableCopy];
   mutableMessage[@"id"] = messageId;
-  self.replyHandlers[messageId] = replyHandler;
+  [self.replyHandlers setObject:replyHandler forKey:messageId];
   [self dispatchEventWithName:EVENT_RECEIVE_MESSAGE body:mutableMessage];
 }
 
@@ -222,7 +257,7 @@ RCT_EXPORT_METHOD(transferFile:(NSString *)url
                   callback:(RCTResponseSenderBlock) callback
                   error:(RCTResponseErrorBlock)error)
 {
-  
+
   NSMutableDictionary* mutableMetaData;
   if (metaData) {
     mutableMetaData = [metaData mutableCopy];

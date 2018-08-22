@@ -22,7 +22,9 @@ And then run the app!
 ## Install
 
 ```bash
-npm install react-native-watch-connectivity
+npm install react-native-watch-connectivity --save
+# or
+yarn add react-native-watch-connectivity
 ```
 
 ### Link
@@ -35,7 +37,7 @@ react-native link
 
 #### Manual Linking
 
-Or you can link the library manually by adding  `node_modules/react-native-watch-connectivity/ios/RNWatch.xcodeproj` to your project and ensuring that libRNWatch.a is present in the **Link Binary With Libraries** build phase.
+Or you can link the library manually by adding `node_modules/react-native-watch-connectivity/ios/RNWatch.xcodeproj` to your project and ensuring that `libRNWatch.a` is present in the **Link Binary With Libraries** build phase.
 
 Alternatively, if you're using CocoaPods, you can add the following to your Podfile:
 
@@ -43,43 +45,60 @@ Alternatively, if you're using CocoaPods, you can add the following to your Podf
 pod 'RNWatch', :path => '../node_modules/react-native-watch-connectivity'
 ```
 
-and run ``pod install``.
+and run `pod install`.
 
 ## Usage
 
 ### WatchOS
 
-Use Apple's Watch API as usual. See the [example WatchOS Swift code](https://github.com/mtford90/react-native-watch-connectivity/tree/master/example/ios/watch Extension) for how to do this.
+Use Apple's Watch API as usual. See the <a href="example/ios/watch Extension">example WatchOS Swift code</a> for how to do this.
+
+### iOS
+
+Unlike with previous versions of this library, a `WCSession` is now activated automatically when you include this library. No code in `AppDelegate.m` is needed.
 
 ### React Native
 
 **ES6**
 
 ```js
-import * as watch from 'react-native-watch-connectivity'
+import * as Watch from 'react-native-watch-connectivity'
 ```
 
 **ES5**
 
 ```js
-var watch = require('react-native-watch-connectivity')
+var Watch = require('react-native-watch-connectivity')
 ```
 
 #### Reachability
 
 ```js
 // Monitor reachability
-this.unsubscribeWatchReachability = watch.subscribeToWatchReachability((err, watchIsReachable) => {
-  if (!err) {
-    this.setState({watchIsReachable})
+this.unsubscribeWatchReachability = Watch.subscribeToWatchReachability(
+  (err, watchIsReachable) => {
+    if (!err) {
+      this.setState({ watchIsReachable })
+    }
   }
-})
+)
 
 // somewhere in componentWillUnmount()
 this.unsubscribeWatchReachability()
 
 // Get current reachability
-watch.getWatchReachability((err, watchIsReachable) => {
+Watch.getWatchReachability((err, watchIsReachable) => {
+  // ...
+})
+```
+
+#### Install & Pairing Status
+
+```js
+Watch.getIsWatchAppInstalled((err, isAppInstalled) => {
+  // ...
+})
+Watch.getIsPaired((err, isPaired) => {
   // ...
 })
 ```
@@ -88,50 +107,55 @@ watch.getWatchReachability((err, watchIsReachable) => {
 
 ```js
 // Monitor watch state
-this.unsubscribeWatchState = watch.subscribeToWatchState((err, watchState) => {
+this.unsubscribeWatchState = Watch.subscribeToWatchState((err, watchState) => {
   if (!err) {
     console.log('watchState', watchState) // NotActivated, Inactive, Activated
   }
 })
 
 // Get current watch state
-watch.getWatchState((err, watchState) => {
-    if (!err) {
-      console.log('watchState', watchState) // NotActivated, Inactive, Activated
-    }
+Watch.getWatchState((err, watchState) => {
+  if (!err) {
+    console.log('watchState', watchState) // NotActivated, Inactive, Activated
+  }
 })
 ```
 
 #### User Info
 
 ```js
-this.unsubscribeUserInfo = watch.subscribeToUserInfo((err, info) => {
-    // ...
+this.unsubscribeUserInfo = Watch.subscribeToUserInfo((err, info) => {
+  // ...
 })
 ```
 
 ```js
-watch.sendUserInfo({name: 'Mike', id: 5})
+Watch.sendUserInfo({ name: 'Mike', id: 5 })
 ```
 
 ```js
-watch.getUserInfo().then(info => {
+watch
+  .getUserInfo()
+  .then(info => {
     // ...
-}).catch(err => {
+  })
+  .catch(err => {
     // ...
-})
+  })
 ```
 
 #### Application Context
 
 ```js
-this.unsubscribeApplicationContext = watch.subscribeToApplicationContext((err, info) => {
+this.unsubscribeApplicationContext = Watch.subscribeToApplicationContext(
+  (err, info) => {
     // ...
-})
+  }
+)
 
-watch.updateApplicationContext({foo: 'bar'})
+Watch.updateApplicationContext({ foo: 'bar' })
 
-watch.getApplicationContext().then(context => {
+Watch.getApplicationContext().then(context => {
   // ...
 })
 ```
@@ -143,8 +167,8 @@ watch.getApplicationContext().then(context => {
 Send messages and receive replies
 
 ```js
-watch.sendMessage({text: "Hi watch!"}, (err, replyMessage) => {
-    console.log("Received reply from watch", replyMessage)
+Watch.sendMessage({ text: 'Hi watch!' }, (err, replyMessage) => {
+  console.log('Received reply from watch', replyMessage)
 })
 ```
 
@@ -153,8 +177,8 @@ watch.sendMessage({text: "Hi watch!"}, (err, replyMessage) => {
 Recieve messages and send responses
 
 ```js
-this.unsubscribeMessages = watch.subscribeToMessages((err, message, reply) => {
-    if (!err) reply({text: "message received!"})
+this.unsubscribeMessages = Watch.subscribeToMessages((err, message, reply) => {
+  if (!err) reply({ text: 'message received!' })
 })
 ```
 
@@ -165,11 +189,14 @@ this.unsubscribeMessages = watch.subscribeToMessages((err, message, reply) => {
 ```js
 const uri = 'file://...' // e.g. a photo/video obtained using react-native-image-picker
 
-watch.transferFile(uri).then(() => {
-  // ...
-}).catch(err => {
-  // ... handle error
-})
+watch
+  .transferFile(uri)
+  .then(() => {
+    // ...
+  })
+  .catch(err => {
+    // ... handle error
+  })
 ```
 
 ##### Receive Files

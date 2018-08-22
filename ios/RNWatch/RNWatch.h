@@ -18,10 +18,11 @@
 
 @import WatchConnectivity;
 
-@interface WatchBridge : RCTEventEmitter <RCTBridgeModule, WCSessionDelegate>
+@interface RNWatch : RCTEventEmitter <RCTBridgeModule, WCSessionDelegate>
 
++ (RNWatch*) sharedInstance;
 @property (nonatomic, strong) WCSession* session;
-@property (nonatomic, strong) NSMutableDictionary* replyHandlers;
+@property (nonatomic, strong) NSCache* replyHandlers;
 @property (nonatomic, strong) NSMutableDictionary* transfers;
 @property (nonatomic, strong) NSDictionary<NSString*, id>* userInfo;
 
