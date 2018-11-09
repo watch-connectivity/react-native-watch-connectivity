@@ -118,7 +118,7 @@ watch.getWatchReachability((err, watchIsReachable) => {
 #### Install & Pairing Status
 
 ```js
-watch.isWatchAppInstalled((err, isAppInstalled) => {
+watch.getIsWatchAppInstalled((err, isAppInstalled) => {
   // ...
 })
 
