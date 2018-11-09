@@ -52,8 +52,8 @@
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleLightContent</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Photos can be selected from the library and displayed on the paired iWatch</string>
+	<string>Photos can be selected from the library and displayed on the paired Apple Watch</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Photos can be taken and displayed on the paired iWatch</string>
+	<string>Photos can be taken and displayed on the paired Apple Watch</string>
 </dict>
 </plist>
