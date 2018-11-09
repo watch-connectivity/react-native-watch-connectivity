@@ -2,6 +2,7 @@
   "name": "rnwatch",
   "version": "0.2.0",
   "private": true,
+  "description": "A react-native Apple Watch bridge for communication between Apple Watch apps and apps developed with react-native",
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "build": "babel Libraries/RNWatch/RNWatch.ios.js > Libraries/RNWatch/RNWatch.ios.build.js"
