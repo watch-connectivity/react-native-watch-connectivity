@@ -1,6 +1,7 @@
 {
   "name": "react-native-watch-connectivity",
   "version": "0.2.0",
+  "description": "Enable communication between iWatch app and react native",
   "main": "./RNWatch.ios.build.js",
   "keywords": "react-native",
   "repository": {
