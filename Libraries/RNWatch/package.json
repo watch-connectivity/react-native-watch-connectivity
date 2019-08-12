@@ -1,6 +1,6 @@
 {
   "name": "react-native-watch-connectivity",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "react-native-watch-connectivity",
   "main": "./RNWatch.ios.build.js",
   "keywords": "react-native",
