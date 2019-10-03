@@ -1,5 +1,5 @@
 //noinspection NpmUsedModulesInstalled
-import Dimensions from 'Dimensions'
+import {Dimensions} from 'react-native'
 
 const purple = '#34314c'
 const blue   = 'rgb(133, 187, 220)'

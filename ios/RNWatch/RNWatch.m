@@ -147,22 +147,6 @@ RCT_EXPORT_METHOD(getReachability: (RCTResponseSenderBlock) callback) {
   NSLog(@"sessionReachabilityDidChange: %@",  reachable ? @"YES" : @"NO");
   [self dispatchEventWithName:EVENT_WATCH_REACHABILITY_CHANGED body:@{@"reachability": [NSNumber numberWithBool:reachable]}];
 }
-    
-////////////////////////////////////////////////////////////////////////////////
-// isWatchAppInstalled
-////////////////////////////////////////////////////////////////////////////////
-
-RCT_EXPORT_METHOD(getIsWatchAppInstalled: (RCTResponseSenderBlock) callback) {
-  callback(@[[NSNumber numberWithBool:self.session.isWatchAppInstalled]]);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// isPaired
-////////////////////////////////////////////////////////////////////////////////
-
-RCT_EXPORT_METHOD(getIsPaired: (RCTResponseSenderBlock) callback) {
-  callback(@[[NSNumber numberWithBool:self.session.isPaired]]);
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 // isWatchAppInstalled
@@ -170,14 +154,6 @@ RCT_EXPORT_METHOD(getIsPaired: (RCTResponseSenderBlock) callback) {
 
 RCT_EXPORT_METHOD(getIsWatchAppInstalled: (RCTResponseSenderBlock) callback) {
   callback(@[[NSNumber numberWithBool:self.session.isWatchAppInstalled]]);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// isPaired
-////////////////////////////////////////////////////////////////////////////////
-
-RCT_EXPORT_METHOD(getIsPaired: (RCTResponseSenderBlock) callback) {
-  callback(@[[NSNumber numberWithBool:self.session.isPaired]]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -352,7 +328,12 @@ RCT_EXPORT_METHOD(updateApplicationContext:(NSDictionary<NSString *,id> *)contex
 ////////////////////////////////////////////////////////////////////////////////
 
 RCT_EXPORT_METHOD(getApplicationContext:(RCTResponseSenderBlock)callback) {
-  callback(@[self.session.applicationContext]);
+  NSDictionary<NSString *,id> * applicationContext = self.session.applicationContext;
+  if (applicationContext == nil) {
+    callback(@[[NSNull null]]);
+  } else {
+    callback(@[applicationContext]);
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////

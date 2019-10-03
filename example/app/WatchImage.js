@@ -16,7 +16,7 @@ export default class WatchImage extends Component {
       <View style={styles.container}>
         <Image
           style={styles.image}
-          source={{uri: 'Watch'}}
+          source={require('./watch.png')}
           {...this.props}
         />
         <View style={styles.pings}>

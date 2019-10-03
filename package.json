@@ -3,6 +3,7 @@
   "version": "0.3.0-beta.1",
   "description": "React Native library to enable communication with Apple Watch app",
   "main": "lib/RNWatch.ios.js",
+  "license": "MIT",
   "author": {
     "name": "Michael Ford",
     "email": "mtford@gmail.com"
@@ -19,6 +20,7 @@
     "watch",
     "apple-watch"
   ],
+  "homepage": "https://github.com/mtford90/react-native-watch-connectivity",
   "scripts": {
     "start": "react-native start"
   },
@@ -33,14 +35,7 @@
   "devDependencies": {
     "babel-jest": "18.0.0",
     "babel-preset-react-native": "1.9.1",
-    "babel-preset-react-native-stage-0": "1.0.1",
-    "jest": "18.1.0",
-    "react": "^16.2.0",
-    "react-native": "^0.52.2",
-    "react-native-image-picker": "^0.25.6",
-    "react-native-spinkit": "^1.0.2",
-    "react-navigation": "^1.0.3",
-    "react-test-renderer": "^16.2.0"
+    "babel-preset-react-native-stage-0": "1.0.1"
   },
   "jest": {
     "preset": "react-native"

@@ -1,23 +1,29 @@
-import ReactNative from 'react-native'
-import React from 'react'
+import ReactNative from 'react-native';
+import React from 'react';
 
-import {COLORS} from './constants'
+import { COLORS } from './constants';
 
-const {Image, View, StyleSheet, TouchableOpacity, Text} = ReactNative
-const {Component} = React
+const { Image, View, StyleSheet, TouchableOpacity, Text } = ReactNative;
+const { Component } = React;
 
 export default class DualButton extends Component {
   static defaultProps = {
-    disabled:            false,
-    textButtonDisabled:  false,
+    disabled: false,
+    textButtonDisabled: false,
     imageButtonDisabled: false,
-    onTextButtonPress:   function () {},
-    onImageButtonPress:  function () {}
+    onTextButtonPress: function() {},
+    onImageButtonPress: function() {},
   };
 
-  render () {
-    const {disabled, textButtonDisabled, imageButtonDisabled, onImageButtonPress, onTextButtonPress} = this.props
-    const disabledStyle = disabled ? {} : styles.disabled
+  render() {
+    const {
+      disabled,
+      textButtonDisabled,
+      imageButtonDisabled,
+      onImageButtonPress,
+      onTextButtonPress,
+    } = this.props;
+    const disabledStyle = disabled ? {} : styles.disabled;
 
     return (
       <View style={[styles.buttons, disabledStyle]}>
@@ -26,9 +32,7 @@ export default class DualButton extends Component {
           disabled={disabled || textButtonDisabled}
           onPress={onTextButtonPress}
         >
-          <Text style={styles.buttonText}>
-            CHANGE MESSAGE
-          </Text>
+          <Text style={styles.buttonText}>CHANGE MESSAGE</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.cameraButton}
@@ -37,44 +41,44 @@ export default class DualButton extends Component {
         >
           <Image
             style={styles.cameraImageStyle}
-            source={{uri: 'Camera'}}
+            source={require('./camera.png')}
           />
         </TouchableOpacity>
       </View>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
-  buttons:          {
+  buttons: {
     flexDirection: 'row',
   },
-  button:           {
-    borderTopLeftRadius:    6,
+  button: {
+    borderTopLeftRadius: 6,
     borderBottomLeftRadius: 6,
-    backgroundColor:        COLORS.blue,
-    padding:                10,
-    height:                 44,
-    marginRight:            1,
+    backgroundColor: COLORS.blue,
+    padding: 10,
+    height: 44,
+    marginRight: 1,
   },
-  cameraButton:     {
-    backgroundColor:         COLORS.blue,
-    width:                   56,
-    height:                  44,
-    borderTopRightRadius:    6,
+  cameraButton: {
+    backgroundColor: COLORS.blue,
+    width: 56,
+    height: 44,
+    borderTopRightRadius: 6,
     borderBottomRightRadius: 6,
-    alignItems:              'center',
-    justifyContent:          'center',
-    alignSelf:               'center'
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
   },
   cameraImageStyle: {
-    width:  34.68,
+    width: 34.68,
     height: 24.31,
   },
-  buttonText:       {
-    color:         'rgb(50, 50, 53)',
-    fontSize:      20,
+  buttonText: {
+    color: 'rgb(50, 50, 53)',
+    fontSize: 20,
     letterSpacing: 0.5,
-    fontWeight:    'bold'
+    fontWeight: 'bold',
   },
-})
+});

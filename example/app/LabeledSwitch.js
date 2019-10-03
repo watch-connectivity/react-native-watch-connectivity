@@ -1,11 +1,10 @@
-import React from 'react'
-import ReactNative  from 'react-native'
+import React from 'react';
+import ReactNative from 'react-native';
 
-import {COLORS, ROW_MARGIN} from './constants'
-import Dimensions from 'Dimensions'
+import { COLORS, ROW_MARGIN } from './constants';
 
-const {View, StyleSheet, Switch, Text} = ReactNative
-const {Component} = React
+const { View, StyleSheet, Switch, Text } = ReactNative;
+const { Component } = React;
 
 export default class LabeledSwitch extends Component {
   static defaultProps = {
@@ -15,20 +14,17 @@ export default class LabeledSwitch extends Component {
     style: {},
   };
 
-  render () {
+  render() {
     return (
       <View style={[styles.container, this.props.style]}>
         <Switch
-          onTintColor={COLORS.orange}
+          trackColor={COLORS.orange}
           style={styles.switch}
           {...this.props.switchProps}
         />
-        <Text
-          style={styles.switchLabel}>
-          {this.props.label}
-        </Text>
+        <Text style={styles.switchLabel}>{this.props.label}</Text>
       </View>
-    )
+    );
   }
 }
 
@@ -40,7 +36,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   switch: {
-    marginBottom: 10
+    marginBottom: 10,
   },
   switchLabel: {
     color: 'white',
@@ -48,5 +44,5 @@ const styles = StyleSheet.create({
     width: 56,
     marginLeft: 10,
     marginTop: 4,
-  }
-})
+  },
+});

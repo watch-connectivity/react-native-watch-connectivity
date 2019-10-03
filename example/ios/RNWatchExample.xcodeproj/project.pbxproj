@@ -12,29 +12,26 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		27C245071E296D74007EC830 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 27C245051E296D74007EC830 /* Interface.storyboard */; };
-		27C245091E296D74007EC830 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27C245081E296D74007EC830 /* Assets.xcassets */; };
-		27C245101E296D74007EC830 /* WatchExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 27C2450F1E296D74007EC830 /* WatchExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		27C245171E296D74007EC830 /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C245161E296D74007EC830 /* InterfaceController.swift */; };
-		27C245191E296D74007EC830 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C245181E296D74007EC830 /* ExtensionDelegate.swift */; };
-		27C2451B1E296D74007EC830 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C2451A1E296D74007EC830 /* NotificationController.swift */; };
-		27C2451D1E296D74007EC830 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C2451C1E296D74007EC830 /* ComplicationController.swift */; };
-		27C2451F1E296D74007EC830 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27C2451E1E296D74007EC830 /* Assets.xcassets */; };
-		27C245231E296D74007EC830 /* Watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 27C245031E296D74007EC830 /* Watch.app */; };
-		916C3B732034FD8B00DC1887 /* libRNWatch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 916C3AA42034F76A00DC1887 /* libRNWatch.a */; };
-		916C3BE02035138F00DC1887 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 916C3B102034F88300DC1887 /* libReact.a */; };
-		916C3BE12035141600DC1887 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 916C3AAB2034F7B500DC1887 /* libRCTAnimation.a */; };
-		916C3BE22035141C00DC1887 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 916C3AB32034F7FB00DC1887 /* libRCTActionSheet.a */; };
-		916C3BE32035142500DC1887 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 916C3AB92034F80900DC1887 /* libRCTGeolocation.a */; };
-		916C3BE42035142C00DC1887 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 916C3AEC2034F86000DC1887 /* libRCTVibration.a */; };
-		916C3BE52035143200DC1887 /* libRCTImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 916C3AC02034F81700DC1887 /* libRCTImage.a */; };
-		916C3BE62035143900DC1887 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 916C3AC92034F82800DC1887 /* libRCTLinking.a */; };
-		916C3BE72035143D00DC1887 /* libRCTNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 916C3AD22034F83600DC1887 /* libRCTNetwork.a */; };
-		916C3BE82035144200DC1887 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 916C3AE42034F85300DC1887 /* libRCTText.a */; };
-		916C3BE92035144600DC1887 /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 916C3ADB2034F84600DC1887 /* libRCTSettings.a */; };
-		916C3BEA2035145000DC1887 /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 916C3AF52034F86C00DC1887 /* libRCTWebSocket.a */; };
-		916C3BEB2035149100DC1887 /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 916C3A952034F74300DC1887 /* libRNImagePicker.a */; };
-		916C3BEC2035149700DC1887 /* libRNSpinkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 916C3A9C2034F75C00DC1887 /* libRNSpinkit.a */; };
+		161CE150B0D5F9A55F3FD210 /* libPods-RNWatchExample-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6139689DC4A98551E3F27A6 /* libPods-RNWatchExample-tvOSTests.a */; };
+		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
+		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		2DCD954D1E0B4F2C00145EB5 /* RNWatchExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* RNWatchExampleTests.m */; };
+		3302A74E8D767146B2516245 /* libPods-RNWatchExample-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26F245C9BD884D85A2605A15 /* libPods-RNWatchExample-tvOS.a */; };
+		5170B42DA881B3DD47E9DCEA /* libPods-RNWatchExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FE6EA392B9030B160A2DB0B4 /* libPods-RNWatchExampleTests.a */; };
+		6AD7222E23488B8100DACD18 /* RNWatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AD7222D23488B8100DACD18 /* RNWatch.m */; };
+		6AD72235234899DE00DACD18 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AD72233234899DE00DACD18 /* Interface.storyboard */; };
+		6AD72237234899E000DACD18 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6AD72236234899E000DACD18 /* Assets.xcassets */; };
+		6AD7223E234899E000DACD18 /* WatchApp Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6AD7223D234899E000DACD18 /* WatchApp Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6AD72247234899E000DACD18 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD72246234899E000DACD18 /* ExtensionDelegate.swift */; };
+		6AD72249234899E000DACD18 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD72248234899E000DACD18 /* NotificationController.swift */; };
+		6AD7224B234899E000DACD18 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD7224A234899E000DACD18 /* NotificationView.swift */; };
+		6AD7224D234899E000DACD18 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD7224C234899E000DACD18 /* ComplicationController.swift */; };
+		6AD7224F234899E100DACD18 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6AD7224E234899E100DACD18 /* Assets.xcassets */; };
+		6AD72252234899E100DACD18 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6AD72251234899E100DACD18 /* Preview Assets.xcassets */; };
+		6AD72257234899E100DACD18 /* WatchApp.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 6AD72231234899DE00DACD18 /* WatchApp.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6AD7226F23489C8900DACD18 /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD7226E23489C8900DACD18 /* InterfaceController.swift */; };
+		F49B168D00755677620BD38E /* libPods-RNWatchExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC8FA8D735925B939C156C1 /* libPods-RNWatchExample.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,316 +40,50 @@
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = rnwatch;
+			remoteInfo = RNWatchExample;
 		};
-		27C245111E296D74007EC830 /* PBXContainerItemProxy */ = {
+		2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 27C2450E1E296D74007EC830;
-			remoteInfo = "watch Extension";
+			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
+			remoteInfo = "RNWatchExample-tvOS";
 		};
-		27C245211E296D74007EC830 /* PBXContainerItemProxy */ = {
+		6AD7223F234899E000DACD18 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 27C245021E296D74007EC830;
-			remoteInfo = watch;
+			remoteGlobalIDString = 6AD7223C234899E000DACD18;
+			remoteInfo = "WatchApp Extension";
 		};
-		916C3A942034F74300DC1887 /* PBXContainerItemProxy */ = {
+		6AD72255234899E100DACD18 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 916C3A902034F74300DC1887 /* RNImagePicker.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 014A3B5C1C6CF33500B6D375;
-			remoteInfo = RNImagePicker;
-		};
-		916C3A9B2034F75C00DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3A962034F75C00DC1887 /* RNSpinkit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D42CB3511B2538DE00FD0AE2;
-			remoteInfo = RNSpinkit;
-		};
-		916C3A9D2034F75C00DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3A962034F75C00DC1887 /* RNSpinkit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 641194871EC9FD4A00D4FC03;
-			remoteInfo = "RNSpinkit-tvOS";
-		};
-		916C3AA32034F76A00DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3A9F2034F76A00DC1887 /* RNWatch.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RNWatch;
-		};
-		916C3AAA2034F7B500DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AA52034F7B500DC1887 /* RCTAnimation.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RCTAnimation;
-		};
-		916C3AAC2034F7B500DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AA52034F7B500DC1887 /* RCTAnimation.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 2D2A28201D9B03D100D4039D;
-			remoteInfo = "RCTAnimation-tvOS";
-		};
-		916C3AB22034F7FB00DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AAE2034F7FB00DC1887 /* RCTActionSheet.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RCTActionSheet;
-		};
-		916C3AB82034F80900DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AB42034F80900DC1887 /* RCTGeolocation.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RCTGeolocation;
-		};
-		916C3ABF2034F81700DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3ABA2034F81700DC1887 /* RCTImage.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 58B5115D1A9E6B3D00147676;
-			remoteInfo = RCTImage;
-		};
-		916C3AC12034F81700DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3ABA2034F81700DC1887 /* RCTImage.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 2D2A283A1D9B042B00D4039D;
-			remoteInfo = "RCTImage-tvOS";
-		};
-		916C3AC82034F82800DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AC32034F82800DC1887 /* RCTLinking.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RCTLinking;
-		};
-		916C3ACA2034F82800DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AC32034F82800DC1887 /* RCTLinking.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 2D2A28471D9B043800D4039D;
-			remoteInfo = "RCTLinking-tvOS";
-		};
-		916C3AD12034F83600DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3ACC2034F83600DC1887 /* RCTNetwork.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 58B511DB1A9E6C8500147676;
-			remoteInfo = RCTNetwork;
-		};
-		916C3AD32034F83600DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3ACC2034F83600DC1887 /* RCTNetwork.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 2D2A28541D9B044C00D4039D;
-			remoteInfo = "RCTNetwork-tvOS";
-		};
-		916C3ADA2034F84600DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AD52034F84500DC1887 /* RCTSettings.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RCTSettings;
-		};
-		916C3ADC2034F84600DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AD52034F84500DC1887 /* RCTSettings.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 2D2A28611D9B046600D4039D;
-			remoteInfo = "RCTSettings-tvOS";
-		};
-		916C3AE32034F85300DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3ADE2034F85300DC1887 /* RCTText.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
-			remoteInfo = RCTText;
-		};
-		916C3AE52034F85300DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3ADE2034F85300DC1887 /* RCTText.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 2D2A287B1D9B048500D4039D;
-			remoteInfo = "RCTText-tvOS";
-		};
-		916C3AEB2034F86000DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AE72034F86000DC1887 /* RCTVibration.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 832C81801AAF6DEF007FA2F7;
-			remoteInfo = RCTVibration;
-		};
-		916C3AF42034F86C00DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AED2034F86C00DC1887 /* RCTWebSocket.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3C86DF461ADF2C930047B81A;
-			remoteInfo = RCTWebSocket;
-		};
-		916C3AF62034F86C00DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AED2034F86C00DC1887 /* RCTWebSocket.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 2D2A28881D9B049200D4039D;
-			remoteInfo = "RCTWebSocket-tvOS";
-		};
-		916C3AF82034F86C00DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AED2034F86C00DC1887 /* RCTWebSocket.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3DBE0D001F3B181A0099AA32;
-			remoteInfo = fishhook;
-		};
-		916C3AFA2034F86C00DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AED2034F86C00DC1887 /* RCTWebSocket.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3DBE0D0D1F3B181C0099AA32;
-			remoteInfo = "fishhook-tvOS";
-		};
-		916C3B0F2034F88300DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AFC2034F88200DC1887 /* React.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 83CBBA2E1A601D0E00E9B192;
-			remoteInfo = React;
-		};
-		916C3B112034F88300DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AFC2034F88200DC1887 /* React.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 2D2A28131D9B038B00D4039D;
-			remoteInfo = "React-tvOS";
-		};
-		916C3B132034F88300DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AFC2034F88200DC1887 /* React.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3D3C059A1DE3340900C268FA;
-			remoteInfo = yoga;
-		};
-		916C3B152034F88300DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AFC2034F88200DC1887 /* React.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3D3C06751DE3340C00C268FA;
-			remoteInfo = "yoga-tvOS";
-		};
-		916C3B172034F88300DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AFC2034F88200DC1887 /* React.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3D3CD9251DE5FBEC00167DC4;
-			remoteInfo = cxxreact;
-		};
-		916C3B192034F88300DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AFC2034F88200DC1887 /* React.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3D3CD9321DE5FBEE00167DC4;
-			remoteInfo = "cxxreact-tvOS";
-		};
-		916C3B1B2034F88300DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AFC2034F88200DC1887 /* React.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3D3CD90B1DE5FBD600167DC4;
-			remoteInfo = jschelpers;
-		};
-		916C3B1D2034F88300DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AFC2034F88200DC1887 /* React.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3D3CD9181DE5FBD800167DC4;
-			remoteInfo = "jschelpers-tvOS";
-		};
-		916C3B1F2034F88300DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AFC2034F88200DC1887 /* React.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = EBF21BDC1FC498900052F4D5;
-			remoteInfo = jsinspector;
-		};
-		916C3B212034F88300DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AFC2034F88200DC1887 /* React.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = EBF21BFA1FC4989A0052F4D5;
-			remoteInfo = "jsinspector-tvOS";
-		};
-		916C3B232034F88300DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AFC2034F88200DC1887 /* React.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 139D7ECE1E25DB7D00323FB7;
-			remoteInfo = "third-party";
-		};
-		916C3B252034F88300DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AFC2034F88200DC1887 /* React.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3D383D3C1EBD27B6005632C8;
-			remoteInfo = "third-party-tvOS";
-		};
-		916C3B272034F88300DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AFC2034F88200DC1887 /* React.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 139D7E881E25C6D100323FB7;
-			remoteInfo = "double-conversion";
-		};
-		916C3B292034F88300DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AFC2034F88200DC1887 /* React.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3D383D621EBD27B9005632C8;
-			remoteInfo = "double-conversion-tvOS";
-		};
-		916C3B2B2034F88300DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AFC2034F88200DC1887 /* React.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 9936F3131F5F2E4B0010BF04;
-			remoteInfo = privatedata;
-		};
-		916C3B2D2034F88300DC1887 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 916C3AFC2034F88200DC1887 /* React.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 9936F32F1F5F2E5B0010BF04;
-			remoteInfo = "privatedata-tvOS";
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6AD72230234899DE00DACD18;
+			remoteInfo = WatchApp;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		27C245271E296D74007EC830 /* Embed App Extensions */ = {
+		6AD7225B234899E100DACD18 /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				27C245101E296D74007EC830 /* WatchExtension.appex in Embed App Extensions */,
+				6AD7223E234899E000DACD18 /* WatchApp Extension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		27C2452B1E296D74007EC830 /* Embed Watch Content */ = {
+		6AD7225F234899E100DACD18 /* Embed Watch Content */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolderSpec = 16;
 			files = (
-				27C245231E296D74007EC830 /* Watch.app in Embed Watch Content */,
+				6AD72257234899E100DACD18 /* WatchApp.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -360,10 +91,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		00202CDC95014B03724DE5CC /* Pods-RNWatchExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNWatchExampleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RNWatchExampleTests/Pods-RNWatchExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00E356EE1AD99517003FC87E /* RNWatchExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RNWatchExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* RNWatchExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNWatchExampleTests.m; sourceTree = "<group>"; };
+		03895E05CAA1DCEF71794FCC /* Pods-RNWatchExample-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNWatchExample-tvOSTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RNWatchExample-tvOSTests/Pods-RNWatchExample-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* RNWatchExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RNWatchExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RNWatchExample/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = RNWatchExample/AppDelegate.m; sourceTree = "<group>"; };
@@ -371,32 +104,36 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = RNWatchExample/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = RNWatchExample/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = RNWatchExample/main.m; sourceTree = "<group>"; };
-		27C245031E296D74007EC830 /* Watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Watch.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		27C245061E296D74007EC830 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
-		27C245081E296D74007EC830 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		27C2450A1E296D74007EC830 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		27C2450F1E296D74007EC830 /* WatchExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WatchExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		27C245151E296D74007EC830 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
-		27C245161E296D74007EC830 /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
-		27C245181E296D74007EC830 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
-		27C2451A1E296D74007EC830 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
-		27C2451C1E296D74007EC830 /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
-		27C2451E1E296D74007EC830 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		27C245201E296D74007EC830 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		916C3A902034F74300DC1887 /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNImagePicker.xcodeproj; path = "../../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; };
-		916C3A962034F75C00DC1887 /* RNSpinkit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSpinkit.xcodeproj; path = "../../node_modules/react-native-spinkit/ios/RNSpinkit.xcodeproj"; sourceTree = "<group>"; };
-		916C3A9F2034F76A00DC1887 /* RNWatch.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNWatch.xcodeproj; path = ../../ios/RNWatch.xcodeproj; sourceTree = "<group>"; };
-		916C3AA52034F7B500DC1887 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
-		916C3AAE2034F7FB00DC1887 /* RCTActionSheet.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTActionSheet.xcodeproj; path = "../../node_modules/react-native/Libraries/ActionSheetIOS/RCTActionSheet.xcodeproj"; sourceTree = "<group>"; };
-		916C3AB42034F80900DC1887 /* RCTGeolocation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTGeolocation.xcodeproj; path = "../../node_modules/react-native/Libraries/Geolocation/RCTGeolocation.xcodeproj"; sourceTree = "<group>"; };
-		916C3ABA2034F81700DC1887 /* RCTImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTImage.xcodeproj; path = "../../node_modules/react-native/Libraries/Image/RCTImage.xcodeproj"; sourceTree = "<group>"; };
-		916C3AC32034F82800DC1887 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
-		916C3ACC2034F83600DC1887 /* RCTNetwork.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTNetwork.xcodeproj; path = "../../node_modules/react-native/Libraries/Network/RCTNetwork.xcodeproj"; sourceTree = "<group>"; };
-		916C3AD52034F84500DC1887 /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
-		916C3ADE2034F85300DC1887 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
-		916C3AE72034F86000DC1887 /* RCTVibration.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTVibration.xcodeproj; path = "../../node_modules/react-native/Libraries/Vibration/RCTVibration.xcodeproj"; sourceTree = "<group>"; };
-		916C3AED2034F86C00DC1887 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
-		916C3AFC2034F88200DC1887 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
+		26F245C9BD884D85A2605A15 /* libPods-RNWatchExample-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNWatchExample-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D02E47B1E0B4A5D006451C7 /* RNWatchExample-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RNWatchExample-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D02E4901E0B4A5D006451C7 /* RNWatchExample-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RNWatchExample-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B3F00C7D89A5620F12A8C8F /* Pods-RNWatchExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNWatchExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RNWatchExample/Pods-RNWatchExample.debug.xcconfig"; sourceTree = "<group>"; };
+		3E27DB578C7607CA0BD5A29A /* Pods-RNWatchExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNWatchExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-RNWatchExample/Pods-RNWatchExample.release.xcconfig"; sourceTree = "<group>"; };
+		4BC8FA8D735925B939C156C1 /* libPods-RNWatchExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNWatchExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		586DA10B13A37B9A30DC3762 /* Pods-RNWatchExample-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNWatchExample-tvOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RNWatchExample-tvOSTests/Pods-RNWatchExample-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		58DED1E38FAC3174226FE108 /* Pods-RNWatchExample-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNWatchExample-tvOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RNWatchExample-tvOS/Pods-RNWatchExample-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		5DAFEEE5185BDFA3FC6F454D /* Pods-RNWatchExample-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNWatchExample-tvOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-RNWatchExample-tvOS/Pods-RNWatchExample-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		6AD7222C23488B8100DACD18 /* RNWatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNWatch.h; path = ../../ios/rnwatch/RNWatch.h; sourceTree = "<group>"; };
+		6AD7222D23488B8100DACD18 /* RNWatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNWatch.m; path = ../../ios/rnwatch/RNWatch.m; sourceTree = "<group>"; };
+		6AD72231234899DE00DACD18 /* WatchApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WatchApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6AD72234234899DE00DACD18 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		6AD72236234899E000DACD18 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6AD72238234899E000DACD18 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6AD7223D234899E000DACD18 /* WatchApp Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "WatchApp Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6AD72246234899E000DACD18 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
+		6AD72248234899E000DACD18 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
+		6AD7224A234899E000DACD18 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
+		6AD7224C234899E000DACD18 /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
+		6AD7224E234899E100DACD18 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6AD72251234899E100DACD18 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		6AD72253234899E100DACD18 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6AD72254234899E100DACD18 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+		6AD7226E23489C8900DACD18 /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
+		770A6F3FF59E81D8270FD468 /* Pods-RNWatchExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNWatchExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RNWatchExampleTests/Pods-RNWatchExampleTests.release.xcconfig"; sourceTree = "<group>"; };
+		D6139689DC4A98551E3F27A6 /* libPods-RNWatchExample-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNWatchExample-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		FE6EA392B9030B160A2DB0B4 /* libPods-RNWatchExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNWatchExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -404,6 +141,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5170B42DA881B3DD47E9DCEA /* libPods-RNWatchExampleTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -411,24 +149,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				916C3BE22035141C00DC1887 /* libRCTActionSheet.a in Frameworks */,
-				916C3BE12035141600DC1887 /* libRCTAnimation.a in Frameworks */,
-				916C3BE32035142500DC1887 /* libRCTGeolocation.a in Frameworks */,
-				916C3BE52035143200DC1887 /* libRCTImage.a in Frameworks */,
-				916C3BE62035143900DC1887 /* libRCTLinking.a in Frameworks */,
-				916C3BE72035143D00DC1887 /* libRCTNetwork.a in Frameworks */,
-				916C3BE92035144600DC1887 /* libRCTSettings.a in Frameworks */,
-				916C3BE82035144200DC1887 /* libRCTText.a in Frameworks */,
-				916C3BE42035142C00DC1887 /* libRCTVibration.a in Frameworks */,
-				916C3BEA2035145000DC1887 /* libRCTWebSocket.a in Frameworks */,
-				916C3BE02035138F00DC1887 /* libReact.a in Frameworks */,
-				916C3BEB2035149100DC1887 /* libRNImagePicker.a in Frameworks */,
-				916C3BEC2035149700DC1887 /* libRNSpinkit.a in Frameworks */,
-				916C3B732034FD8B00DC1887 /* libRNWatch.a in Frameworks */,
+				F49B168D00755677620BD38E /* libPods-RNWatchExample.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		27C2450C1E296D74007EC830 /* Frameworks */ = {
+		2D02E4781E0B4A5D006451C7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3302A74E8D767146B2516245 /* libPods-RNWatchExample-tvOS.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2D02E48D1E0B4A5D006451C7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				161CE150B0D5F9A55F3FD210 /* libPods-RNWatchExample-tvOSTests.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6AD7223A234899E000DACD18 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -469,55 +210,66 @@
 			name = RNWatchExample;
 			sourceTree = "<group>";
 		};
-		27C245041E296D74007EC830 /* Watch */ = {
+		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				27C245051E296D74007EC830 /* Interface.storyboard */,
-				27C245081E296D74007EC830 /* Assets.xcassets */,
-				27C2450A1E296D74007EC830 /* Info.plist */,
+				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
+				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
+				4BC8FA8D735925B939C156C1 /* libPods-RNWatchExample.a */,
+				26F245C9BD884D85A2605A15 /* libPods-RNWatchExample-tvOS.a */,
+				D6139689DC4A98551E3F27A6 /* libPods-RNWatchExample-tvOSTests.a */,
+				FE6EA392B9030B160A2DB0B4 /* libPods-RNWatchExampleTests.a */,
 			);
-			path = Watch;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		27C245131E296D74007EC830 /* WatchExtension */ = {
+		6AD7222B23488B5500DACD18 /* RNWatch */ = {
 			isa = PBXGroup;
 			children = (
-				27C245161E296D74007EC830 /* InterfaceController.swift */,
-				27C245181E296D74007EC830 /* ExtensionDelegate.swift */,
-				27C2451A1E296D74007EC830 /* NotificationController.swift */,
-				27C2451C1E296D74007EC830 /* ComplicationController.swift */,
-				27C2451E1E296D74007EC830 /* Assets.xcassets */,
-				27C245201E296D74007EC830 /* Info.plist */,
-				27C245141E296D74007EC830 /* Supporting Files */,
+				6AD7222C23488B8100DACD18 /* RNWatch.h */,
+				6AD7222D23488B8100DACD18 /* RNWatch.m */,
 			);
-			path = WatchExtension;
+			name = RNWatch;
 			sourceTree = "<group>";
 		};
-		27C245141E296D74007EC830 /* Supporting Files */ = {
+		6AD72232234899DE00DACD18 /* WatchApp */ = {
 			isa = PBXGroup;
 			children = (
-				27C245151E296D74007EC830 /* PushNotificationPayload.apns */,
+				6AD72233234899DE00DACD18 /* Interface.storyboard */,
+				6AD72236234899E000DACD18 /* Assets.xcassets */,
+				6AD72238234899E000DACD18 /* Info.plist */,
 			);
-			name = "Supporting Files";
+			path = WatchApp;
+			sourceTree = "<group>";
+		};
+		6AD72241234899E000DACD18 /* WatchApp Extension */ = {
+			isa = PBXGroup;
+			children = (
+				6AD72246234899E000DACD18 /* ExtensionDelegate.swift */,
+				6AD72248234899E000DACD18 /* NotificationController.swift */,
+				6AD7224A234899E000DACD18 /* NotificationView.swift */,
+				6AD7224C234899E000DACD18 /* ComplicationController.swift */,
+				6AD7224E234899E100DACD18 /* Assets.xcassets */,
+				6AD72253234899E100DACD18 /* Info.plist */,
+				6AD72254234899E100DACD18 /* PushNotificationPayload.apns */,
+				6AD72250234899E100DACD18 /* Preview Content */,
+				6AD7226E23489C8900DACD18 /* InterfaceController.swift */,
+			);
+			path = "WatchApp Extension";
+			sourceTree = "<group>";
+		};
+		6AD72250234899E100DACD18 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				6AD72251234899E100DACD18 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				916C3AA52034F7B500DC1887 /* RCTAnimation.xcodeproj */,
-				916C3AAE2034F7FB00DC1887 /* RCTActionSheet.xcodeproj */,
-				916C3AB42034F80900DC1887 /* RCTGeolocation.xcodeproj */,
-				916C3ABA2034F81700DC1887 /* RCTImage.xcodeproj */,
-				916C3AC32034F82800DC1887 /* RCTLinking.xcodeproj */,
-				916C3ACC2034F83600DC1887 /* RCTNetwork.xcodeproj */,
-				916C3AD52034F84500DC1887 /* RCTSettings.xcodeproj */,
-				916C3ADE2034F85300DC1887 /* RCTText.xcodeproj */,
-				916C3AE72034F86000DC1887 /* RCTVibration.xcodeproj */,
-				916C3AED2034F86C00DC1887 /* RCTWebSocket.xcodeproj */,
-				916C3AFC2034F88200DC1887 /* React.xcodeproj */,
-				916C3A902034F74300DC1887 /* RNImagePicker.xcodeproj */,
-				916C3A962034F75C00DC1887 /* RNSpinkit.xcodeproj */,
-				916C3A9F2034F76A00DC1887 /* RNWatch.xcodeproj */,
+				6AD7222B23488B5500DACD18 /* RNWatch */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -526,170 +278,45 @@
 			isa = PBXGroup;
 			children = (
 				13B07FAE1A68108700A75B9A /* RNWatchExample */,
-				00E356EF1AD99517003FC87E /* RNWatchExampleTests */,
-				27C245041E296D74007EC830 /* Watch */,
-				27C245131E296D74007EC830 /* WatchExtension */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
+				00E356EF1AD99517003FC87E /* RNWatchExampleTests */,
+				6AD72232234899DE00DACD18 /* WatchApp */,
+				6AD72241234899E000DACD18 /* WatchApp Extension */,
 				83CBBA001A601CBA00E9B192 /* Products */,
-				916C3B722034FD8B00DC1887 /* Frameworks */,
+				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+				89392281680D35A21318B122 /* Pods */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
 			tabWidth = 2;
+			usesTabs = 0;
 		};
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* RNWatchExample.app */,
 				00E356EE1AD99517003FC87E /* RNWatchExampleTests.xctest */,
-				27C245031E296D74007EC830 /* Watch.app */,
-				27C2450F1E296D74007EC830 /* WatchExtension.appex */,
+				2D02E47B1E0B4A5D006451C7 /* RNWatchExample-tvOS.app */,
+				2D02E4901E0B4A5D006451C7 /* RNWatchExample-tvOSTests.xctest */,
+				6AD72231234899DE00DACD18 /* WatchApp.app */,
+				6AD7223D234899E000DACD18 /* WatchApp Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		916C3A912034F74300DC1887 /* Products */ = {
+		89392281680D35A21318B122 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				916C3A952034F74300DC1887 /* libRNImagePicker.a */,
+				3B3F00C7D89A5620F12A8C8F /* Pods-RNWatchExample.debug.xcconfig */,
+				3E27DB578C7607CA0BD5A29A /* Pods-RNWatchExample.release.xcconfig */,
+				58DED1E38FAC3174226FE108 /* Pods-RNWatchExample-tvOS.debug.xcconfig */,
+				5DAFEEE5185BDFA3FC6F454D /* Pods-RNWatchExample-tvOS.release.xcconfig */,
+				586DA10B13A37B9A30DC3762 /* Pods-RNWatchExample-tvOSTests.debug.xcconfig */,
+				03895E05CAA1DCEF71794FCC /* Pods-RNWatchExample-tvOSTests.release.xcconfig */,
+				00202CDC95014B03724DE5CC /* Pods-RNWatchExampleTests.debug.xcconfig */,
+				770A6F3FF59E81D8270FD468 /* Pods-RNWatchExampleTests.release.xcconfig */,
 			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		916C3A972034F75C00DC1887 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				916C3A9C2034F75C00DC1887 /* libRNSpinkit.a */,
-				916C3A9E2034F75C00DC1887 /* libRNSpinkit.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		916C3AA02034F76A00DC1887 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				916C3AA42034F76A00DC1887 /* libRNWatch.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		916C3AA62034F7B500DC1887 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				916C3AAB2034F7B500DC1887 /* libRCTAnimation.a */,
-				916C3AAD2034F7B500DC1887 /* libRCTAnimation.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		916C3AAF2034F7FB00DC1887 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				916C3AB32034F7FB00DC1887 /* libRCTActionSheet.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		916C3AB52034F80900DC1887 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				916C3AB92034F80900DC1887 /* libRCTGeolocation.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		916C3ABB2034F81700DC1887 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				916C3AC02034F81700DC1887 /* libRCTImage.a */,
-				916C3AC22034F81700DC1887 /* libRCTImage-tvOS.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		916C3AC42034F82800DC1887 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				916C3AC92034F82800DC1887 /* libRCTLinking.a */,
-				916C3ACB2034F82800DC1887 /* libRCTLinking-tvOS.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		916C3ACD2034F83600DC1887 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				916C3AD22034F83600DC1887 /* libRCTNetwork.a */,
-				916C3AD42034F83600DC1887 /* libRCTNetwork-tvOS.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		916C3AD62034F84500DC1887 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				916C3ADB2034F84600DC1887 /* libRCTSettings.a */,
-				916C3ADD2034F84600DC1887 /* libRCTSettings-tvOS.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		916C3ADF2034F85300DC1887 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				916C3AE42034F85300DC1887 /* libRCTText.a */,
-				916C3AE62034F85300DC1887 /* libRCTText-tvOS.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		916C3AE82034F86000DC1887 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				916C3AEC2034F86000DC1887 /* libRCTVibration.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		916C3AEE2034F86C00DC1887 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				916C3AF52034F86C00DC1887 /* libRCTWebSocket.a */,
-				916C3AF72034F86C00DC1887 /* libRCTWebSocket-tvOS.a */,
-				916C3AF92034F86C00DC1887 /* libfishhook.a */,
-				916C3AFB2034F86C00DC1887 /* libfishhook-tvOS.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		916C3AFD2034F88200DC1887 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				916C3B102034F88300DC1887 /* libReact.a */,
-				916C3B122034F88300DC1887 /* libReact.a */,
-				916C3B142034F88300DC1887 /* libyoga.a */,
-				916C3B162034F88300DC1887 /* libyoga.a */,
-				916C3B182034F88300DC1887 /* libcxxreact.a */,
-				916C3B1A2034F88300DC1887 /* libcxxreact.a */,
-				916C3B1C2034F88300DC1887 /* libjschelpers.a */,
-				916C3B1E2034F88300DC1887 /* libjschelpers.a */,
-				916C3B202034F88300DC1887 /* libjsinspector.a */,
-				916C3B222034F88300DC1887 /* libjsinspector-tvOS.a */,
-				916C3B242034F88300DC1887 /* libthird-party.a */,
-				916C3B262034F88300DC1887 /* libthird-party.a */,
-				916C3B282034F88300DC1887 /* libdouble-conversion.a */,
-				916C3B2A2034F88300DC1887 /* libdouble-conversion.a */,
-				916C3B2C2034F88300DC1887 /* libprivatedata.a */,
-				916C3B2E2034F88300DC1887 /* libprivatedata-tvOS.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		916C3B722034FD8B00DC1887 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -699,6 +326,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "RNWatchExampleTests" */;
 			buildPhases = (
+				6A93F0BA6C4D16B328F6E0CC /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
@@ -709,7 +337,7 @@
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
 			name = RNWatchExampleTests;
-			productName = rnwatchTests;
+			productName = RNWatchExampleTests;
 			productReference = 00E356EE1AD99517003FC87E /* RNWatchExampleTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
@@ -717,54 +345,95 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "RNWatchExample" */;
 			buildPhases = (
+				5B8CB017B6D803ACD11E9F13 /* [CP] Check Pods Manifest.lock */,
+				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				27C2452B1E296D74007EC830 /* Embed Watch Content */,
+				6AD7225F234899E100DACD18 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				27C245221E296D74007EC830 /* PBXTargetDependency */,
+				6AD72256234899E100DACD18 /* PBXTargetDependency */,
 			);
 			name = RNWatchExample;
-			productName = "Hello World";
+			productName = RNWatchExample;
 			productReference = 13B07F961A680F5B00A75B9A /* RNWatchExample.app */;
 			productType = "com.apple.product-type.application";
 		};
-		27C245021E296D74007EC830 /* Watch */ = {
+		2D02E47A1E0B4A5D006451C7 /* RNWatchExample-tvOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 27C245281E296D74007EC830 /* Build configuration list for PBXNativeTarget "Watch" */;
+			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "RNWatchExample-tvOS" */;
 			buildPhases = (
-				27C245011E296D74007EC830 /* Resources */,
-				27C245271E296D74007EC830 /* Embed App Extensions */,
+				D8BF18BC1400B01AB42A142E /* [CP] Check Pods Manifest.lock */,
+				FD10A7F122414F3F0027D42C /* Start Packager */,
+				2D02E4771E0B4A5D006451C7 /* Sources */,
+				2D02E4781E0B4A5D006451C7 /* Frameworks */,
+				2D02E4791E0B4A5D006451C7 /* Resources */,
+				2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				27C245121E296D74007EC830 /* PBXTargetDependency */,
 			);
-			name = Watch;
-			productName = watch;
-			productReference = 27C245031E296D74007EC830 /* Watch.app */;
+			name = "RNWatchExample-tvOS";
+			productName = "RNWatchExample-tvOS";
+			productReference = 2D02E47B1E0B4A5D006451C7 /* RNWatchExample-tvOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		2D02E48F1E0B4A5D006451C7 /* RNWatchExample-tvOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "RNWatchExample-tvOSTests" */;
+			buildPhases = (
+				0F78F572CF75CE80265497B6 /* [CP] Check Pods Manifest.lock */,
+				2D02E48C1E0B4A5D006451C7 /* Sources */,
+				2D02E48D1E0B4A5D006451C7 /* Frameworks */,
+				2D02E48E1E0B4A5D006451C7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */,
+			);
+			name = "RNWatchExample-tvOSTests";
+			productName = "RNWatchExample-tvOSTests";
+			productReference = 2D02E4901E0B4A5D006451C7 /* RNWatchExample-tvOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		6AD72230234899DE00DACD18 /* WatchApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6AD7225C234899E100DACD18 /* Build configuration list for PBXNativeTarget "WatchApp" */;
+			buildPhases = (
+				6AD7222F234899DE00DACD18 /* Resources */,
+				6AD7225B234899E100DACD18 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6AD72240234899E000DACD18 /* PBXTargetDependency */,
+			);
+			name = WatchApp;
+			productName = WatchApp;
+			productReference = 6AD72231234899DE00DACD18 /* WatchApp.app */;
 			productType = "com.apple.product-type.application.watchapp2";
 		};
-		27C2450E1E296D74007EC830 /* WatchExtension */ = {
+		6AD7223C234899E000DACD18 /* WatchApp Extension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 27C245241E296D74007EC830 /* Build configuration list for PBXNativeTarget "WatchExtension" */;
+			buildConfigurationList = 6AD72258234899E100DACD18 /* Build configuration list for PBXNativeTarget "WatchApp Extension" */;
 			buildPhases = (
-				27C2450B1E296D74007EC830 /* Sources */,
-				27C2450C1E296D74007EC830 /* Frameworks */,
-				27C2450D1E296D74007EC830 /* Resources */,
+				6AD72239234899E000DACD18 /* Sources */,
+				6AD7223A234899E000DACD18 /* Frameworks */,
+				6AD7223B234899E000DACD18 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = WatchExtension;
-			productName = "watch Extension";
-			productReference = 27C2450F1E296D74007EC830 /* WatchExtension.appex */;
+			name = "WatchApp Extension";
+			productName = "WatchApp Extension";
+			productReference = 6AD7223D234899E000DACD18 /* WatchApp Extension.appex */;
 			productType = "com.apple.product-type.watchkit2-extension";
 		};
 /* End PBXNativeTarget section */
@@ -773,20 +442,30 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0810;
-				LastUpgradeCheck = 0610;
+				LastSwiftUpdateCheck = 1100;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
-					27C245021E296D74007EC830 = {
-						CreatedOnToolsVersion = 8.1;
+					2D02E47A1E0B4A5D006451C7 = {
+						CreatedOnToolsVersion = 8.2.1;
 						ProvisioningStyle = Automatic;
 					};
-					27C2450E1E296D74007EC830 = {
-						CreatedOnToolsVersion = 8.1;
+					2D02E48F1E0B4A5D006451C7 = {
+						CreatedOnToolsVersion = 8.2.1;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 2D02E47A1E0B4A5D006451C7;
+					};
+					6AD72230234899DE00DACD18 = {
+						CreatedOnToolsVersion = 11.0;
+						ProvisioningStyle = Automatic;
+					};
+					6AD7223C234899E000DACD18 = {
+						CreatedOnToolsVersion = 11.0;
+						DevelopmentTeam = B6MNS4NM69;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -796,355 +475,24 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 916C3AAF2034F7FB00DC1887 /* Products */;
-					ProjectRef = 916C3AAE2034F7FB00DC1887 /* RCTActionSheet.xcodeproj */;
-				},
-				{
-					ProductGroup = 916C3AA62034F7B500DC1887 /* Products */;
-					ProjectRef = 916C3AA52034F7B500DC1887 /* RCTAnimation.xcodeproj */;
-				},
-				{
-					ProductGroup = 916C3AB52034F80900DC1887 /* Products */;
-					ProjectRef = 916C3AB42034F80900DC1887 /* RCTGeolocation.xcodeproj */;
-				},
-				{
-					ProductGroup = 916C3ABB2034F81700DC1887 /* Products */;
-					ProjectRef = 916C3ABA2034F81700DC1887 /* RCTImage.xcodeproj */;
-				},
-				{
-					ProductGroup = 916C3AC42034F82800DC1887 /* Products */;
-					ProjectRef = 916C3AC32034F82800DC1887 /* RCTLinking.xcodeproj */;
-				},
-				{
-					ProductGroup = 916C3ACD2034F83600DC1887 /* Products */;
-					ProjectRef = 916C3ACC2034F83600DC1887 /* RCTNetwork.xcodeproj */;
-				},
-				{
-					ProductGroup = 916C3AD62034F84500DC1887 /* Products */;
-					ProjectRef = 916C3AD52034F84500DC1887 /* RCTSettings.xcodeproj */;
-				},
-				{
-					ProductGroup = 916C3ADF2034F85300DC1887 /* Products */;
-					ProjectRef = 916C3ADE2034F85300DC1887 /* RCTText.xcodeproj */;
-				},
-				{
-					ProductGroup = 916C3AE82034F86000DC1887 /* Products */;
-					ProjectRef = 916C3AE72034F86000DC1887 /* RCTVibration.xcodeproj */;
-				},
-				{
-					ProductGroup = 916C3AEE2034F86C00DC1887 /* Products */;
-					ProjectRef = 916C3AED2034F86C00DC1887 /* RCTWebSocket.xcodeproj */;
-				},
-				{
-					ProductGroup = 916C3AFD2034F88200DC1887 /* Products */;
-					ProjectRef = 916C3AFC2034F88200DC1887 /* React.xcodeproj */;
-				},
-				{
-					ProductGroup = 916C3A912034F74300DC1887 /* Products */;
-					ProjectRef = 916C3A902034F74300DC1887 /* RNImagePicker.xcodeproj */;
-				},
-				{
-					ProductGroup = 916C3A972034F75C00DC1887 /* Products */;
-					ProjectRef = 916C3A962034F75C00DC1887 /* RNSpinkit.xcodeproj */;
-				},
-				{
-					ProductGroup = 916C3AA02034F76A00DC1887 /* Products */;
-					ProjectRef = 916C3A9F2034F76A00DC1887 /* RNWatch.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* RNWatchExample */,
 				00E356ED1AD99517003FC87E /* RNWatchExampleTests */,
-				27C245021E296D74007EC830 /* Watch */,
-				27C2450E1E296D74007EC830 /* WatchExtension */,
+				2D02E47A1E0B4A5D006451C7 /* RNWatchExample-tvOS */,
+				2D02E48F1E0B4A5D006451C7 /* RNWatchExample-tvOSTests */,
+				6AD72230234899DE00DACD18 /* WatchApp */,
+				6AD7223C234899E000DACD18 /* WatchApp Extension */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		916C3A952034F74300DC1887 /* libRNImagePicker.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNImagePicker.a;
-			remoteRef = 916C3A942034F74300DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3A9C2034F75C00DC1887 /* libRNSpinkit.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNSpinkit.a;
-			remoteRef = 916C3A9B2034F75C00DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3A9E2034F75C00DC1887 /* libRNSpinkit.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNSpinkit.a;
-			remoteRef = 916C3A9D2034F75C00DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3AA42034F76A00DC1887 /* libRNWatch.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNWatch.a;
-			remoteRef = 916C3AA32034F76A00DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3AAB2034F7B500DC1887 /* libRCTAnimation.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTAnimation.a;
-			remoteRef = 916C3AAA2034F7B500DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3AAD2034F7B500DC1887 /* libRCTAnimation.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTAnimation.a;
-			remoteRef = 916C3AAC2034F7B500DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3AB32034F7FB00DC1887 /* libRCTActionSheet.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTActionSheet.a;
-			remoteRef = 916C3AB22034F7FB00DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3AB92034F80900DC1887 /* libRCTGeolocation.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTGeolocation.a;
-			remoteRef = 916C3AB82034F80900DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3AC02034F81700DC1887 /* libRCTImage.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTImage.a;
-			remoteRef = 916C3ABF2034F81700DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3AC22034F81700DC1887 /* libRCTImage-tvOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libRCTImage-tvOS.a";
-			remoteRef = 916C3AC12034F81700DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3AC92034F82800DC1887 /* libRCTLinking.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTLinking.a;
-			remoteRef = 916C3AC82034F82800DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3ACB2034F82800DC1887 /* libRCTLinking-tvOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libRCTLinking-tvOS.a";
-			remoteRef = 916C3ACA2034F82800DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3AD22034F83600DC1887 /* libRCTNetwork.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTNetwork.a;
-			remoteRef = 916C3AD12034F83600DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3AD42034F83600DC1887 /* libRCTNetwork-tvOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libRCTNetwork-tvOS.a";
-			remoteRef = 916C3AD32034F83600DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3ADB2034F84600DC1887 /* libRCTSettings.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTSettings.a;
-			remoteRef = 916C3ADA2034F84600DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3ADD2034F84600DC1887 /* libRCTSettings-tvOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libRCTSettings-tvOS.a";
-			remoteRef = 916C3ADC2034F84600DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3AE42034F85300DC1887 /* libRCTText.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTText.a;
-			remoteRef = 916C3AE32034F85300DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3AE62034F85300DC1887 /* libRCTText-tvOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libRCTText-tvOS.a";
-			remoteRef = 916C3AE52034F85300DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3AEC2034F86000DC1887 /* libRCTVibration.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTVibration.a;
-			remoteRef = 916C3AEB2034F86000DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3AF52034F86C00DC1887 /* libRCTWebSocket.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTWebSocket.a;
-			remoteRef = 916C3AF42034F86C00DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3AF72034F86C00DC1887 /* libRCTWebSocket-tvOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libRCTWebSocket-tvOS.a";
-			remoteRef = 916C3AF62034F86C00DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3AF92034F86C00DC1887 /* libfishhook.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libfishhook.a;
-			remoteRef = 916C3AF82034F86C00DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3AFB2034F86C00DC1887 /* libfishhook-tvOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libfishhook-tvOS.a";
-			remoteRef = 916C3AFA2034F86C00DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3B102034F88300DC1887 /* libReact.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libReact.a;
-			remoteRef = 916C3B0F2034F88300DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3B122034F88300DC1887 /* libReact.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libReact.a;
-			remoteRef = 916C3B112034F88300DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3B142034F88300DC1887 /* libyoga.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libyoga.a;
-			remoteRef = 916C3B132034F88300DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3B162034F88300DC1887 /* libyoga.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libyoga.a;
-			remoteRef = 916C3B152034F88300DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3B182034F88300DC1887 /* libcxxreact.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libcxxreact.a;
-			remoteRef = 916C3B172034F88300DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3B1A2034F88300DC1887 /* libcxxreact.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libcxxreact.a;
-			remoteRef = 916C3B192034F88300DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3B1C2034F88300DC1887 /* libjschelpers.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libjschelpers.a;
-			remoteRef = 916C3B1B2034F88300DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3B1E2034F88300DC1887 /* libjschelpers.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libjschelpers.a;
-			remoteRef = 916C3B1D2034F88300DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3B202034F88300DC1887 /* libjsinspector.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libjsinspector.a;
-			remoteRef = 916C3B1F2034F88300DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3B222034F88300DC1887 /* libjsinspector-tvOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libjsinspector-tvOS.a";
-			remoteRef = 916C3B212034F88300DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3B242034F88300DC1887 /* libthird-party.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libthird-party.a";
-			remoteRef = 916C3B232034F88300DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3B262034F88300DC1887 /* libthird-party.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libthird-party.a";
-			remoteRef = 916C3B252034F88300DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3B282034F88300DC1887 /* libdouble-conversion.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libdouble-conversion.a";
-			remoteRef = 916C3B272034F88300DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3B2A2034F88300DC1887 /* libdouble-conversion.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libdouble-conversion.a";
-			remoteRef = 916C3B292034F88300DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3B2C2034F88300DC1887 /* libprivatedata.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libprivatedata.a;
-			remoteRef = 916C3B2B2034F88300DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		916C3B2E2034F88300DC1887 /* libprivatedata-tvOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libprivatedata-tvOS.a";
-			remoteRef = 916C3B2D2034F88300DC1887 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		00E356EC1AD99517003FC87E /* Resources */ = {
@@ -1163,20 +511,36 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		27C245011E296D74007EC830 /* Resources */ = {
+		2D02E4791E0B4A5D006451C7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				27C245091E296D74007EC830 /* Assets.xcassets in Resources */,
-				27C245071E296D74007EC830 /* Interface.storyboard in Resources */,
+				2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		27C2450D1E296D74007EC830 /* Resources */ = {
+		2D02E48E1E0B4A5D006451C7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				27C2451F1E296D74007EC830 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6AD7222F234899DE00DACD18 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6AD72237234899E000DACD18 /* Assets.xcassets in Resources */,
+				6AD72235234899DE00DACD18 /* Interface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6AD7223B234899E000DACD18 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6AD72252234899E100DACD18 /* Preview Assets.xcassets in Resources */,
+				6AD7224F234899E100DACD18 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1195,7 +559,147 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+		};
+		0F78F572CF75CE80265497B6 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RNWatchExample-tvOSTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Bundle React Native Code And Images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+		};
+		5B8CB017B6D803ACD11E9F13 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RNWatchExample-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6A93F0BA6C4D16B328F6E0CC /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RNWatchExampleTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D8BF18BC1400B01AB42A142E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RNWatchExample-tvOS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FD10A7F022414F080027D42C /* Start Packager */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Start Packager";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		FD10A7F122414F3F0027D42C /* Start Packager */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Start Packager";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1214,17 +718,36 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				6AD7222E23488B8100DACD18 /* RNWatch.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		27C2450B1E296D74007EC830 /* Sources */ = {
+		2D02E4771E0B4A5D006451C7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				27C2451B1E296D74007EC830 /* NotificationController.swift in Sources */,
-				27C2451D1E296D74007EC830 /* ComplicationController.swift in Sources */,
-				27C245191E296D74007EC830 /* ExtensionDelegate.swift in Sources */,
-				27C245171E296D74007EC830 /* InterfaceController.swift in Sources */,
+				2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */,
+				2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2D02E48C1E0B4A5D006451C7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2DCD954D1E0B4F2C00145EB5 /* RNWatchExampleTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6AD72239234899E000DACD18 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6AD7226F23489C8900DACD18 /* InterfaceController.swift in Sources */,
+				6AD72249234899E000DACD18 /* NotificationController.swift in Sources */,
+				6AD72247234899E000DACD18 /* ExtensionDelegate.swift in Sources */,
+				6AD7224B234899E000DACD18 /* NotificationView.swift in Sources */,
+				6AD7224D234899E000DACD18 /* ComplicationController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1236,15 +759,20 @@
 			target = 13B07F861A680F5B00A75B9A /* RNWatchExample */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
-		27C245121E296D74007EC830 /* PBXTargetDependency */ = {
+		2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 27C2450E1E296D74007EC830 /* WatchExtension */;
-			targetProxy = 27C245111E296D74007EC830 /* PBXContainerItemProxy */;
+			target = 2D02E47A1E0B4A5D006451C7 /* RNWatchExample-tvOS */;
+			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
 		};
-		27C245221E296D74007EC830 /* PBXTargetDependency */ = {
+		6AD72240234899E000DACD18 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 27C245021E296D74007EC830 /* Watch */;
-			targetProxy = 27C245211E296D74007EC830 /* PBXContainerItemProxy */;
+			target = 6AD7223C234899E000DACD18 /* WatchApp Extension */;
+			targetProxy = 6AD7223F234899E000DACD18 /* PBXContainerItemProxy */;
+		};
+		6AD72256234899E100DACD18 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6AD72230234899DE00DACD18 /* WatchApp */;
+			targetProxy = 6AD72255234899E100DACD18 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1258,10 +786,10 @@
 			path = RNWatchExample;
 			sourceTree = "<group>";
 		};
-		27C245051E296D74007EC830 /* Interface.storyboard */ = {
+		6AD72233234899DE00DACD18 /* Interface.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				27C245061E296D74007EC830 /* Base */,
+				6AD72234234899DE00DACD18 /* Base */,
 			);
 			name = Interface.storyboard;
 			sourceTree = "<group>";
@@ -1271,16 +799,22 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 00202CDC95014B03724DE5CC /* Pods-RNWatchExampleTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = RNWatchExampleTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RNWatchExample.app/RNWatchExample";
 			};
@@ -1288,13 +822,19 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 770A6F3FF59E81D8270FD468 /* Pods-RNWatchExampleTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = RNWatchExampleTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RNWatchExample.app/RNWatchExample";
 			};
@@ -1302,160 +842,272 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3B3F00C7D89A5620F12A8C8F /* Pods-RNWatchExample.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = "";
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/../node_modules/react-native/React/**",
-					"$(SRCROOT)/../Libraries/RNWatch",
-				);
-				INFOPLIST_FILE = "$(SRCROOT)/RNWatchExample/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				INFOPLIST_FILE = RNWatchExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.watch.example;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = RNWatchExample;
-				USER_HEADER_SEARCH_PATHS = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3E27DB578C7607CA0BD5A29A /* Pods-RNWatchExample.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/../node_modules/react-native/React/**",
-					"$(SRCROOT)/../Libraries/RNWatch",
-				);
-				INFOPLIST_FILE = "$(SRCROOT)/RNWatchExample/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				INFOPLIST_FILE = RNWatchExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.watch.example;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = RNWatchExample;
-				USER_HEADER_SEARCH_PATHS = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};
-		27C245251E296D74007EC830 /* Debug */ = {
+		2D02E4971E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 58DED1E38FAC3174226FE108 /* Pods-RNWatchExample-tvOS.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "";
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/WatchExtension/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.watch.example.watchkitapp.watchkitextension;
-				PRODUCT_NAME = "${TARGET_NAME}";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 3.1;
+				INFOPLIST_FILE = "RNWatchExample-tvOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.RNWatchExample-tvOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.2;
 			};
 			name = Debug;
 		};
-		27C245261E296D74007EC830 /* Release */ = {
+		2D02E4981E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5DAFEEE5185BDFA3FC6F454D /* Pods-RNWatchExample-tvOS.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/WatchExtension/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.watch.example.watchkitapp.watchkitextension;
-				PRODUCT_NAME = "${TARGET_NAME}";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 3.1;
+				INFOPLIST_FILE = "RNWatchExample-tvOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.RNWatchExample-tvOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.2;
 			};
 			name = Release;
 		};
-		27C245291E296D74007EC830 /* Debug */ = {
+		2D02E4991E0B4A5E006451C7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 586DA10B13A37B9A30DC3762 /* Pods-RNWatchExample-tvOSTests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "RNWatchExample-tvOSTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.RNWatchExample-tvOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RNWatchExample-tvOS.app/RNWatchExample-tvOS";
+				TVOS_DEPLOYMENT_TARGET = 10.1;
+			};
+			name = Debug;
+		};
+		2D02E49A1E0B4A5E006451C7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 03895E05CAA1DCEF71794FCC /* Pods-RNWatchExample-tvOSTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "RNWatchExample-tvOSTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.RNWatchExample-tvOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RNWatchExample-tvOS.app/RNWatchExample-tvOS";
+				TVOS_DEPLOYMENT_TARGET = 10.1;
+			};
+			name = Release;
+		};
+		6AD72259234899E100DACD18 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_ASSET_PATHS = "\"WatchApp Extension/Preview Content\"";
+				DEVELOPMENT_TEAM = B6MNS4NM69;
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "WatchApp Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.RNWatchExample.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.0;
+			};
+			name = Debug;
+		};
+		6AD7225A234899E100DACD18 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_ASSET_PATHS = "\"WatchApp Extension/Preview Content\"";
+				DEVELOPMENT_TEAM = B6MNS4NM69;
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "WatchApp Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.RNWatchExample.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.0;
+			};
+			name = Release;
+		};
+		6AD7225D234899E100DACD18 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "";
-				ENABLE_TESTABILITY = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				IBSC_MODULE = watch_Extension;
-				INFOPLIST_FILE = watch/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.watch.example.watchkitapp;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				IBSC_MODULE = WatchApp_Extension;
+				INFOPLIST_FILE = WatchApp/Info.plist;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.RNWatchExample.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 3.1;
+				WATCHOS_DEPLOYMENT_TARGET = 6.0;
 			};
 			name = Debug;
 		};
-		27C2452A1E296D74007EC830 /* Release */ = {
+		6AD7225E234899E100DACD18 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
-				GCC_NO_COMMON_BLOCKS = YES;
-				IBSC_MODULE = watch_Extension;
-				INFOPLIST_FILE = watch/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.watch.example.watchkitapp;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				IBSC_MODULE = WatchApp_Extension;
+				INFOPLIST_FILE = WatchApp/Info.plist;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.RNWatchExample.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 3.1;
+				WATCHOS_DEPLOYMENT_TARGET = 6.0;
 			};
 			name = Release;
 		};
@@ -1467,20 +1119,32 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1493,7 +1157,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1508,13 +1172,23 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1522,13 +1196,14 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -1556,20 +1231,38 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		27C245241E296D74007EC830 /* Build configuration list for PBXNativeTarget "WatchExtension" */ = {
+		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "RNWatchExample-tvOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				27C245251E296D74007EC830 /* Debug */,
-				27C245261E296D74007EC830 /* Release */,
+				2D02E4971E0B4A5E006451C7 /* Debug */,
+				2D02E4981E0B4A5E006451C7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		27C245281E296D74007EC830 /* Build configuration list for PBXNativeTarget "Watch" */ = {
+		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "RNWatchExample-tvOSTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				27C245291E296D74007EC830 /* Debug */,
-				27C2452A1E296D74007EC830 /* Release */,
+				2D02E4991E0B4A5E006451C7 /* Debug */,
+				2D02E49A1E0B4A5E006451C7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6AD72258234899E100DACD18 /* Build configuration list for PBXNativeTarget "WatchApp Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6AD72259234899E100DACD18 /* Debug */,
+				6AD7225A234899E100DACD18 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6AD7225C234899E100DACD18 /* Build configuration list for PBXNativeTarget "WatchApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6AD7225D234899E100DACD18 /* Debug */,
+				6AD7225E234899E100DACD18 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

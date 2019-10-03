@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="14868" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Wqb-fH-rHl">
+    <device id="watch38"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="14643"/>
+    </dependencies>
+    <scenes>
+        <!--Static Notification Interface Controller-->
+        <scene sceneID="AEw-b0-oYE">
+            <objects>
+                <notificationController id="YCC-NB-fut">
+                    <items>
+                        <label alignment="left" text="Alert Label" numberOfLines="0" id="IdU-wH-bcW"/>
+                    </items>
+                    <notificationCategory key="notificationCategory" identifier="myCategory" id="JfB-70-Muf"/>
+                    <connections>
+                        <outlet property="notificationAlertLabel" destination="IdU-wH-bcW" id="JKC-fr-R95"/>
+                        <segue destination="eXb-UN-Cd0" kind="relationship" relationship="dynamicInteractiveNotificationInterface" id="mpB-YA-K8N"/>
+                    </connections>
+                </notificationController>
+            </objects>
+            <point key="canvasLocation" x="187" y="462"/>
+        </scene>
+        <!--Notification Controller-->
+        <scene sceneID="Niz-AI-uX2">
+            <objects>
+                <controller id="eXb-UN-Cd0" customClass="NotificationController" customModule="WatchApp" customModuleProvider="target"/>
+            </objects>
+            <point key="canvasLocation" x="488" y="462"/>
+        </scene>
+        <!--InterfaceController-->
+        <scene sceneID="JCx-xj-eeo">
+            <objects>
+                <controller identifier="InterfaceController" id="Wqb-fH-rHl" customClass="InterfaceController" customModule="WatchApp_Extension">
+                    <items>
+                        <label width="1" alignment="left" text="iWatch Bridge" textAlignment="center" id="3UX-92-fqT">
+                            <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
+                        </label>
+                        <imageView width="1" height="44" alignment="left" image="Camera" contentMode="scaleAspectFit" id="3OL-Cc-1ez"/>
+                        <label width="136" height="51.5" alignment="center" text="Use the app to change this message" textAlignment="center" numberOfLines="0" id="fLJ-DU-dOK">
+                            <accessibilityTraits key="accessibilityTraits" staticText="YES" updatesFrequently="YES"/>
+                            <fontDescription key="font" type="system" pointSize="14"/>
+                        </label>
+                        <label width="136" height="23.5" alignment="center" text="0 Pongs" textAlignment="center" numberOfLines="0" id="6vj-gd-leC">
+                            <accessibilityTraits key="accessibilityTraits" staticText="YES" updatesFrequently="YES"/>
+                            <fontDescription key="font" type="boldSystem" pointSize="14"/>
+                        </label>
+                    </items>
+                    <connections>
+                        <outlet property="image" destination="3OL-Cc-1ez" id="WgS-rM-faF"/>
+                        <outlet property="label" destination="fLJ-DU-dOK" id="fUV-6V-DU1"/>
+                        <outlet property="pongs" destination="6vj-gd-leC" id="Eao-B8-XL4"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="510" y="141"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Camera" width="74" height="52"/>
+    </resources>
+</document>

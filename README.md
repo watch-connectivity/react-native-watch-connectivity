@@ -29,6 +29,8 @@ yarn add react-native-watch-connectivity
 
 ### Link
 
+Note: this library now supports autolinking for RN 0.60+
+
 First of all you'll need to link the library to your iOS project. You can do this automatically by using:
 
 ```bash
