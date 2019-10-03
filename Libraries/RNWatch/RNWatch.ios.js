@@ -335,5 +335,6 @@ export function getApplicationContext (cb = () => {}) {
  */
 export function _subscribe (event, cb = () => {}) {
   if (!event) throw new Error(`Must pass event`)
-  return ::NativeAppEventEmitter.addListener(event, cb).remove
+  const sub = NativeAppEventEmitter.addListener(event, cb)
+  return sub.remove.bind(sub)
 }

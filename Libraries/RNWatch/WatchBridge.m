@@ -22,6 +22,11 @@ RCT_EXPORT_MODULE()
 // Init
 ////////////////////////////////////////////////////////////////////////////////
 
++(BOOL)requiresMainQueueSetup
+{
+    return YES;
+}
+
 + (WatchBridge*) shared {
   static WatchBridge *sharedMyManager = nil;
   static dispatch_once_t onceToken;
