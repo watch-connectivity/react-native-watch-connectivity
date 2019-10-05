@@ -32,11 +32,6 @@
     "react": ">=15.1",
     "react-native": ">=0.40"
   },
-  "devDependencies": {
-    "babel-jest": "18.0.0",
-    "babel-preset-react-native": "1.9.1",
-    "babel-preset-react-native-stage-0": "1.0.1"
-  },
   "jest": {
     "preset": "react-native"
   }
