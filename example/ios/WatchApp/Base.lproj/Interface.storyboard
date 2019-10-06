@@ -34,7 +34,7 @@
             <objects>
                 <controller identifier="InterfaceController" id="Wqb-fH-rHl" customClass="InterfaceController" customModule="WatchApp_Extension">
                     <items>
-                        <label width="1" alignment="left" text="iWatch Bridge" textAlignment="center" id="3UX-92-fqT">
+                        <label width="1" alignment="left" text="Apple Watch Bridge" textAlignment="center" id="3UX-92-fqT">
                             <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
                         </label>
                         <imageView width="1" height="44" alignment="left" image="Camera" contentMode="scaleAspectFit" id="3OL-Cc-1ez"/>
