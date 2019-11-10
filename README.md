@@ -158,6 +158,12 @@ watch
   })
 ```
 
+```js
+Watch.sendComplicationUserInfo({ name: 'Mike' }, (err, replyMessage) => {
+  console.log('Received reply from watch', replyMessage)
+})
+```
+
 #### Application Context
 
 ```js
