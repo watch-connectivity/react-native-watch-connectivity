@@ -1,6 +1,6 @@
 {
   "name": "react-native-watch-connectivity",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "React Native library to enable communication with Apple Watch app",
   "main": "lib/RNWatch.ios.js",
   "license": "MIT",
