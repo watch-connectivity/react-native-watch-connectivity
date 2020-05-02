@@ -1,5 +1,5 @@
-import { NativeEventEmitter } from 'react-native';
-import { NativeModule, WatchPayload } from './native-module';
+import {NativeEventEmitter} from 'react-native';
+import {NativeModule, WatchPayload} from './native-module';
 
 export const watchEmitter = new NativeEventEmitter(NativeModule);
 
@@ -14,18 +14,20 @@ export enum NativeWatchEvent {
 }
 
 export interface NativeWatchEventPayloads {
-  [NativeWatchEvent.EVENT_FILE_TRANSFER_ERROR]: { error: Error };
+  [NativeWatchEvent.EVENT_FILE_TRANSFER_ERROR]: {error: Error};
   [NativeWatchEvent.EVENT_FILE_TRANSFER_FINISHED]: {
     uri: string;
     metadata: Record<string, unknown>;
     id: string;
   };
-  [NativeWatchEvent.EVENT_RECEIVE_MESSAGE]: WatchPayload & { id?: string };
+  [NativeWatchEvent.EVENT_RECEIVE_MESSAGE]: WatchPayload & {id?: string};
   [NativeWatchEvent.EVENT_WATCH_STATE_CHANGED]: {
     state:
       | 'WCSessionActivationStateNotActivated'
       | 'WCSessionActivationStateInactive'
       | 'WCSessionActivationStateActivated';
+    installed: boolean;
+    paired: boolean;
   };
   [NativeWatchEvent.EVENT_WATCH_REACHABILITY_CHANGED]: {
     reachability: boolean;
@@ -34,10 +36,10 @@ export interface NativeWatchEventPayloads {
   [NativeWatchEvent.EVENT_APPLICATION_CONTEXT_RECEIVED]: WatchPayload;
 }
 
-export function _subscribeToNativeWatchEvent<E extends NativeWatchEvent>(
-  event: E,
-  cb: (payload: NativeWatchEventPayloads[E]) => void
-) {
+export function _subscribeToNativeWatchEvent<
+  E extends NativeWatchEvent,
+  Payload = NativeWatchEventPayloads[E]
+>(event: E, cb: (payload: Payload) => void) {
   // Type the event name
   if (!event) {
     throw new Error('Must pass event');

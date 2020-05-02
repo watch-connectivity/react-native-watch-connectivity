@@ -1,8 +1,8 @@
 {
   "name": "react-native-watch-connectivity",
-  "version": "0.5.0",
+  "version": "0.5.0-alpha.0",
   "description": "React Native library to enable communication with Apple Watch app",
-  "main": "dist/RNWatch.ios.js",
+  "main": "dist/index.js",
   "files": [
     "dist",
     "ios",
@@ -29,9 +29,10 @@
   ],
   "homepage": "https://github.com/mtford90/react-native-watch-connectivity",
   "scripts": {
-    "build": "yarn tsc && yarn lint ./dist/**/*.d.ts ./dist/**/*.js --fix --quiet",
+    "build": "yarn tsc && cp ./lib/RNWatch.d.ts ./dist/RNWatch.d.ts && yarn lint ./dist/**/*.d.ts ./dist/**/*.js --fix --quiet",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx",
-    "precommit": "tsc --skipLibCheck && lint-staged"
+    "precommit": "tsc --skipLibCheck && lint-staged",
+    "tsc": "tsc --project tsconfig.build.json"
   },
   "repository": {
     "type": "git",

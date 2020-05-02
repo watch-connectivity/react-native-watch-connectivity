@@ -1,4 +1,4 @@
-import { EventSubscriptionVendor, NativeModules } from 'react-native';
+import {EventSubscriptionVendor, NativeModules} from 'react-native';
 
 export type WatchPayload = Record<string, unknown>;
 
@@ -6,6 +6,12 @@ export type WCWatchState =
   | 'WCSessionActivationStateNotActivated'
   | 'WCSessionActivationStateInactive'
   | 'WCSessionActivationStateActivated';
+
+export type FileTransferInfo = {
+  uri: string;
+  metadata: Record<string, unknown>;
+  id: string;
+};
 
 export interface IRNWatchNativeModule extends EventSubscriptionVendor {
   getSessionState: (cb: (state: WCWatchState) => void) => void;
@@ -19,10 +25,13 @@ export interface IRNWatchNativeModule extends EventSubscriptionVendor {
   getIsPaired: (cb: (isPaired: boolean) => void) => void;
   getIsWatchAppInstalled: (cb: (isPaired: boolean) => void) => void;
 
-  sendMessage: (
-    message: WatchPayload,
-    cb: (reply: WatchPayload) => void,
-    errCb: (err: Error) => void
+  sendMessage: <
+    Payload extends WatchPayload = WatchPayload,
+    ResponsePayload extends WatchPayload = Payload
+  >(
+    message: Payload,
+    cb: (reply: ResponsePayload) => void,
+    errCb: (err: Error) => void,
   ) => void;
 
   replyToMessageWithId: (messageId: string, message: WatchPayload) => void;
@@ -31,14 +40,14 @@ export interface IRNWatchNativeModule extends EventSubscriptionVendor {
     str: string,
     encoding: number,
     replyCallback: (b64ResponseData: string) => void,
-    errorCallback: (err: Error) => void
+    errorCallback: (err: Error) => void,
   ) => void;
 
   transferFile: (
     url: string,
     metaData: WatchPayload | null,
-    cb: () => void,
-    errCb: (err: Error) => void
+    cb: (info: FileTransferInfo) => void,
+    errCb: (err: Error) => void,
   ) => void;
 
   updateApplicationContext: (context: WatchPayload) => void;
@@ -52,7 +61,7 @@ if (!__mod) {
   throw new Error(
     'Could not find RNWatch native module. ' +
       'On RN 0.60+ you can autolink by running pod install. ' +
-      'On RN <0.60 you need to run react-native link or else link manually.'
+      'On RN <0.60 you need to run react-native link or else link manually.',
   );
 }
 

@@ -1,7 +1,7 @@
-import { _subscribeToNativeWatchEvent, NativeWatchEvent } from './events';
-import { NativeModule, WCWatchState } from './native-module';
+import {_subscribeToNativeWatchEvent, NativeWatchEvent} from './events';
+import {NativeModule, WCWatchState} from './native-module';
 
-enum WatchState {
+export enum WatchState {
   NotActivated = 'NotActivated',
   Inactive = 'Inactive',
   Activated = 'Activated',
@@ -13,12 +13,14 @@ const _WatchState: Record<WCWatchState, WatchState> = {
   WCSessionActivationStateActivated: WatchState.Activated,
 };
 
-export function subscribeToWatchState(cb: (state: WatchState) => void) {
+export type WatchStateListener = (state: WatchState) => void;
+
+export function subscribeToWatchState(cb: WatchStateListener) {
   // noinspection JSIgnoredPromiseFromCall
   getWatchState(cb); // Initial reading
   return _subscribeToNativeWatchEvent(
     NativeWatchEvent.EVENT_WATCH_STATE_CHANGED,
-    (payload) => cb(_WatchState[payload.state])
+    (payload) => cb(_WatchState[payload.state]),
   );
 }
 
@@ -33,21 +35,27 @@ export function getWatchState(cb?: (state: WatchState) => void) {
   });
 }
 
-export function getIsPaired(cb: (err: null, isPaired: boolean) => void) {
+export function getIsPaired(
+  cb?: (err: null, isPaired: boolean) => void,
+): Promise<boolean> {
   return new Promise((resolve) => {
     NativeModule.getIsPaired((isPaired) => {
-      cb(null, isPaired);
+      if (cb) {
+        cb(null, isPaired);
+      }
       resolve(isPaired);
     });
   });
 }
 
 export function getIsWatchAppInstalled(
-  cb: (err: null, isPaired: boolean) => void
-) {
-  return new Promise((resolve) => {
+  cb?: (err: null, isPaired: boolean) => void,
+): Promise<boolean> {
+  return new Promise<boolean>((resolve) => {
     NativeModule.getIsWatchAppInstalled((isWatchAppInstalled) => {
-      cb(null, isWatchAppInstalled);
+      if (cb) {
+        cb(null, isWatchAppInstalled);
+      }
       resolve(isWatchAppInstalled);
     });
   });

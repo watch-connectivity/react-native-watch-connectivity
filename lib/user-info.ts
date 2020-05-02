@@ -1,18 +1,18 @@
-import { WatchPayload, NativeModule } from './native-module';
-import { _subscribeToNativeWatchEvent, NativeWatchEvent } from './events';
+import {WatchPayload, NativeModule} from './native-module';
+import {_subscribeToNativeWatchEvent, NativeWatchEvent} from './events';
 
 export function sendComplicationUserInfo(info = {}) {
   NativeModule.sendComplicationUserInfo(info);
 }
 
-export function subscribeToUserInfo(
-  cb: (err: null, userInfo: WatchPayload) => void
-) {
+export type UserInfoListener = (userInfo: WatchPayload) => void;
+
+export function subscribeToUserInfo(cb: UserInfoListener) {
   // noinspection JSIgnoredPromiseFromCall
-  getUserInfo(cb);
+  getUserInfo((_err, userInfo) => cb(userInfo));
   return _subscribeToNativeWatchEvent(
     NativeWatchEvent.EVENT_WATCH_USER_INFO_RECEIVED,
-    (payload) => cb(null, payload)
+    (payload) => cb(payload),
   );
 }
 

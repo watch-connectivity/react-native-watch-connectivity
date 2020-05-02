@@ -6,21 +6,19 @@
     "lib": ["es6"],
     "allowJs": true,
     "isolatedModules": true,
-    "outDir": "dist",
+    "noEmit": true,
+    "skipLibCheck": true,
+    "jsx": "react-native",
     "strict": true,
     "declaration": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
+    "typeRoots": ["./node_modules/@types", "./example/node_modules/@types"],
     "experimentalDecorators": true
   },
   "include": [
-    "./lib/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "babel.config.js",
-    "metro.config.js",
-    "jest.config.js"
+    "./lib/**/*",
+    "./example/src/**/*"
   ]
 }

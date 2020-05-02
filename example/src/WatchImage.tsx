@@ -1,12 +1,12 @@
-import ReactNative from 'react-native';
+import {Image, StyleSheet, View, Text, ImageProps} from 'react-native';
 import React from 'react';
 
-import { ROW_MARGIN } from './constants';
+import {ROW_MARGIN} from './constants';
 
-const { Image, StyleSheet, View, Text } = ReactNative;
-const { Component } = React;
-
-export default function WatchImage({ pings = 0, ...restOfProps }) {
+export default function WatchImage({
+  pings = 0,
+  ...restOfProps
+}: {pings: number} & Omit<ImageProps, 'style' | 'source'>) {
   return (
     <View style={styles.container}>
       <Image
