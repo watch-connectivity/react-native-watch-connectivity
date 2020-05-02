@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    /* Basic Options */
+    "target": "esnext",
+    "module": "commonjs",
+    "lib": ["es6"],
+    "allowJs": true,
+    "isolatedModules": true,
+    "outDir": "dist",
+    "strict": true,
+    "declaration": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true
+  },
+  "include": [
+    "./lib/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "metro.config.js",
+    "jest.config.js"
+  ]
+}
