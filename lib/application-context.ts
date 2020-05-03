@@ -5,22 +5,26 @@ export function updateApplicationContext(context: WatchPayload) {
   NativeModule.updateApplicationContext(context);
 }
 
-export type ApplicationContextListener = (context: WatchPayload | null) => void;
+export type ApplicationContextListener<Context extends WatchPayload> = (
+  context: Context | null,
+) => void;
 
-export function subscribeToApplicationContext(cb: ApplicationContextListener) {
+export function subscribeToApplicationContext<
+  Context extends WatchPayload = WatchPayload
+>(cb: ApplicationContextListener<Context>) {
   // noinspection JSIgnoredPromiseFromCall
   getApplicationContext(cb);
-  return _subscribeToNativeWatchEvent(
+  return _subscribeToNativeWatchEvent<
     NativeWatchEvent.EVENT_APPLICATION_CONTEXT_RECEIVED,
-    cb,
-  );
+    Context
+  >(NativeWatchEvent.EVENT_APPLICATION_CONTEXT_RECEIVED, cb);
 }
 
-export function getApplicationContext(
-  cb: (err: null, context: WatchPayload | null) => void,
-) {
+export function getApplicationContext<
+  Context extends WatchPayload = WatchPayload
+>(cb: (err: null, context: Context | null) => void) {
   return new Promise((resolve) => {
-    NativeModule.getApplicationContext((context) => {
+    NativeModule.getApplicationContext<Context>((context) => {
       cb(null, context);
       resolve(context);
     });

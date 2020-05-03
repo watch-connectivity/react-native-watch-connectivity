@@ -3,8 +3,14 @@ import {EventSubscriptionVendor, NativeModules} from 'react-native';
 export type WatchPayload = Record<string, unknown>;
 
 export type WCWatchState =
+  // When in this state, no communication occurs between the Watch app and iOS app.
+  // It is a programmer error to try to send data to the counterpart app while in this state.
   | 'WCSessionActivationStateNotActivated'
+  // The session was active but is transitioning to the deactivated state.
+  // The session’s delegate object may still receive data while in this state,
+  // but it is a programmer error to try to send data to the counterpart app.
   | 'WCSessionActivationStateInactive'
+  // The session is active and the Watch app and iOS app may communicate with each other freely.
   | 'WCSessionActivationStateActivated';
 
 export type FileTransferInfo = {
@@ -16,8 +22,10 @@ export type FileTransferInfo = {
 export interface IRNWatchNativeModule extends EventSubscriptionVendor {
   getSessionState: (cb: (state: WCWatchState) => void) => void;
 
-  sendUserInfo: (userInfo: WatchPayload) => void;
-  getUserInfo: (cb: (userInfo: WatchPayload) => void) => void;
+  sendUserInfo: <UserInfo extends WatchPayload>(userInfo: UserInfo) => void;
+  getUserInfo: <UserInfo extends WatchPayload>(
+    cb: (userInfo: UserInfo) => void,
+  ) => void;
 
   sendComplicationUserInfo: (userInfo: WatchPayload) => void;
 
@@ -26,8 +34,8 @@ export interface IRNWatchNativeModule extends EventSubscriptionVendor {
   getIsWatchAppInstalled: (cb: (isPaired: boolean) => void) => void;
 
   sendMessage: <
-    Payload extends WatchPayload = WatchPayload,
-    ResponsePayload extends WatchPayload = Payload
+    Payload extends WatchPayload,
+    ResponsePayload extends WatchPayload
   >(
     message: Payload,
     cb: (reply: ResponsePayload) => void,
@@ -52,7 +60,9 @@ export interface IRNWatchNativeModule extends EventSubscriptionVendor {
 
   updateApplicationContext: (context: WatchPayload) => void;
 
-  getApplicationContext: (cb: (context: WatchPayload | null) => void) => void;
+  getApplicationContext: <Context extends WatchPayload>(
+    cb: (context: Context | null) => void,
+  ) => void;
 }
 
 const __mod = NativeModules.RNWatch;

@@ -6,19 +6,17 @@
     "lib": ["es6"],
     "allowJs": true,
     "isolatedModules": true,
-    "noEmit": true,
     "skipLibCheck": true,
     "jsx": "react-native",
     "strict": true,
+    "outDir": "dist",
     "declaration": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "typeRoots": ["./node_modules/@types", "./example/node_modules/@types"],
     "experimentalDecorators": true
   },
   "include": [
-    "./lib/**/*",
-    "./example/src/**/*"
+    "./lib/**/*"
   ]
 }

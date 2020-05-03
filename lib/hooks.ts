@@ -1,12 +1,6 @@
 import {subscribeToMessages, WatchMessageListener} from './messages';
-import {useEffect, useRef, useState} from 'react';
-import {
-  getIsPaired,
-  getIsWatchAppInstalled,
-  subscribeToWatchState,
-  WatchState,
-  WatchStateListener,
-} from './state';
+import {useEffect, useState} from 'react';
+import {subscribeToWatchState, WatchState, WatchStateListener} from './state';
 import {
   subscribeToWatchReachability,
   WatchReachabilityListener,
@@ -41,87 +35,56 @@ export function useWatchReachabilityListener(
   }, [listener]);
 }
 
-export function useUserInfoListener(listener: UserInfoListener) {
+export function useUserInfoListener<
+  UserInfo extends WatchPayload = WatchPayload
+>(listener: UserInfoListener<UserInfo>) {
   return useEffect(() => {
-    return subscribeToUserInfo(listener);
+    return subscribeToUserInfo<UserInfo>(listener);
   }, [listener]);
 }
 
-export function useApplicationContextListener(
-  listener: ApplicationContextListener,
-) {
+export function useApplicationContextListener<
+  Context extends WatchPayload = WatchPayload
+>(listener: ApplicationContextListener<Context>) {
   return useEffect(() => {
-    return subscribeToApplicationContext(listener);
+    return subscribeToApplicationContext<Context>(listener);
   }, [listener]);
 }
 
-/**
- * A hook that provides useful information about watch state:
- *
- *  - pairing status
- *  - install status
- *  - reachability
- *  - watch state (active/inactive/activated)
- */
-export function useWatchStatusListener() {
-  const [watchStatus, setWatchStatus] = useState<{
-    isPaired: boolean;
-    isInstalled: boolean;
-    watchState: WatchState;
-    reachable: boolean;
-  }>({
-    isPaired: false,
-    isInstalled: false,
-    watchState: WatchState.NotActivated,
-    reachable: false,
-  });
+export function useWatchReachability() {
+  const [reachability, setReachability] = useState(false);
 
-  const mountedRef = useRef(true);
+  useWatchReachabilityListener(setReachability);
 
-  useEffect(() => {
-    return () => {
-      mountedRef.current = false;
-    };
-  }, []);
+  return reachability;
+}
 
-  useEffect(() => {
-    getIsPaired()
-      .then((isPaired) => {
-        const isMounted = mountedRef.current;
+export function useWatchState() {
+  const [watchState, setWatchState] = useState(WatchState.NotActivated);
 
-        // Async code within useEffect can cause unmount errors
-        if (isMounted) {
-          setWatchStatus((s) => ({...s, isPaired}));
-        }
+  useWatchStateListener(setWatchState);
 
-        return null; // Avoid bluebird unhandled promise warnings
-      })
-      .catch((err) => {
-        console.warn('Error getting pairing status', err);
-      });
+  return watchState;
+}
 
-    getIsWatchAppInstalled()
-      .then((isInstalled) => {
-        const isMounted = mountedRef.current;
-        // Async code within useEffect can cause unmount errors
-        if (isMounted) {
-          setWatchStatus((s) => ({...s, isInstalled}));
-        }
-
-        return null; // Avoid bluebird unhandled promise warnings
-      })
-      .catch((err) => {
-        console.warn('Error getting install status', err);
-      });
-  }, [watchStatus.watchState, watchStatus.reachable]);
-
-  useWatchStateListener((state) => {
-    setWatchStatus((s) => ({...s, watchState: state}));
-  });
-
-  useWatchReachabilityListener((reachable) =>
-    setWatchStatus((s) => ({...s, reachable})),
+export function useWatchApplicationContext<
+  Context extends WatchPayload = WatchPayload
+>() {
+  const [applicationContext, setApplicationContext] = useState<Context | null>(
+    null,
   );
 
-  return watchStatus;
+  useApplicationContextListener<Context>(setApplicationContext);
+
+  return applicationContext;
+}
+
+export function useWatchUserInfo<
+  UserInfo extends WatchPayload = WatchPayload
+>() {
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+
+  useUserInfoListener<UserInfo>(setUserInfo);
+
+  return userInfo;
 }

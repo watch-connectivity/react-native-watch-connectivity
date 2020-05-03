@@ -10,6 +10,7 @@
     "README.md",
     "RNWatch.podspec"
   ],
+  "types": "dist/index.d.ts",
   "license": "MIT",
   "author": {
     "name": "Michael Ford",
@@ -29,10 +30,9 @@
   ],
   "homepage": "https://github.com/mtford90/react-native-watch-connectivity",
   "scripts": {
-    "build": "yarn tsc && cp ./lib/RNWatch.d.ts ./dist/RNWatch.d.ts && yarn lint ./dist/**/*.d.ts ./dist/**/*.js --fix --quiet",
+    "build": "rm -rf dist && yarn tsc && cp ./lib/RNWatch.d.ts ./dist/RNWatch.d.ts && yarn lint ./dist/**/*.d.ts ./dist/**/*.js --fix --quiet",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx",
-    "precommit": "tsc --skipLibCheck && lint-staged",
-    "tsc": "tsc --project tsconfig.build.json"
+    "precommit": "tsc --skipLibCheck && lint-staged"
   },
   "repository": {
     "type": "git",
@@ -56,14 +56,15 @@
     "typescript": "^3.8.3",
     "eslint": "^6.8.0",
     "@types/react-native": "^0.62.2",
+    "@types/react": "^16.9.34",
+    "react-native": "^0.62.2",
+    "react": "16.11.0",
     "@react-native-community/eslint-config": "^1.1.0",
     "lint-staged": "^10.1.3",
     "husky": "^4.2.5",
     "sort-package-json": "^1.41.0",
     "prettier": "^2.0.4",
-    "eslint-plugin-prettier": "^3.1.3",
-    "react-native": "^0.62.2",
-    "react": "16.11.0"
+    "eslint-plugin-prettier": "^3.1.3"
   },
   "jest": {
     "preset": "react-native"

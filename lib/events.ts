@@ -33,7 +33,7 @@ export interface NativeWatchEventPayloads {
     reachability: boolean;
   };
   [NativeWatchEvent.EVENT_WATCH_USER_INFO_RECEIVED]: WatchPayload;
-  [NativeWatchEvent.EVENT_APPLICATION_CONTEXT_RECEIVED]: WatchPayload;
+  [NativeWatchEvent.EVENT_APPLICATION_CONTEXT_RECEIVED]: WatchPayload | null;
 }
 
 export function _subscribeToNativeWatchEvent<
