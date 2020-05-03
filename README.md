@@ -53,7 +53,7 @@ and run `pod install`.
 
 ### WatchOS
 
-Use Apple's Watch API as usual. See the <a href="example/ios/WatchExtension">example WatchOS Swift code</a> for how to do this.
+Use Apple's Watch API as usual. See the <a href="https://github.com/mtford90/react-native-watch-connectivity-example">example app</a> for how to do this.
 
 ### iOS
 
