@@ -1,8 +1,3 @@
-/**
- *
- * @param {Function} [cb]
- * @returns {Function}
- */
 import {_subscribeToNativeWatchEvent, NativeWatchEvent} from './events';
 import {NativeModule} from './native-module';
 
@@ -17,11 +12,6 @@ export function subscribeToWatchReachability(cb: WatchReachabilityListener) {
   );
 }
 
-/**
- *
- * @param {Function} [cb]
- * @returns {Promise}
- */
 export function getWatchReachability(cb?: (reachable: boolean) => void) {
   return new Promise((resolve) => {
     NativeModule.getReachability((reachability) => {

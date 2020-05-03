@@ -18,15 +18,17 @@
 #import "React/RCTEventDispatcher.h"
 #endif
 
-static const NSString* EVENT_FILE_TRANSFER_ERROR            = @"WatchFileTransferError";
-static const NSString* EVENT_FILE_TRANSFER_FINISHED         = @"WatchFileTransferFinished";
-static const NSString* EVENT_RECEIVE_MESSAGE                = @"WatchReceiveMessage";
-static const NSString* EVENT_RECEIVE_MESSAGE_DATA           = @"WatchReceiveMessageData";
-static const NSString* EVENT_WATCH_STATE_CHANGED            = @"WatchStateChanged";
-static const NSString* EVENT_ACTIVATION_ERROR               = @"WatchActivationError";
-static const NSString* EVENT_WATCH_REACHABILITY_CHANGED     = @"WatchReachabilityChanged";
-static const NSString* EVENT_WATCH_USER_INFO_RECEIVED       = @"WatchUserInfoReceived";
-static const NSString* EVENT_APPLICATION_CONTEXT_RECEIVED   = @"WatchApplicationContextReceived";
+static NSString* EVENT_FILE_TRANSFER_ERROR            = @"WatchFileTransferError";
+static NSString* EVENT_FILE_TRANSFER_FINISHED         = @"WatchFileTransferFinished";
+static NSString* EVENT_RECEIVE_MESSAGE                = @"WatchReceiveMessage";
+static NSString* EVENT_RECEIVE_MESSAGE_DATA           = @"WatchReceiveMessageData";
+static NSString* EVENT_WATCH_STATE_CHANGED            = @"WatchStateChanged";
+static NSString* EVENT_ACTIVATION_ERROR               = @"WatchActivationError";
+static NSString* EVENT_WATCH_REACHABILITY_CHANGED     = @"WatchReachabilityChanged";
+static NSString* EVENT_WATCH_USER_INFO_RECEIVED       = @"WatchUserInfoReceived";
+static NSString* EVENT_APPLICATION_CONTEXT_RECEIVED   = @"WatchApplicationContextReceived";
+static NSString* EVENT_SESSION_DID_DEACTIVATE         = @"WatchSessionDidDeactivate";
+static NSString* EVENT_SESSION_BECAME_INACTIVE        = @"WatchSessionBecameInactive";
 
 static RNWatch* sharedInstance;
 
@@ -103,6 +105,16 @@ activationDidCompleteWithState:(WCSessionActivationState)activationState
     NSLog(@"sessionActivationDidCompleteWithState: %ld", (long)activationState);
   }
   [self _sendStateEvent:session.activationState];
+}
+
+- (void)sessionDidDeactivate:(WCSession *)session
+{
+  [self dispatchEventWithName:EVENT_SESSION_DID_DEACTIVATE body:@{}];
+}
+
+- (void)sessionDidBecomeInactive:(WCSession *)session
+{
+  [self dispatchEventWithName:EVENT_SESSION_BECAME_INACTIVE body:@{}];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -366,7 +378,12 @@ didReceiveApplicationContext:(NSDictionary<NSString *,id> *)applicationContext {
 ////////////////////////////////////////////////////////////////////////////////
 
 RCT_EXPORT_METHOD(sendUserInfo:(NSDictionary<NSString *,id> *)userInfo) {
+  NSLog(@"sending user info %@", userInfo);
   [self.session transferUserInfo:userInfo];
+}
+
+- (void)session:(WCSession *)session didFinishUserInfoTransfer:(WCSessionUserInfoTransfer *)userInfoTransfer error:(NSError *)error {
+  NSLog(@"Did finish user info transfer %@", error);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -388,7 +405,7 @@ didReceiveUserInfo:(NSDictionary<NSString *,id> *)userInfo {
 // Helpers
 ////////////////////////////////////////////////////////////////////////////////
 
--(void)dispatchEventWithName:(const NSString*) name
+-(void)dispatchEventWithName:(NSString*) name
                         body:(NSDictionary<NSString *,id> *)body {
   NSLog(@"dispatch %@: %@", name, body);
   [self sendEventWithName:name body:body];

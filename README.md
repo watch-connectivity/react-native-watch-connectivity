@@ -219,12 +219,20 @@ watch
   })
 ```
 
-##### Receive Files
 
-TODO: Not implemented or documented
 
 ## Troubleshooting
 
+Apple's iOS/iWatch simulator integration is exceptionally poor. I strongly suggest using real devices instead. There are three main issues: 
+
+### Messages are not being received on the simulator 
+
 Note that communication between the iOS simulator and Apple Watch simulator can be ridiculously slow - it's much faster when using actual devices. I've seen response times of up to 2 minutes when using the simulator & have no idea why.
 
-If the issue is not related to the above, compare your app and the example app, ensuring everything is configured the same - otherwise raise an issue and i'll be happy to help.
+### Watch remains unreachable on the simulator
+
+Apple's dodgy watchos/ios simulator setup strikes again. If you keep reinstalling each app, it will eventually work. Better to use real devices.
+
+### Watch app does not receive user info in the simulator
+
+There's a bug within Apple's simulator setup that can cause issues in iOS 13/watchOS6+ whereby the watch app's WCSessionDelegate does not fire `didReceiveUserInfo`. No solution for this as of yet until Apple fixes this problem. Either use real devices or else downgrade iOS/watchOS

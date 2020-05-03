@@ -1,5 +1,5 @@
 import {subscribeToMessages, WatchMessageListener} from './messages';
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {subscribeToWatchState, WatchState, WatchStateListener} from './state';
 import {
   subscribeToWatchReachability,
