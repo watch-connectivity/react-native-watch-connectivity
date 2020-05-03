@@ -8,16 +8,15 @@ Communicate with your Apple Watch apps over the React Native bridge.
 
 ## Demo
 
-The featured screenshot is from the example app. To run the example:
+The featured screenshot is from the [example app](https://github.com/mtford90/react-native-watch-connectivity-example). To run the example:
 
 ```
-git clone https://github.com/mtford90/react-native-watch-connectivity.git
+git clone https://github.com/mtford90/react-native-watch-connectivity-example.git
 cd react-native-watch-connectivity
-npm install
-open example/ios/RNWatchExample.xcodeproj
+yarn install
+yarn ios # Run app
+open ios/RNWatchExample.xcworkspace # Run watch app from Xcode 
 ```
-
-And then run the app!
 
 ## Install
 
@@ -29,13 +28,15 @@ yarn add react-native-watch-connectivity
 
 ### Link
 
-Note: this library now supports autolinking for RN 0.60+
+Note: this library now supports autolinking for RN 0.60+.
 
-First of all you'll need to link the library to your iOS project. You can do this automatically by using:
+For RN <0.60 link via:
 
 ```bash
 react-native link
 ```
+
+Or else add the xcodeproj or .h/.m files directly to your project via XCode
 
 #### Manual Linking
 
