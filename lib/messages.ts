@@ -2,16 +2,16 @@ import {NativeModule, WatchPayload} from './native-module';
 import {_subscribeToNativeWatchEvent, NativeWatchEvent} from './events';
 
 export function sendWatchMessage<
-  Payload extends WatchPayload = WatchPayload,
-  ResponsePayload extends WatchPayload = Payload
+  MessageToWatch extends WatchPayload = WatchPayload,
+  MessageFromWatch extends WatchPayload = MessageToWatch
 >(
-  message: Payload,
-  cb?: (err: Error | null, reply: ResponsePayload | null) => void,
+  message: MessageToWatch,
+  cb?: (err: Error | null, reply: MessageFromWatch | null) => void,
 ) {
-  return NativeModule.sendMessage<Payload, ResponsePayload>(
+  return NativeModule.sendMessage<MessageToWatch, MessageFromWatch>(
     message,
-    (reply) => cb && cb(null, reply),
-    (err) => cb && cb(err, null),
+    reply => cb && cb(null, reply),
+    err => cb && cb(err, null),
   );
 }
 
@@ -26,16 +26,16 @@ export type WatchMessageListener<
 ) => void;
 
 export function subscribeToMessages<
-  Payload extends WatchPayload = WatchPayload,
-  ResponsePayload extends WatchPayload = Payload
->(cb: WatchMessageListener<Payload & {id?: string}, ResponsePayload>) {
+  MessageFromWatch extends WatchPayload = WatchPayload,
+  MessageToWatch extends WatchPayload = MessageFromWatch
+>(cb: WatchMessageListener<MessageFromWatch & {id?: string}, MessageToWatch>) {
   return _subscribeToNativeWatchEvent<
     NativeWatchEvent.EVENT_RECEIVE_MESSAGE,
-    Payload & {id?: string}
-  >(NativeWatchEvent.EVENT_RECEIVE_MESSAGE, (payload) => {
+    MessageFromWatch & {id?: string}
+  >(NativeWatchEvent.EVENT_RECEIVE_MESSAGE, payload => {
     const messageId = payload.id;
     const replyHandler = messageId
-      ? (resp: ResponsePayload) =>
+      ? (resp: MessageToWatch) =>
           NativeModule.replyToMessageWithId(messageId, resp)
       : null;
 

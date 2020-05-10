@@ -349,6 +349,7 @@ didFinishFileTransfer:(WCSessionFileTransfer *)fileTransfer
 ////////////////////////////////////////////////////////////////////////////////
 
 RCT_EXPORT_METHOD(updateApplicationContext:(NSDictionary<NSString *,id> *)context) {
+  NSLog(@"sending application context %@", context);
   [self.session updateApplicationContext:context error:nil];
   [self dispatchEventWithName:EVENT_APPLICATION_CONTEXT_RECEIVED body:context];
 }

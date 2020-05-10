@@ -1,5 +1,5 @@
 import {subscribeToMessages, WatchMessageListener} from './messages';
-import {useCallback, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {subscribeToWatchState, WatchState, WatchStateListener} from './state';
 import {
   subscribeToWatchReachability,
@@ -13,11 +13,11 @@ import {
 import {WatchPayload} from './native-module';
 
 export function useWatchMessageListener<
-  Payload extends WatchPayload = WatchPayload,
-  ResponsePayload extends WatchPayload = Payload
->(listener: WatchMessageListener<Payload, ResponsePayload>) {
+  MessageFromWatch extends WatchPayload = WatchPayload,
+  ResponseToWatch extends WatchPayload = MessageFromWatch
+>(listener: WatchMessageListener<MessageFromWatch, ResponseToWatch>) {
   return useEffect(() => {
-    return subscribeToMessages<Payload, ResponsePayload>(listener);
+    return subscribeToMessages<MessageFromWatch, ResponseToWatch>(listener);
   }, [listener]);
 }
 
