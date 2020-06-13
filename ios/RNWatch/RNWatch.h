@@ -24,6 +24,6 @@
 @property (nonatomic, strong) WCSession* session;
 @property (nonatomic, strong) NSCache* replyHandlers;
 @property (nonatomic, strong) NSMutableDictionary* transfers;
-@property (nonatomic, strong) NSDictionary<NSString*, id>* userInfo;
+@property (nonatomic, strong) NSMutableDictionary<NSString*, NSDictionary<NSString *,id> *>* userInfo;
 
 @end

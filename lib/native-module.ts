@@ -19,15 +19,45 @@ export type FileTransferInfo = {
   id: string;
 };
 
+export type QueuedUserInfo<UserInfo extends WatchPayload = WatchPayload> = {
+  userInfo: UserInfo;
+  timestamp: number;
+  id: string;
+};
+
+export interface UserInfoQueue<UserInfo extends WatchPayload = WatchPayload> {
+  [timestamp: string]: UserInfo;
+}
+
+export type FileTransferProgressPayload = {
+  completedUnitCount: number;
+  estimatedTimeRemaining: number | null;
+  fractionCompleted: number;
+  throughput: number | null;
+  totalUnitCount: number;
+  uri: string;
+  metadata: Record<string, unknown>;
+  id: string;
+  startTime: number;
+  endTime: number | null;
+};
+
 export interface IRNWatchNativeModule extends EventSubscriptionVendor {
   getSessionState: (cb: (state: WCWatchState) => void) => void;
 
-  sendUserInfo: <UserInfo extends WatchPayload>(userInfo: UserInfo) => void;
+  transferUserInfo: <UserInfo extends WatchPayload>(userInfo: UserInfo) => void;
   getUserInfo: <UserInfo extends WatchPayload>(
-    cb: (userInfo: UserInfo) => void,
+    cb: (userInfo: UserInfoQueue<UserInfo>) => void,
+  ) => void;
+  clearUserInfoQueue: <UserInfo extends WatchPayload>(
+    cb: (userInfo: UserInfoQueue<UserInfo>) => void,
+  ) => void;
+  dequeueUserInfo: <UserInfo extends WatchPayload>(
+    ids: string[],
+    cb: (userInfo: UserInfoQueue<UserInfo>) => void,
   ) => void;
 
-  sendComplicationUserInfo: (userInfo: WatchPayload) => void;
+  transferCurrentComplicationUserInfo: (userInfo: WatchPayload) => void;
 
   getReachability: (cb: (reachable: boolean) => void) => void;
   getIsPaired: (cb: (isPaired: boolean) => void) => void;
@@ -55,7 +85,10 @@ export interface IRNWatchNativeModule extends EventSubscriptionVendor {
     url: string,
     metaData: WatchPayload | null,
     cb: (info: FileTransferInfo) => void,
-    errCb: (err: Error) => void,
+  ) => void;
+
+  getFileTransfers: (
+    cb: (transfers: {[id: string]: FileTransferProgressPayload}) => void,
   ) => void;
 
   updateApplicationContext: (context: WatchPayload) => void;

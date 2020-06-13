@@ -20,6 +20,8 @@
 
 static NSString* EVENT_FILE_TRANSFER_ERROR            = @"WatchFileTransferError";
 static NSString* EVENT_FILE_TRANSFER_FINISHED         = @"WatchFileTransferFinished";
+static NSString* EVENT_FILE_TRANSFER_STARTED          = @"WatchFileTransferStarted";
+static NSString* EVENT_FILE_TRANSFER_PROGRESS         = @"WatchFileTransferProgress";
 static NSString* EVENT_RECEIVE_MESSAGE                = @"WatchReceiveMessage";
 static NSString* EVENT_RECEIVE_MESSAGE_DATA           = @"WatchReceiveMessageData";
 static NSString* EVENT_WATCH_STATE_CHANGED            = @"WatchStateChanged";
@@ -52,8 +54,8 @@ RCT_EXPORT_MODULE()
   sharedInstance = [super init];
   self.replyHandlers = [NSCache new];
   self.transfers = [NSMutableDictionary new];
-  self.userInfo = [NSDictionary<NSString*, id> new];
-
+  self.userInfo = [NSMutableDictionary new];
+  
   if ([WCSession isSupported]) {
     WCSession* session = [WCSession defaultSession];
     session.delegate = self;
@@ -66,7 +68,7 @@ RCT_EXPORT_MODULE()
 
 - (NSArray<NSString*>*) supportedEvents {
   return @[
-    EVENT_FILE_TRANSFER_ERROR, EVENT_FILE_TRANSFER_FINISHED,
+    EVENT_FILE_TRANSFER_ERROR, EVENT_FILE_TRANSFER_FINISHED, EVENT_FILE_TRANSFER_PROGRESS, EVENT_FILE_TRANSFER_STARTED,
     EVENT_RECEIVE_MESSAGE, EVENT_RECEIVE_MESSAGE_DATA,
     EVENT_WATCH_STATE_CHANGED, EVENT_ACTIVATION_ERROR,
     EVENT_WATCH_REACHABILITY_CHANGED,
@@ -148,9 +150,11 @@ activationDidCompleteWithState:(WCSessionActivationState)activationState
 // Complication User Info
 ////////////////////////////////////////////////////////////////////////////////
 
-RCT_EXPORT_METHOD(sendComplicationUserInfo:(NSDictionary<NSString *,id> *)userInfo) {
+RCT_EXPORT_METHOD(transferCurrentComplicationUserInfo:(NSDictionary<NSString *,id> *)userInfo) {
   [self.session transferCurrentComplicationUserInfo:userInfo];
 }
+
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Reachability
@@ -274,9 +278,9 @@ didReceiveMessageData:(NSData *)messageData
 
 RCT_EXPORT_METHOD(transferFile:(NSString *)url
                   metaData:(nullable NSDictionary<NSString *,id> *)metaData
-                  callback:(RCTResponseSenderBlock) callback
-                  error:(RCTResponseErrorBlock)error)
+                  callback:(RCTResponseSenderBlock) callback)
 {
+  double startTime = [self getJavascriptStyleTimestamp];
 
   NSMutableDictionary* mutableMetaData;
   if (metaData) {
@@ -288,52 +292,120 @@ RCT_EXPORT_METHOD(transferFile:(NSString *)url
   NSString* uuid = [self uuidString];
   mutableMetaData[@"id"] = uuid;
   WCSessionFileTransfer* transfer = [self.session transferFile:[NSURL URLWithString:url] metadata:mutableMetaData];
-  NSDictionary* transferInfo = @{@"transfer": transfer, @"callback": callback, @"errorCallback": error};
+  
+  NSDictionary* transferInfo = [NSMutableDictionary dictionaryWithDictionary:@{@"transfer": transfer, @"id": uuid, @"uri": url, @"metadata": metaData, @"startTime": [NSNumber numberWithDouble:startTime], @"endTime": [NSNull null], @"error": [NSNull null]}];
+  
   [self.transfers setObject:transferInfo forKey:uuid];
-  NSLog(@"Creating transfer with uuid %@: %@", uuid, self.transfers);
+  
+  [transfer addObserver:self forKeyPath:@"progress.fractionCompleted" options:NSKeyValueObservingOptionNew context:nil];
+  
+  [transfer addObserver:self forKeyPath:@"progress.completedUnitCount" options:NSKeyValueObservingOptionNew context:nil];
+  
+  
+  [transfer addObserver:self forKeyPath:@"progress.estimatedTimeRemaining" options:NSKeyValueObservingOptionNew context:nil];
+  
+  [transfer addObserver:self forKeyPath:@"progress.throughput" options:NSKeyValueObservingOptionNew context:nil];
+  
+  NSDictionary* eventBody = [self getProgressPayload:transfer];
+  
+  [self dispatchEventWithName:EVENT_FILE_TRANSFER_STARTED body: eventBody];
+  
+  callback(@[eventBody]);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+RCT_EXPORT_METHOD(getFileTransfers: (RCTResponseSenderBlock) callback) {
+  NSMutableDictionary* transfers = self.transfers;
+  NSMutableDictionary* payload = [NSMutableDictionary new];
+  
+  for (NSString* transferId in transfers) {
+    NSDictionary* transferInfo = transfers[transferId];
+    WCSessionFileTransfer* fileTransfer = transferInfo[@"transfer"];
+    NSDictionary* progressPayload = [self getProgressPayload:fileTransfer];
+    payload[transferId] = progressPayload;
+  }
+  
+  callback(@[payload]);
+}
 
+- (NSDictionary *)getProgressPayload:(WCSessionFileTransfer *)transfer {
+  NSString* uuid = transfer.file.metadata[@"id"];
+  
+  NSDictionary* transferInfo = self.transfers[uuid];
+  
+  NSNumber * _Nonnull completedUnitCount = [NSNumber numberWithLongLong:transfer.progress.completedUnitCount];
+  
+  NS_REFINED_FOR_SWIFT NSNumber *estimatedTimeRemaining = transfer.progress.estimatedTimeRemaining;
+  
+  NSNumber * _Nonnull fractionCompleted = [NSNumber numberWithDouble: transfer.progress.fractionCompleted];
+  
+  NS_REFINED_FOR_SWIFT NSNumber *throughput = transfer.progress.throughput;
+  
+  NSNumber * _Nonnull totalUnitCount = [NSNumber numberWithLongLong: transfer.progress.totalUnitCount];
+  
+  NSDictionary* body = @{
+    @"completedUnitCount": completedUnitCount,
+    @"estimatedTimeRemaining": estimatedTimeRemaining == nil ? [NSNull null] : estimatedTimeRemaining,
+    @"id": uuid,
+    @"fractionCompleted": fractionCompleted,
+    @"throughput": throughput == nil ? [NSNull null] : throughput,
+    @"totalUnitCount": totalUnitCount,
+    @"uri": transferInfo[@"uri"],
+    @"error": transferInfo[@"error"],
+    @"metadata": transferInfo[@"metadata"],
+    @"startTime": transferInfo[@"startTime"],
+    @"endTime": transferInfo[@"endTime"]
+  };
+  return body;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+  NSLog(@"Received observation for %@ (%@)", object, keyPath);
+  
+  if ([keyPath hasPrefix:@"progress"]) {
+    WCSessionFileTransfer* transfer = object;
+    
+    NSDictionary * body = [self getProgressPayload:transfer];
+    
+    NSLog(@"Emitting file transfer progress %@", body);
+    
+    [self dispatchEventWithName:EVENT_FILE_TRANSFER_PROGRESS body: body];
+  }
+}
 
 - (void)session:(WCSession *)session
  didReceiveFile:(WCSessionFile *)file {
   NSLog(@"sessionDidReceiveFile: %@", @{@"url": file.fileURL, @"metadata": file.metadata});
 }
 
-////////////////////////////////////////////////////////////////////////////////
-
 - (void)session:(WCSession *)session
 didFinishFileTransfer:(WCSessionFileTransfer *)fileTransfer
           error:(NSError *)error {
+  double endTime = [self getJavascriptStyleTimestamp];
+
   WCSessionFile* file = fileTransfer.file;
   NSDictionary<NSString*, id>* metadata = file.metadata;
   NSString* transferId = metadata[@"id"];
   if (transferId) {
-    NSURL* fileURL = file.fileURL;
-    NSDictionary* transferInfo = self.transfers[transferId];
+    NSMutableDictionary* transferInfo = self.transfers[transferId];
+    
+    transferInfo[@"endTime"] = [NSNumber numberWithDouble:endTime];
+    
     if (transferInfo) {
       if (error) {
-        NSLog(@"sessionDidFinishFileTransfer error: %@", error);
-        [self dispatchEventWithName:EVENT_FILE_TRANSFER_ERROR body:@{@"error": error}];
-        RCTResponseErrorBlock callback = transferInfo[@"errorCallback"];
-        callback(error);
+        transferInfo[@"error"] = error;
+        NSDictionary* payload = [self getProgressPayload:fileTransfer];
+        [self dispatchEventWithName:EVENT_FILE_TRANSFER_ERROR body: payload];
       }
       else {
-        NSMutableDictionary* dict = [NSMutableDictionary new];
-        if (fileURL) {
-          NSString* uri = [fileURL absoluteString];
-          assert(uri);
-          dict[@"uri"] = uri;
-        }
-        if (metadata) dict[@"metadata"] = metadata;
-        if (transferId) dict[@"id"] = transferId;
-        NSLog(@"sessionDidFinishFileTransfer %@", dict);
-        [self dispatchEventWithName:EVENT_FILE_TRANSFER_FINISHED body:dict];
-        RCTResponseSenderBlock callback = transferInfo[@"callback"];
-        callback(@[dict]);
+        NSDictionary* payload = [self getProgressPayload:fileTransfer];
+        [self dispatchEventWithName:EVENT_FILE_TRANSFER_FINISHED body:payload];
       }
-      [self.transfers removeObjectForKey:transferId];
+      
+      WCSessionFileTransfer* transfer = transferInfo[@"transfer"];
+      [transfer removeObserver:self forKeyPath:@"progress.fractionCompleted"];
+      [transfer removeObserver:self forKeyPath:@"progress.completedUnitCount"];
+      [transfer removeObserver:self forKeyPath:@"progress.estimatedTimeRemaining"];
+      [transfer removeObserver:self forKeyPath:@"progress.throughput"];
     }
     else {
       NSLog(@"Warning: Transfer ID %@ has no transfer info", transferId);
@@ -351,7 +423,6 @@ didFinishFileTransfer:(WCSessionFileTransfer *)fileTransfer
 RCT_EXPORT_METHOD(updateApplicationContext:(NSDictionary<NSString *,id> *)context) {
   NSLog(@"sending application context %@", context);
   [self.session updateApplicationContext:context error:nil];
-  [self dispatchEventWithName:EVENT_APPLICATION_CONTEXT_RECEIVED body:context];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -378,28 +449,45 @@ didReceiveApplicationContext:(NSDictionary<NSString *,id> *)applicationContext {
 // User Info
 ////////////////////////////////////////////////////////////////////////////////
 
-RCT_EXPORT_METHOD(sendUserInfo:(NSDictionary<NSString *,id> *)userInfo) {
-  NSLog(@"sending user info %@", userInfo);
-  [self.session transferUserInfo:userInfo];
-}
-
-- (void)session:(WCSession *)session didFinishUserInfoTransfer:(WCSessionUserInfoTransfer *)userInfoTransfer error:(NSError *)error {
-  NSLog(@"Did finish user info transfer %@", error);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-RCT_EXPORT_METHOD(getUserInfo:(RCTResponseSenderBlock)callback) {
+RCT_EXPORT_METHOD(getUserInfo: (RCTResponseSenderBlock) callback) {
   callback(@[self.userInfo]);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+RCT_EXPORT_METHOD(transferUserInfo:(NSDictionary<NSString *,id> *)userInfo) {
+  NSLog(@"transfer user info over session %@", userInfo);
+  [self.session transferUserInfo:userInfo];
+}
+
+RCT_EXPORT_METHOD(clearUserInfoQueue: (RCTResponseSenderBlock) callback) {
+  self.userInfo = [NSMutableDictionary new];
+  [self dispatchEventWithName:EVENT_WATCH_USER_INFO_RECEIVED body:self.userInfo];
+  callback(@[self.userInfo]);
+}
+
+RCT_EXPORT_METHOD(dequeueUserInfo: (NSArray<NSString *>*)ids withCallback: (RCTResponseSenderBlock) callback) {
+  for (NSString* ident in ids) {
+    [self.userInfo removeObjectForKey:ident];
+  }
+  [self dispatchEventWithName:EVENT_WATCH_USER_INFO_RECEIVED body:self.userInfo];
+  callback(@[self.userInfo]);
+}
+
+- (void)session:(WCSession *)session didFinishUserInfoTransfer:(WCSessionUserInfoTransfer *)userInfoTransfer error:(NSError *)error {
+  NSLog(@"Did finish user info transfer %@ %@", userInfoTransfer.userInfo, error);
+}
+
+- (double)getJavascriptStyleTimestamp {
+  double ts = floor([[NSDate date] timeIntervalSince1970] * 1000);
+  return ts;
+}
 
 - (void)session:(WCSession *)session
 didReceiveUserInfo:(NSDictionary<NSString *,id> *)userInfo {
   NSLog(@"sessionDidReceiveUserInfo %@", userInfo);
-  self.userInfo = userInfo;
-  [self dispatchEventWithName:EVENT_WATCH_USER_INFO_RECEIVED body:userInfo];
+  double ts = [self getJavascriptStyleTimestamp]; // javascript style timestamp (ms since epoch)
+  NSString* timestamp = [[NSNumber numberWithDouble: ts] stringValue];
+  [self.userInfo setValue:userInfo forKey:timestamp];
+  [self dispatchEventWithName:EVENT_WATCH_USER_INFO_RECEIVED body:@{@"userInfo": userInfo, @"timestamp": [NSNumber numberWithDouble:ts], @"id": timestamp}];
 }
 
 ////////////////////////////////////////////////////////////////////////////////

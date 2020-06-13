@@ -1,53 +1,71 @@
 import {
-  NativeWatchEvent,
   _subscribeToNativeWatchEvent,
+  NativeWatchEvent,
   NativeWatchEventPayloads,
 } from './events';
-import {FileTransferInfo, NativeModule, WatchPayload} from './native-module';
-
-type FileTransferEventPayload =
-  | {ok: false; error: Error}
-  | ({
-      ok: true;
-    } & NativeWatchEventPayloads[NativeWatchEvent.EVENT_FILE_TRANSFER_FINISHED]);
+import {
+  FileTransferInfo,
+  FileTransferProgressPayload,
+  NativeModule,
+  WatchPayload,
+} from './native-module';
 
 export function subscribeToFileTransfers(
-  cb: (event: FileTransferEventPayload) => void,
+  cb: (
+    event:
+      | ({
+          type: NativeWatchEvent.EVENT_FILE_TRANSFER_FINISHED;
+        } & NativeWatchEventPayloads[NativeWatchEvent.EVENT_FILE_TRANSFER_FINISHED])
+      | ({
+          type: NativeWatchEvent.EVENT_FILE_TRANSFER_ERROR;
+        } & NativeWatchEventPayloads[NativeWatchEvent.EVENT_FILE_TRANSFER_ERROR])
+      | ({
+          type: NativeWatchEvent.EVENT_FILE_TRANSFER_STARTED;
+        } & NativeWatchEventPayloads[NativeWatchEvent.EVENT_FILE_TRANSFER_STARTED])
+      | ({
+          type: NativeWatchEvent.EVENT_FILE_TRANSFER_PROGRESS;
+        } & NativeWatchEventPayloads[NativeWatchEvent.EVENT_FILE_TRANSFER_PROGRESS]),
+  ) => void,
 ) {
   const subscriptions = [
     _subscribeToNativeWatchEvent(
-      NativeWatchEvent.EVENT_FILE_TRANSFER_FINISHED,
-      (nativePayload) => cb({...nativePayload, ok: true}),
+      NativeWatchEvent.EVENT_FILE_TRANSFER_ERROR,
+      (payload) =>
+        cb({type: NativeWatchEvent.EVENT_FILE_TRANSFER_ERROR, ...payload}),
     ),
     _subscribeToNativeWatchEvent(
-      NativeWatchEvent.EVENT_FILE_TRANSFER_ERROR,
-      ({error}) => cb({ok: false, error}),
+      NativeWatchEvent.EVENT_FILE_TRANSFER_FINISHED,
+      (payload) =>
+        cb({type: NativeWatchEvent.EVENT_FILE_TRANSFER_FINISHED, ...payload}),
+    ),
+    _subscribeToNativeWatchEvent(
+      NativeWatchEvent.EVENT_FILE_TRANSFER_STARTED,
+      (payload) =>
+        cb({type: NativeWatchEvent.EVENT_FILE_TRANSFER_STARTED, ...payload}),
+    ),
+    _subscribeToNativeWatchEvent(
+      NativeWatchEvent.EVENT_FILE_TRANSFER_PROGRESS,
+      (payload) =>
+        cb({type: NativeWatchEvent.EVENT_FILE_TRANSFER_PROGRESS, ...payload}),
     ),
   ];
+
   return () => subscriptions.forEach((fn) => fn());
 }
 
-export function transferFile(
+export function startFileTransfer(
   uri: string,
   metadata: WatchPayload = {},
-  cb?: (err: Error | null, info: FileTransferInfo | null) => void,
 ): Promise<FileTransferInfo> {
-  return new Promise((resolve, reject) => {
-    NativeModule.transferFile(
-      uri,
-      metadata,
-      (resp) => {
-        resolve(resp);
-        if (cb) {
-          cb(null, resp);
-        }
-      },
-      (err) => {
-        reject(err);
-        if (cb) {
-          cb(err, null);
-        }
-      },
-    );
+  return new Promise((resolve) => {
+    NativeModule.transferFile(uri, metadata, resolve);
+  });
+}
+
+export function getFileTransfers(): Promise<{
+  [id: string]: FileTransferProgressPayload;
+}> {
+  return new Promise((resolve) => {
+    NativeModule.getFileTransfers(resolve);
   });
 }

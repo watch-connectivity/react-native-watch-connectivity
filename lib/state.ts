@@ -17,14 +17,15 @@ export type WatchStateListener = (state: WatchState) => void;
 
 export function subscribeToWatchState(cb: WatchStateListener) {
   // noinspection JSIgnoredPromiseFromCall
-  getWatchState(cb); // Initial reading
   return _subscribeToNativeWatchEvent(
     NativeWatchEvent.EVENT_WATCH_STATE_CHANGED,
     (payload) => cb(_WatchState[payload.state]),
   );
 }
 
-export function getWatchState(cb?: (state: WatchState) => void) {
+export function getWatchState(
+  cb?: (state: WatchState) => void,
+): Promise<WatchState> {
   return new Promise((resolve) => {
     NativeModule.getSessionState((state) => {
       if (cb) {
