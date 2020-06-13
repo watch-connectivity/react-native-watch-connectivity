@@ -1,0 +1,69 @@
+{
+  "name": "react-native-watch-connectivity-example-app",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "test": "jest",
+    "precommit": "tsc --skipLibCheck && lint-staged",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx"
+  },
+  "dependencies": {
+    "react": "16.11.0",
+    "react-native": "0.62.2",
+    "react-native-image-picker": "^1.1.0",
+    "react-native-spinkit": "^1.5.0",
+    "mobx": "^5.15.4",
+    "mobx-react-lite": "^2.0.7",
+    "lodash": "^4.17.15",
+    "lodash.sortby": "^4.7.0",
+    "react-native-gesture-handler": "^1.6.1",
+    "react-native-svg": "^12.1.0",
+    "react-native-svg-transformer": "^0.14.3",
+    "react-native-reanimated": "^1.9.0",
+    "react-native-screens": "^2.8.0",
+    "react-native-fs": "^2.16.6",
+    "react-native-safe-area-context": "^3.0.2",
+    "@react-navigation/native": "^5.5.1",
+    "@react-navigation/stack": "^5.4.2",
+    "@react-navigation/drawer": "^5.8.2",
+    "bluebird": "^3.7.2",
+    "bluebird-global": "^1.0.1",
+    "faker": "^4.1.0",
+    "@types/faker": "^4.1.12"
+  },
+  "lint-staged": {
+    "package.json": [
+      "sort-package-json",
+      "git add"
+    ],
+    "{lib}/**/*.ts?(x)": [
+      "yarn lint --fix",
+      "git add"
+    ]
+  },
+  "devDependencies": {
+    "@types/lodash.sortby": "^4.7.6",
+    "@types/bluebird": "^3.5.32",
+    "@types/bluebird-global": "^3.5.12",
+    "@babel/core": "^7.6.2",
+    "@babel/runtime": "^7.6.2",
+    "@babel/plugin-proposal-decorators": "^7.10.1",
+    "@types/lodash": "^4.14.155",
+    "@react-native-community/eslint-config": "^1.1.0",
+    "babel-jest": "^24.9.0",
+    "eslint": "^6.8.0",
+    "jest": "^24.9.0",
+    "husky": "^4.2.5",
+    "@types/react": "^16.9.34",
+    "@types/react-native": "^0.62.5",
+    "metro-react-native-babel-preset": "^0.58.0",
+    "react-test-renderer": "16.11.0",
+    "typescript": "^3.8.3"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}

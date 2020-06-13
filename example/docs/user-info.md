@@ -1,0 +1,1 @@
+transferUserInfo would queue and send multiple info about the list (or tasks). While that might be good on a task-by-task basis, you'd have to process the whole queue of changes to bring your entire list up to data, duplicating any work you did to apply the same changes on the paired device

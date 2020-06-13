@@ -13,3 +13,6 @@ export type {
   UserInfoQueue,
   FileTransferEventPayload,
 } from './native-module';
+export {
+  NativeWatchEvent
+} from './events'
