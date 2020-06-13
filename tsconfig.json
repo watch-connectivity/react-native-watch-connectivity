@@ -3,7 +3,7 @@
     /* Basic Options */
     "target": "esnext",
     "module": "commonjs",
-    "lib": ["es6"],
+    "lib": ["es6", "es2019"],
     "allowJs": true,
     "isolatedModules": true,
     "skipLibCheck": true,

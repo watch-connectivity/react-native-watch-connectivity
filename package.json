@@ -1,6 +1,6 @@
 {
   "name": "react-native-watch-connectivity",
-  "version": "0.5.0-alpha.5",
+  "version": "0.5.0-alpha.6",
   "description": "React Native library to enable communication with Apple Watch app",
   "main": "dist/index.js",
   "files": [
@@ -52,6 +52,9 @@
       "git add"
     ]
   },
+  "dependencies": {
+    "lodash.sortby": "^4.7.0"
+  },
   "devDependencies": {
     "typescript": "^3.8.3",
     "eslint": "^6.8.0",
@@ -64,7 +67,8 @@
     "husky": "^4.2.5",
     "sort-package-json": "^1.41.0",
     "prettier": "^2.0.4",
-    "eslint-plugin-prettier": "^3.1.3"
+    "eslint-plugin-prettier": "^3.1.3",
+    "@types/lodash.sortby": "^4.7.6"
   },
   "jest": {
     "preset": "react-native"
