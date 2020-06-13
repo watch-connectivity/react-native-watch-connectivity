@@ -1,6 +1,6 @@
 import {NativeEventEmitter} from 'react-native';
 import {
-  FileTransferProgressPayload,
+  FileTransferEventPayload,
   NativeModule,
   QueuedUserInfo,
   WatchPayload,
@@ -21,10 +21,10 @@ export enum NativeWatchEvent {
 }
 
 export interface NativeWatchEventPayloads {
-  [NativeWatchEvent.EVENT_FILE_TRANSFER_ERROR]: FileTransferProgressPayload;
-  [NativeWatchEvent.EVENT_FILE_TRANSFER_FINISHED]: FileTransferProgressPayload;
-  [NativeWatchEvent.EVENT_FILE_TRANSFER_PROGRESS]: FileTransferProgressPayload;
-  [NativeWatchEvent.EVENT_FILE_TRANSFER_STARTED]: FileTransferProgressPayload;
+  [NativeWatchEvent.EVENT_FILE_TRANSFER_ERROR]: FileTransferEventPayload;
+  [NativeWatchEvent.EVENT_FILE_TRANSFER_FINISHED]: FileTransferEventPayload;
+  [NativeWatchEvent.EVENT_FILE_TRANSFER_PROGRESS]: FileTransferEventPayload;
+  [NativeWatchEvent.EVENT_FILE_TRANSFER_STARTED]: FileTransferEventPayload;
   [NativeWatchEvent.EVENT_RECEIVE_MESSAGE]: WatchPayload & {id?: string};
   [NativeWatchEvent.EVENT_WATCH_STATE_CHANGED]: {
     state:

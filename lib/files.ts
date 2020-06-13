@@ -5,7 +5,7 @@ import {
 } from './events';
 import {
   FileTransferInfo,
-  FileTransferProgressPayload,
+  FileTransferEventPayload,
   NativeModule,
   WatchPayload,
 } from './native-module';
@@ -63,7 +63,7 @@ export function startFileTransfer(
 }
 
 export function getFileTransfers(): Promise<{
-  [id: string]: FileTransferProgressPayload;
+  [id: string]: FileTransferEventPayload;
 }> {
   return new Promise((resolve) => {
     NativeModule.getFileTransfers(resolve);

@@ -29,7 +29,7 @@ export interface UserInfoQueue<UserInfo extends WatchPayload = WatchPayload> {
   [timestamp: string]: UserInfo;
 }
 
-export type FileTransferProgressPayload = {
+export type FileTransferEventPayload = {
   completedUnitCount: number;
   estimatedTimeRemaining: number | null;
   fractionCompleted: number;
@@ -88,7 +88,7 @@ export interface IRNWatchNativeModule extends EventSubscriptionVendor {
   ) => void;
 
   getFileTransfers: (
-    cb: (transfers: {[id: string]: FileTransferProgressPayload}) => void,
+    cb: (transfers: {[id: string]: FileTransferEventPayload}) => void,
   ) => void;
 
   updateApplicationContext: (context: WatchPayload) => void;

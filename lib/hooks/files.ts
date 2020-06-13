@@ -1,10 +1,10 @@
 import {useEffect, useState} from 'react';
 import {getFileTransfers, subscribeToFileTransfers} from '../files';
-import {FileTransferProgressPayload} from '../native-module';
+import {FileTransferEventPayload} from '../native-module';
 
 export function useFileTransfers() {
   const [fileTransfers, setFileTransfers] = useState<{
-    [id: string]: FileTransferProgressPayload;
+    [id: string]: FileTransferEventPayload;
   }>({});
   useEffect(() => {
     getFileTransfers().then(setFileTransfers);
