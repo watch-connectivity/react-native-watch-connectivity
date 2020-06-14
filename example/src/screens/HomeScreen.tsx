@@ -22,8 +22,6 @@ import {
   startFileTransfer, ERROR_CODE_SESSION_UNREACHABLE,
 } from 'react-native-watch-connectivity';
 
-type MessageToWatch = { text: string; timestamp: number };
-
 export default function HomeScreen() {
   const [loading, setLoading] = useState(false);
   const [text, setText] = useState('');
@@ -70,7 +68,7 @@ export default function HomeScreen() {
                   configureAnimation();
                   setLoading(true);
 
-                  sendMessage<MessageToWatch,
+                  sendMessage<
                     { elapsed: number; timestamp: number }>({ text, timestamp }, (resp) => {
                       // FIXME: If no error ,resp should not be null
                       console.log('response received', resp);

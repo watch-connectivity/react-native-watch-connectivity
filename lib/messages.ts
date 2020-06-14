@@ -9,7 +9,7 @@ export function sendMessage<
   replyCb: (reply: MessageFromWatch) => void = (reply) => {
     console.warn(`Unhandled watch reply`, reply);
   },
-  errCb: () => {},
+  errCb: (error: Error & {code?: string; domain?: string}) => void = () => {},
 ) {
   NativeModule.sendMessage<MessageToWatch, MessageFromWatch>(
     message,
