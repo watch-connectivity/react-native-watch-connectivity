@@ -6,7 +6,7 @@ import {assert, TestLogFn} from './util';
 import * as faker from 'faker';
 import {
   getApplicationContext,
-  sendWatchMessage,
+  sendMessage,
   subscribeToApplicationContext,
   subscribeToMessages,
   updateApplicationContext,
@@ -74,7 +74,7 @@ export class ApplicationContextTests extends IntegrationTest {
         },
       );
 
-      sendWatchMessage({
+      sendMessage({
         test: true,
         text: 'send me some application context',
         context: expectedApplicationContext,

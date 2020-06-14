@@ -8,7 +8,7 @@ import {
   dequeueUserInfo,
   getQueuedUserInfo,
   QueuedUserInfo,
-  sendWatchMessage,
+  sendMessage,
   subscribeToMessages,
   subscribeToUserInfo,
   transferCurrentComplicationUserInfo,
@@ -77,7 +77,7 @@ export class UserInfoIntegrationTest extends IntegrationTest {
             },
           );
 
-          sendWatchMessage({test: true, text: 'send me some user info'});
+          sendMessage({test: true, text: 'send me some user info'});
           log('requested user info from watch');
         }),
     );
@@ -100,11 +100,11 @@ export class UserInfoIntegrationTest extends IntegrationTest {
 
       let message = {test: true, text: 'send me some user info'};
       log('sent message: ' + JSON.stringify(message));
-      sendWatchMessage(message);
+      sendMessage(message);
 
       message = {test: true, text: 'send me some more user info'};
       log('sent message: ' + JSON.stringify(message));
-      sendWatchMessage(message);
+      sendMessage(message);
 
       await userInfoPromise;
 

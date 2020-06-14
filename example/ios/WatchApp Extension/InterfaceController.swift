@@ -14,9 +14,8 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
   @IBOutlet weak var label: WKInterfaceLabel!
   @IBOutlet weak var pings: WKInterfaceLabel!
   @IBOutlet weak var image: WKInterfaceImage!
-  var session: WCSession?
 
-  ////////////////////////////////////////////////////////////////////////////////
+  var session: WCSession?
 
   func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
     print("Did activate")
@@ -32,19 +31,13 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     }
   }
 
-  ////////////////////////////////////////////////////////////////////////////////
-
   override func willActivate() {
     super.willActivate()
   }
 
-  ////////////////////////////////////////////////////////////////////////////////
-
   override func didDeactivate() {
     super.didDeactivate()
   }
-
-  ////////////////////////////////////////////////////////////////////////////////
 
   func session(_ session: WCSession, didReceiveMessage message: [String: Any], replyHandler: @escaping ([String: Any]) -> Void) {
     print("watch received message", message);
@@ -106,8 +99,6 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     }
   }
 
-  ////////////////////////////////////////////////////////////////////////////////
-
   func session(_ session: WCSession, didReceiveMessageData messageData: Data, replyHandler: @escaping (Data) -> Void) {
     let currentTimestamp: Double = Date().timeIntervalSince1970 * 1000
 
@@ -128,8 +119,6 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     }
   }
 
-  ////////////////////////////////////////////////////////////////////////////////
-
   func session(_ session: WCSession, didReceive file: WCSessionFile) {
     let data: Data? = try? Data(contentsOf: file.fileURL)
     self.image.setImageData(data)
@@ -138,23 +127,17 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     })
   }
 
-  ////////////////////////////////////////////////////////////////////////////////
-
   func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
     print("did receive application context", applicationContext)
     self.session?.sendMessage(["application-context": applicationContext, "text": "application context received by the watch"], replyHandler: { (response) in
     })
   }
 
-  ////////////////////////////////////////////////////////////////////////////////
-
   func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any]) {
     print("did receive user info", userInfo)
     self.session?.sendMessage(["user-info": userInfo, "text": "user info received by the watch"], replyHandler: { (response) in
     })
   }
-
-  ////////////////////////////////////////////////////////////////////////////////
 
   func session(_ session: WCSession, didFinish fileTransfer: WCSessionFileTransfer, error: Error?) {
     print("did finish file transfer")
@@ -167,8 +150,6 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
   func sessionReachabilityDidChange(_ session: WCSession) {
     print("sessionReachabilityDidChange")
   }
-
-  ////////////////////////////////////////////////////////////////////////////////
 
   func JSONStringify(_ value: Dictionary<String, Any>, prettyPrinted: Bool = false) -> String {
     let options = prettyPrinted ? JSONSerialization.WritingOptions.prettyPrinted : JSONSerialization.WritingOptions(rawValue: 0)

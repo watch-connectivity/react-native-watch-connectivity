@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from 'react';
-import {useWatchReachability, useWatchState, sendWatchMessage, WatchState} from 'react-native-watch-connectivity';
+import {useWatchReachability, useWatchState, sendMessage, WatchState} from 'react-native-watch-connectivity';
 
 export function usePingPongEffect() {
   const [pongs, setPongs] = useState(0);
@@ -9,10 +9,10 @@ export function usePingPongEffect() {
 
   const doPing = useCallback(() => {
     if (reachable && state === WatchState.Activated) {
-      sendWatchMessage({ping: true}, (err) => {
-        if (!err) {
-          setPongs(pongs + 1);
-        }
+      sendMessage({ping: true}, () => {
+        setPongs(pongs + 1);
+      }, err => {
+        console.log('watch message', err)
       });
     }
   }, [pongs, reachable, state]);

@@ -18,7 +18,7 @@ import Layout from '../components/Layout';
 import {
   useWatchReachability, useWatchState,
   sendMessageData,
-  sendWatchMessage,
+  sendMessage,
   startFileTransfer,
 } from 'react-native-watch-connectivity';
 
@@ -70,9 +70,8 @@ export default function HomeScreen() {
                   configureAnimation();
                   setLoading(true);
 
-                  sendWatchMessage<MessageToWatch,
-                    { elapsed: number; timestamp: number }>({ text, timestamp }, (err, resp) => {
-                    if (!err && resp) {
+                  sendMessage<MessageToWatch,
+                    { elapsed: number; timestamp: number }>({ text, timestamp }, (resp) => {
                       // FIXME: If no error ,resp should not be null
                       console.log('response received', resp);
                       configureAnimation();
@@ -81,12 +80,11 @@ export default function HomeScreen() {
                       setTimeTakenToReply(
                         new Date().getTime() - resp.timestamp,
                       );
-                    } else {
-                      console.error('error sending message to watch', err);
-                    }
 
                     setLoading(false);
-                  });
+                  }, err => {
+                      console.log('Send message error', err)
+                  })
                 }
               }}
               onImageButtonPress={() => {

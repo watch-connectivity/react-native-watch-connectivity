@@ -1,6 +1,6 @@
 import {IntegrationTest} from '../IntegrationTest';
 import {TestLogFn} from './util';
-import {sendWatchMessage, subscribeToMessages} from 'react-native-watch-connectivity';
+import {sendMessage, subscribeToMessages} from 'react-native-watch-connectivity';
 
 export class MessagesIntegrationTest extends IntegrationTest {
   constructor() {
@@ -39,7 +39,7 @@ export class MessagesIntegrationTest extends IntegrationTest {
       });
       log('Subscribed to messages');
       let message = {test: true, text: 'Send me a message, please'};
-      sendWatchMessage(message);
+      sendMessage(message);
       log('Sent message: ' + JSON.stringify(message));
     });
   };
@@ -70,25 +70,25 @@ export class MessagesIntegrationTest extends IntegrationTest {
         }
       });
       log('Subscribed to messages');
-      sendWatchMessage({test: true, text: 'Send me a message, please'});
+      sendMessage({test: true, text: 'Send me a message, please'});
       log('Sent message');
     });
   };
 
   private sendMessage(text: string, log: TestLogFn): Promise<string> {
     return new Promise((resolve, reject) => {
-      sendWatchMessage({test: true, text}, (err, reply) => {
+      sendMessage({test: true, text}, (reply) => {
         if (reply) {
           log('Received reply: ' + JSON.stringify(reply));
         }
-        if (err) {
-          reject(err);
-        } else if (reply && reply.text && typeof reply.text === 'string') {
+       if (reply.text && typeof reply.text === 'string') {
           resolve(reply.text);
         } else {
           reject(new Error('Incorrect response'));
         }
-      });
+      }, err => {
+        reject(err)
+      })
     });
   }
 }
