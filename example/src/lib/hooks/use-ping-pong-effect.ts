@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from 'react';
-import {useWatchReachability, useWatchState, sendMessage, WatchState} from 'react-native-watch-connectivity';
+import {useWatchReachability, useWatchState, sendMessage, WatchState, ERROR_CODE_SESSION_UNREACHABLE} from 'react-native-watch-connectivity';
 
 export function usePingPongEffect() {
   const [pongs, setPongs] = useState(0);
@@ -12,7 +12,9 @@ export function usePingPongEffect() {
       sendMessage({ping: true}, () => {
         setPongs(pongs + 1);
       }, err => {
-        console.log('watch message', err)
+        if (err.code !== ERROR_CODE_SESSION_UNREACHABLE) {
+          console.error('watch message error', err)
+        }
       });
     }
   }, [pongs, reachable, state]);

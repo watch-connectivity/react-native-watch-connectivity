@@ -19,7 +19,7 @@ import {
   useWatchReachability, useWatchState,
   sendMessageData,
   sendMessage,
-  startFileTransfer,
+  startFileTransfer, ERROR_CODE_SESSION_UNREACHABLE,
 } from 'react-native-watch-connectivity';
 
 type MessageToWatch = { text: string; timestamp: number };

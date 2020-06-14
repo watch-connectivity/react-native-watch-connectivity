@@ -16,3 +16,4 @@ export type {
 export {
   NativeWatchEvent
 } from './events'
+export * from './errors';
