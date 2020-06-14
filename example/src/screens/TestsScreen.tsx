@@ -14,7 +14,7 @@ import {useTestRunner} from '../lib/testing/TestRunner/context';
 import {observer} from 'mobx-react-lite';
 import Icon from '../components/Icon';
 import {COLORS} from '../constants';
-import {useWatchReachability} from 'react-native-watch-connectivity';
+import {useReachability} from 'react-native-watch-connectivity';
 
 const styles = StyleSheet.create({
   sectionTitle: {
@@ -142,7 +142,7 @@ const TestButton = observer(
     mode?: TestMode;
     style?: ViewStyle;
   }) => {
-    const reachable = useWatchReachability();
+    const reachable = useReachability();
     const testRunner = useTestRunner();
 
     let disabled =

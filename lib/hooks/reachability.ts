@@ -1,15 +1,15 @@
 import {
-  getWatchReachability,
-  subscribeToWatchReachability,
+  getReachability,
+  subscribeToReachability,
 } from '../reachability';
 import {useEffect, useState} from 'react';
 
-export function useWatchReachability() {
+export function useReachability() {
   const [reachability, setReachability] = useState(false);
 
   useEffect(() => {
-    getWatchReachability().then(setReachability);
-    return subscribeToWatchReachability(setReachability);
+    getReachability().then(setReachability);
+    return subscribeToReachability(setReachability);
   }, []);
 
   return reachability;

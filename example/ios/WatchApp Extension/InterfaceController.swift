@@ -39,7 +39,11 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     super.didDeactivate()
   }
 
-  func session(_ session: WCSession, didReceiveMessage message: [String: Any], replyHandler: @escaping ([String: Any]) -> Void) {
+  func session(
+    _ session: WCSession,
+    didReceiveMessage message: [String: Any],
+    replyHandler: @escaping ([String: Any]) -> Void
+  ) {
     print("watch received message", message);
 
     let isTest: Bool = message["test"] as? Bool ?? false
@@ -99,7 +103,11 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     }
   }
 
-  func session(_ session: WCSession, didReceiveMessageData messageData: Data, replyHandler: @escaping (Data) -> Void) {
+  func session(
+    _ session: WCSession,
+    didReceiveMessageData messageData: Data,
+    replyHandler: @escaping (Data) -> Void
+  ) {
     let currentTimestamp: Double = Date().timeIntervalSince1970 * 1000
 
     let str = String(data: messageData, encoding: .utf8)

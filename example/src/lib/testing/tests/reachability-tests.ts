@@ -2,8 +2,8 @@ import {IntegrationTest} from '../IntegrationTest';
 
 import {assert, TestLogFn} from './util';
 import {
-  getWatchReachability,
-  subscribeToWatchReachability,
+  getReachability,
+  subscribeToReachability,
 } from 'react-native-watch-connectivity';
 
 export class ReachabilityIntegrationTest extends IntegrationTest {
@@ -23,7 +23,7 @@ export class ReachabilityIntegrationTest extends IntegrationTest {
   }
 
   testReachable = async () => {
-    const reachable = await getWatchReachability();
+    const reachable = await getReachability();
     if (!reachable) {
       // The tests cannot even be executed if watch not reachable
       throw new Error('Watch should reachable');
@@ -31,7 +31,7 @@ export class ReachabilityIntegrationTest extends IntegrationTest {
   };
 
   testWaitForReachability = async (log: TestLogFn) => {
-    const reachable = await getWatchReachability();
+    const reachable = await getReachability();
     log('checking that watch is unreachable: ' + JSON.stringify(reachable));
     assert(!reachable, 'should not be reachable to begin with');
 
@@ -39,7 +39,7 @@ export class ReachabilityIntegrationTest extends IntegrationTest {
       log(
         'waiting for watch to become reachable... you should open the watch app',
       );
-      const unsubscribe = subscribeToWatchReachability((reachable1) => {
+      const unsubscribe = subscribeToReachability((reachable1) => {
         if (reachable1) {
           unsubscribe();
           resolve();
@@ -49,7 +49,7 @@ export class ReachabilityIntegrationTest extends IntegrationTest {
   };
 
   testWaitForUnreachability = async (log: TestLogFn) => {
-    const reachable = await getWatchReachability();
+    const reachable = await getReachability();
     log('checking that watch is reachable: ' + JSON.stringify(reachable));
     assert(reachable, 'should be reachable to begin with');
 
@@ -57,7 +57,7 @@ export class ReachabilityIntegrationTest extends IntegrationTest {
       log(
         'waiting for watch to become unreachable... you should close the watch app',
       );
-      const unsubscribe = subscribeToWatchReachability((reachable1) => {
+      const unsubscribe = subscribeToReachability((reachable1) => {
         if (!reachable1) {
           unsubscribe();
           resolve();
