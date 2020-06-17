@@ -8,14 +8,17 @@ Communicate with your Apple Watch apps over the React Native bridge.
 
 ## Demo
 
-The featured screenshot is from the [example app](https://github.com/mtford90/react-native-watch-connectivity-example). To run the example:
+The featured screenshot is from the [example app](https://github.com/mtford90/react-native-watch-connectivity/tree/master/example). To run the example:
 
 ```
-git clone https://github.com/mtford90/react-native-watch-connectivity-example.git
-cd react-native-watch-connectivity
+git clone https://github.com/mtford90/react-native-watch-connectivity.git
+cd react-native-watch-connectivity/example
 yarn install
+cd ios
+pod install
+cd ..
 yarn ios # Run app
-open ios/RNWatchExample.xcworkspace # Run watch app from Xcode 
+open ios/RNWatchExample.xcworkspace # Run watch app from Xcode
 ```
 
 ## Install
@@ -49,191 +52,3 @@ pod 'RNWatch', :path => '../node_modules/react-native-watch-connectivity'
 ```
 
 and run `pod install`.
-
-## Usage
-
-### WatchOS
-
-Use Apple's Watch API as usual. See the <a href="https://github.com/mtford90/react-native-watch-connectivity-example">example app</a> for how to do this.
-
-### iOS
-
-Unlike with previous versions of this library, a `WCSession` is now activated automatically when you include this library. No code in `AppDelegate.m` is needed.
-
-### React Native
-
-**ES6**
-
-```js
-import * as Watch from 'react-native-watch-connectivity'
-```
-
-**ES5**
-
-```js
-var Watch = require('react-native-watch-connectivity')
-```
-
-#### Reachability
-
-```js
-// Monitor reachability
-this.unsubscribeWatchReachability = Watch.subscribeToWatchReachability(
-  (err, watchIsReachable) => {
-    if (!err) {
-      this.setState({ watchIsReachable })
-    }
-  }
-)
-
-// somewhere in componentWillUnmount()
-this.unsubscribeWatchReachability()
-
-// Get current reachability
-Watch.getWatchReachability((err, watchIsReachable) => {
-  // ...
-})
-```
-
-#### Install & Pairing Status
-
-```js
-Watch.getIsWatchAppInstalled((err, isAppInstalled) => {
-  // ...
-})
-Watch.getIsPaired((err, isPaired) => {
-  // ...
-})
-```
-
-#### Install & Pairing Status
-
-```js
-watch.getIsWatchAppInstalled((err, isAppInstalled) => {
-  // ...
-})
-
-watch.getIsPaired((err, isPaired) => {
-  // ...
-})
-```
-
-#### Watch State
-
-```js
-// Monitor watch state
-this.unsubscribeWatchState = Watch.subscribeToWatchState((err, watchState) => {
-  if (!err) {
-    console.log('watchState', watchState) // NotActivated, Inactive, Activated
-  }
-})
-
-// Get current watch state
-Watch.getWatchState((err, watchState) => {
-  if (!err) {
-    console.log('watchState', watchState) // NotActivated, Inactive, Activated
-  }
-})
-```
-
-#### User Info
-
-```js
-this.unsubscribeUserInfo = Watch.subscribeToUserInfo((err, info) => {
-  // ...
-})
-```
-
-```js
-Watch.sendUserInfo({ name: 'Mike', id: 5 })
-```
-
-```js
-watch
-  .getUserInfo()
-  .then(info => {
-    // ...
-  })
-  .catch(err => {
-    // ...
-  })
-```
-
-```js
-Watch.sendComplicationUserInfo({ name: 'Mike' }, (err, replyMessage) => {
-  console.log('Received reply from watch', replyMessage)
-})
-```
-
-#### Application Context
-
-```js
-this.unsubscribeApplicationContext = Watch.subscribeToApplicationContext(
-  (err, info) => {
-    // ...
-  }
-)
-
-Watch.updateApplicationContext({ foo: 'bar' })
-
-Watch.getApplicationContext().then(context => {
-  // ...
-})
-```
-
-#### Messages
-
-##### Send Message
-
-Send messages and receive replies
-
-```js
-Watch.sendMessage({ text: 'Hi watch!' }, (err, replyMessage) => {
-  console.log('Received reply from watch', replyMessage)
-})
-```
-
-##### Receive Message
-
-Recieve messages and send responses
-
-```js
-this.unsubscribeMessages = Watch.subscribeToMessages((err, message, reply) => {
-  if (!err) reply({ text: 'message received!' })
-})
-```
-
-#### Files
-
-##### Send Files
-
-```js
-const uri = 'file://...' // e.g. a photo/video obtained using react-native-image-picker
-
-watch
-  .transferFile(uri)
-  .then(() => {
-    // ...
-  })
-  .catch(err => {
-    // ... handle error
-  })
-```
-
-
-
-## Troubleshooting
-
-Apple's iOS/iWatch simulator integration is exceptionally poor. I strongly suggest using real devices instead. There are three main issues: 
-
-### Messages are not being received on the simulator 
-
-Note that communication between the iOS simulator and Apple Watch simulator can be ridiculously slow - it's much faster when using actual devices. I've seen response times of up to 2 minutes when using the simulator & have no idea why.
-
-### Watch remains unreachable on the simulator
-
-Apple's dodgy watchos/ios simulator setup strikes again. If you keep reinstalling each app, it will eventually work. Better to use real devices.
-
-### Watch app does not receive user info in the simulator
-
-There's a bug within Apple's simulator setup that can cause issues in iOS 13/watchOS6+ whereby the watch app's WCSessionDelegate does not fire `didReceiveUserInfo`. No solution for this as of yet until Apple fixes this problem. Either use real devices or else downgrade iOS/watchOS
