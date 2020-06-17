@@ -6,6 +6,10 @@ Communicate with your Apple Watch apps over the React Native bridge.
 
 <img height=600 src="https://github.com/mtford90/react-native-watch-connectivity/blob/06001bb1d15bcdb9607c35d75c7c7ab463c71e86/assets/screenshot.png?raw=true"/>
 
+## Documentation
+
+http://mtford.co.uk/react-native-watch-connectivity/
+
 ## Demo
 
 The featured screenshot is from the [example app](https://github.com/mtford90/react-native-watch-connectivity/tree/master/example). To run the example:
