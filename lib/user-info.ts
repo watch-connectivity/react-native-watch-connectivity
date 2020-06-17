@@ -84,8 +84,10 @@ export function dequeueUserInfo(
   });
 }
 
+export type UserInfoConsumer<UserInfo extends WatchPayload = WatchPayload> = (userInfo: UserInfo, date: Date) => Promise<void> | void;
+
 export function consumeUserInfo<UserInfo extends WatchPayload = WatchPayload>(
-  consumer: (userInfo: UserInfo, date: Date) => Promise<void> | void,
+  consumer: UserInfoConsumer<UserInfo>,
   errCb?: (err: Error, userInfo: UserInfo | null) => void
 ) {
   function handleError(err: Error, info: UserInfo | null) {

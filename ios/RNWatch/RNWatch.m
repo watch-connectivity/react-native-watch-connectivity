@@ -57,7 +57,7 @@ RCT_EXPORT_MODULE()
 - (instancetype)init {
     sharedInstance = [super init];
     self.replyHandlers = [NSCache new];
-    self.transfers = [NSMutableDictionary new];
+    self.fileTransfers = [NSMutableDictionary new];
     self.userInfo = [NSMutableDictionary new];
 
     if ([WCSession isSupported]) {
@@ -308,7 +308,7 @@ RCT_EXPORT_METHOD(transferFile:
             @"error": [NSNull null]
     }];
 
-    self.transfers[uuid] = transferInfo;
+    self.fileTransfers[uuid] = transferInfo;
 
     [self observeTransferProgress:transfer];
 
@@ -328,7 +328,7 @@ RCT_EXPORT_METHOD(transferFile:
 
 RCT_EXPORT_METHOD(getFileTransfers:
     (RCTResponseSenderBlock) callback) {
-    NSMutableDictionary *transfers = self.transfers;
+    NSMutableDictionary *transfers = self.fileTransfers;
     NSMutableDictionary *payload = [NSMutableDictionary new];
 
     for (NSString *transferId in transfers) {
@@ -344,7 +344,7 @@ RCT_EXPORT_METHOD(getFileTransfers:
 - (NSDictionary *)getProgressPayload:(WCSessionFileTransfer *)transfer {
     NSString *uuid = transfer.file.metadata[@"id"];
 
-    NSDictionary *transferInfo = self.transfers[uuid];
+    NSDictionary *transferInfo = self.fileTransfers[uuid];
 
     NSNumber *_Nonnull completedUnitCount = @(transfer.progress.completedUnitCount);
 
@@ -397,7 +397,7 @@ didFinishFileTransfer:(WCSessionFileTransfer *)fileTransfer
     NSDictionary<NSString *, id> *metadata = file.metadata;
     NSString *transferId = metadata[@"id"];
     if (transferId) {
-        NSMutableDictionary *transferInfo = self.transfers[transferId];
+        NSMutableDictionary *transferInfo = self.fileTransfers[transferId];
 
         transferInfo[@"endTime"] = @(endTime);
 

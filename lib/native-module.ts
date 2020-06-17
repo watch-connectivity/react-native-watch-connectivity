@@ -40,6 +40,7 @@ export type FileTransferEventPayload = {
   id: string;
   startTime: number;
   endTime: number | null;
+  error: Error | null;
 };
 
 export interface IRNWatchNativeModule extends EventSubscriptionVendor {

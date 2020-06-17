@@ -1,15 +1,19 @@
 import {useEffect, useState} from 'react';
-import {getFileTransfers, subscribeToFileTransfers} from '../files';
+import {getFileTransfers, monitorFileTransfers} from '../files';
 import {FileTransferEventPayload} from '../native-module';
 
 export function useFileTransfers() {
-  const [fileTransfers, setFileTransfers] = useState<{
-    [id: string]: FileTransferEventPayload;
-  }>({});
+  const [fileTransfers, setFileTransfers] = useState<
+    FileTransferEventPayload[]
+  >([]);
   useEffect(() => {
-    getFileTransfers().then(setFileTransfers);
-    return subscribeToFileTransfers(() => {
-      getFileTransfers().then(setFileTransfers);
+    getFileTransfers().then(transfers => {
+      setFileTransfers(Object.values(transfers));
+    });
+    return monitorFileTransfers(() => {
+      getFileTransfers().then(transfers => {
+        setFileTransfers(Object.values(transfers))
+      });
     });
   }, []);
 

@@ -10,20 +10,27 @@ import {
   WatchPayload,
 } from './native-module';
 
-export function subscribeToFileTransfers(
+export enum FileTransferEvent {
+  FINISHED = 'finished',
+  ERROR = 'error',
+  STARTED = 'started',
+  PROGRESS = 'progress',
+}
+
+export function monitorFileTransfers(
   cb: (
     event:
       | ({
-          type: NativeWatchEvent.EVENT_FILE_TRANSFER_FINISHED;
+          type: FileTransferEvent.FINISHED
         } & NativeWatchEventPayloads[NativeWatchEvent.EVENT_FILE_TRANSFER_FINISHED])
       | ({
-          type: NativeWatchEvent.EVENT_FILE_TRANSFER_ERROR;
+          type: FileTransferEvent.ERROR
         } & NativeWatchEventPayloads[NativeWatchEvent.EVENT_FILE_TRANSFER_ERROR])
       | ({
-          type: NativeWatchEvent.EVENT_FILE_TRANSFER_STARTED;
+          type: FileTransferEvent.STARTED
         } & NativeWatchEventPayloads[NativeWatchEvent.EVENT_FILE_TRANSFER_STARTED])
       | ({
-          type: NativeWatchEvent.EVENT_FILE_TRANSFER_PROGRESS;
+          type: FileTransferEvent.PROGRESS
         } & NativeWatchEventPayloads[NativeWatchEvent.EVENT_FILE_TRANSFER_PROGRESS]),
   ) => void,
 ) {
@@ -31,22 +38,22 @@ export function subscribeToFileTransfers(
     _subscribeToNativeWatchEvent(
       NativeWatchEvent.EVENT_FILE_TRANSFER_ERROR,
       (payload) =>
-        cb({type: NativeWatchEvent.EVENT_FILE_TRANSFER_ERROR, ...payload}),
+        cb({type: FileTransferEvent.ERROR, ...payload}),
     ),
     _subscribeToNativeWatchEvent(
       NativeWatchEvent.EVENT_FILE_TRANSFER_FINISHED,
       (payload) =>
-        cb({type: NativeWatchEvent.EVENT_FILE_TRANSFER_FINISHED, ...payload}),
+        cb({type: FileTransferEvent.FINISHED, ...payload}),
     ),
     _subscribeToNativeWatchEvent(
       NativeWatchEvent.EVENT_FILE_TRANSFER_STARTED,
       (payload) =>
-        cb({type: NativeWatchEvent.EVENT_FILE_TRANSFER_STARTED, ...payload}),
+        cb({type: FileTransferEvent.STARTED, ...payload}),
     ),
     _subscribeToNativeWatchEvent(
       NativeWatchEvent.EVENT_FILE_TRANSFER_PROGRESS,
       (payload) =>
-        cb({type: NativeWatchEvent.EVENT_FILE_TRANSFER_PROGRESS, ...payload}),
+        cb({type: FileTransferEvent.PROGRESS, ...payload}),
     ),
   ];
 

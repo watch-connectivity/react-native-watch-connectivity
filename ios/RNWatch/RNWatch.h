@@ -23,7 +23,7 @@
 + (RNWatch*) sharedInstance;
 @property (nonatomic, strong) WCSession* session;
 @property (nonatomic, strong) NSCache* replyHandlers;
-@property (nonatomic, strong) NSMutableDictionary* transfers;
+@property (nonatomic, strong) NSMutableDictionary* fileTransfers;
 @property (nonatomic, strong) NSMutableDictionary<NSString*, NSDictionary<NSString *,id> *>* userInfo;
 
 @end

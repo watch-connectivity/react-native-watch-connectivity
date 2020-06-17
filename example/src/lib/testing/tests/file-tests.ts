@@ -5,7 +5,7 @@ import fs from 'react-native-fs';
 import {
   getFileTransfers,
   startFileTransfer,
-  subscribeToFileTransfers,
+  monitorFileTransfers,
   NativeWatchEvent
 } from 'react-native-watch-connectivity';
 
@@ -30,17 +30,17 @@ export class FileIntegrationTest extends IntegrationTest {
       let didReceiveFinalProgressEvent = false;
       let didReceiveSuccessEvent = false;
 
-      const unsubscribeFromFileTransfers = subscribeToFileTransfers((event) => {
+      const unsubscribeFromFileTransfers = monitorFileTransfers((event) => {
         log('transfer event: ' + JSON.stringify(event));
-        if (event.type === NativeWatchEvent.EVENT_FILE_TRANSFER_STARTED) {
+        if (event.type === "started") {
           didReceiveStartEvent = true;
         } else if (
-          event.type === NativeWatchEvent.EVENT_FILE_TRANSFER_PROGRESS &&
+          event.type === "progress" &&
           event.fractionCompleted === 1
         ) {
           didReceiveFinalProgressEvent = true;
         } else if (
-          event.type === NativeWatchEvent.EVENT_FILE_TRANSFER_FINISHED
+          event.type === "finished"
         ) {
           didReceiveSuccessEvent = true;
         }
@@ -60,7 +60,7 @@ export class FileIntegrationTest extends IntegrationTest {
         reject(err);
       });
 
-      log('transferred file');
+      log('started file transfer');
     });
 
     // TODO: Clean up susbcribes on test failure (need an after func)

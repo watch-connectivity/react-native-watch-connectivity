@@ -5,7 +5,7 @@ import {
 } from '../application-context';
 import {useEffect, useState} from 'react';
 
-export function useWatchApplicationContext<
+export function useApplicationContext<
   Context extends WatchPayload = WatchPayload
 >() {
   const [applicationContext, setApplicationContext] = useState<Context | null>(

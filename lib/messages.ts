@@ -1,20 +1,26 @@
 import { NativeModule, WatchPayload } from './native-module';
 import { _subscribeToNativeWatchEvent, NativeWatchEvent } from './events';
 
+type SendMessageReplyCallback<MessageFromWatch extends WatchPayload = WatchPayload> = (reply: MessageFromWatch) => void;
+
+type SendMessageErrorCallback = (error: Error & { code?: string; domain?: string }) => void;
+
 export function sendMessage<
   MessageFromWatch extends WatchPayload = WatchPayload,
   MessageToWatch extends WatchPayload = WatchPayload
 >(
   message: MessageToWatch,
-  replyCb: (reply: MessageFromWatch) => void = (reply) => {
-    console.warn(`Unhandled watch reply`, reply);
-  },
-  errCb: (error: Error & {code?: string; domain?: string}) => void = () => {},
+  replyCb?: SendMessageReplyCallback<MessageFromWatch>,
+  errCb?: SendMessageErrorCallback,
 ) {
   NativeModule.sendMessage<MessageToWatch, MessageFromWatch>(
     message,
-    replyCb,
-    errCb,
+    replyCb || ((reply: MessageFromWatch) => {
+      console.warn(`Unhandled watch reply`, reply);
+    }),
+    errCb || ((err) => {
+      console.warn('Unhandled sendMessage error', err)
+  }),
   );
 }
 
@@ -25,6 +31,7 @@ export type WatchMessageListener<
   // if the watch sends a message without a messageId, we have no way to respond
   replyHandler: ((resp: ResponsePayload) => void) | null,
 ) => void;
+
 
 export function subscribeToMessages<
   MessageToWatch extends WatchPayload = WatchPayload,
