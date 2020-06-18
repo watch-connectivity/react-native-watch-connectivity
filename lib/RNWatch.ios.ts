@@ -6,6 +6,7 @@ export * from './files';
 export * from './user-info';
 export * from './application-context';
 export * from './hooks';
+// TODO: Nothing should be exported from native module
 export type {
   FileTransferInfo,
   QueuedUserInfo,
@@ -13,7 +14,7 @@ export type {
   UserInfoQueue,
   FileTransferEventPayload,
 } from './native-module';
-export {
-  NativeWatchEvent
-} from './events'
 export * from './errors';
+
+export {default as watchEvents} from './events';
+export type {WatchEvent} from './events/definitions';

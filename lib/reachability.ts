@@ -1,11 +1,15 @@
-import {_subscribeToNativeWatchEvent, NativeWatchEvent} from './events';
-import {NativeModule} from './native-module';
+import {
+  _addListener,
+  NativeModule,
+  NativeWatchEvent,
+} from './native-module';
 
-export type WatchReachabilityListener = (reachable: boolean) => void;
-
-export function subscribeToReachability(cb: WatchReachabilityListener) {
+/**
+ * @deprecated Use addListener('reachability', event => {}) instead
+ */
+export function subscribeToReachability(cb: (reachable: boolean) => void) {
   // noinspection JSIgnoredPromiseFromCall
-  return _subscribeToNativeWatchEvent(
+  return _addListener(
     NativeWatchEvent.EVENT_WATCH_REACHABILITY_CHANGED,
     ({reachability}) => cb(reachability),
   );

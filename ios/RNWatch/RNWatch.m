@@ -35,6 +35,8 @@ static NSString *EVENT_WATCH_USER_INFO_RECEIVED = @"WatchUserInfoReceived";
 static NSString *EVENT_APPLICATION_CONTEXT_RECEIVED = @"WatchApplicationContextReceived";
 static NSString *EVENT_SESSION_DID_DEACTIVATE = @"WatchSessionDidDeactivate";
 static NSString *EVENT_SESSION_BECAME_INACTIVE = @"WatchSessionBecameInactive";
+static NSString *EVENT_PAIR_STATUS_CHANGED = @"WatchPairStatusChanged";
+static NSString *EVENT_INSTALL_STATUS_CHANGED = @"WatchInstallStatusChanged";
 
 static RNWatch *sharedInstance;
 
@@ -65,6 +67,8 @@ RCT_EXPORT_MODULE()
         session.delegate = self;
         self.session = session;
         [self.session activateSession];
+        [self.session addObserver:self forKeyPath:@"paired" options:NSKeyValueObservingOptionNew context:nil];
+        [self.session addObserver:self forKeyPath:@"watchAppInstalled" options:NSKeyValueObservingOptionNew context:nil];
     }
 
     return sharedInstance;
@@ -82,7 +86,9 @@ RCT_EXPORT_MODULE()
       EVENT_ACTIVATION_ERROR,
       EVENT_WATCH_REACHABILITY_CHANGED,
       EVENT_WATCH_USER_INFO_RECEIVED,
-      EVENT_APPLICATION_CONTEXT_RECEIVED
+      EVENT_APPLICATION_CONTEXT_RECEIVED,
+      EVENT_PAIR_STATUS_CHANGED,
+      EVENT_INSTALL_STATUS_CHANGED
     ];
 }
 
@@ -373,13 +379,14 @@ RCT_EXPORT_METHOD(getFileTransfers:
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey, id> *)change context:(void *)context {
-
     if ([keyPath hasPrefix:@"progress"]) {
         WCSessionFileTransfer *transfer = object;
-
         NSDictionary *body = [self getProgressPayload:transfer];
-
         [self dispatchEventWithName:EVENT_FILE_TRANSFER_PROGRESS body:body];
+    } else if ([keyPath isEqualToString:@"paired"]) {
+        [self dispatchEventWithName:EVENT_PAIR_STATUS_CHANGED body:@{@"paired": change[NSKeyValueChangeNewKey]}];
+    } else if ([keyPath isEqualToString:@"watchAppInstalled"]) {
+        [self dispatchEventWithName:EVENT_INSTALL_STATUS_CHANGED body:@{@"installed": change[NSKeyValueChangeNewKey]}];
     }
 }
 

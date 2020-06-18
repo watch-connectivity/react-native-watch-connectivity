@@ -9,10 +9,9 @@ import {
   getQueuedUserInfo,
   QueuedUserInfo,
   sendMessage,
-  subscribeToMessages,
-  subscribeToUserInfo,
   transferCurrentComplicationUserInfo,
   transferUserInfo,
+  watchEvents,
 } from 'react-native-watch-connectivity';
 
 export class UserInfoIntegrationTest extends IntegrationTest {
@@ -63,7 +62,8 @@ export class UserInfoIntegrationTest extends IntegrationTest {
             email: 'bob@example.com',
           };
 
-          const unsubscribe = subscribeToUserInfo(
+          const unsubscribe = watchEvents.addListener(
+            'user-info',
             ({userInfo: userInfoFromEvent}) => {
               log(
                 'received user info from watch event: ' +
@@ -88,7 +88,7 @@ export class UserInfoIntegrationTest extends IntegrationTest {
       const userInfoPromise = new Promise((resolve) => {
         const receivedUserInfo: QueuedUserInfo[] = [];
 
-        const unsubscribe = subscribeToUserInfo((userInfo) => {
+        const unsubscribe = watchEvents.addListener('user-info', (userInfo) => {
           log('Received user info: ' + JSON.stringify(userInfo));
           receivedUserInfo.push(userInfo);
           if (receivedUserInfo.length === 2) {
@@ -172,7 +172,7 @@ export class UserInfoIntegrationTest extends IntegrationTest {
         transferUserInfo(userInfoToSend);
       }
 
-      const unsubscribe = subscribeToMessages((payload) => {
+      const unsubscribe = watchEvents.addListener('message', (payload) => {
         if (payload) {
           log('Received message: ' + JSON.stringify(payload));
         }

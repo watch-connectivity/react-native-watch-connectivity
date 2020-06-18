@@ -1,5 +1,9 @@
-import {_subscribeToNativeWatchEvent, NativeWatchEvent} from './events';
-import {NativeModule, WCWatchState} from './native-module';
+import {
+  _addListener,
+  NativeModule,
+  NativeWatchEvent,
+  WCWatchState,
+} from './native-module';
 
 export enum WatchState {
   NotActivated = 'NotActivated',
@@ -13,11 +17,12 @@ const _WatchState: Record<WCWatchState, WatchState> = {
   WCSessionActivationStateActivated: WatchState.Activated,
 };
 
-export type WatchStateListener = (state: WatchState) => void;
-
-export function subscribeToWatchState(cb: WatchStateListener) {
+/**
+ * @deprecated Use addListener('session-state', event => {}) instead
+ */
+export function subscribeToWatchState(cb: (state: WatchState) => void) {
   // noinspection JSIgnoredPromiseFromCall
-  return _subscribeToNativeWatchEvent(
+  return _addListener(
     NativeWatchEvent.EVENT_WATCH_STATE_CHANGED,
     (payload) => cb(_WatchState[payload.state]),
   );

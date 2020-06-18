@@ -30,16 +30,6 @@
     "faker": "^4.1.0",
     "@types/faker": "^4.1.12"
   },
-  "lint-staged": {
-    "package.json": [
-      "sort-package-json",
-      "git add"
-    ],
-    "{lib}/**/*.ts?(x)": [
-      "yarn lint --fix",
-      "git add"
-    ]
-  },
   "devDependencies": {
     "@types/lodash.sortby": "^4.7.6",
     "@types/bluebird": "^3.5.32",
@@ -51,7 +41,7 @@
     "@types/react": "^16.9.34",
     "@types/react-native": "^0.62.5",
     "metro-react-native-babel-preset": "^0.58.0",
-    "typescript": "^3.8.3"
+    "typescript": "3.9.5"
   },
   "jest": {
     "preset": "react-native"

@@ -5,8 +5,7 @@ import fs from 'react-native-fs';
 import {
   getFileTransfers,
   startFileTransfer,
-  monitorFileTransfers,
-  NativeWatchEvent
+  watchEvents,
 } from 'react-native-watch-connectivity';
 
 export class FileIntegrationTest extends IntegrationTest {
@@ -30,30 +29,31 @@ export class FileIntegrationTest extends IntegrationTest {
       let didReceiveFinalProgressEvent = false;
       let didReceiveSuccessEvent = false;
 
-      const unsubscribeFromFileTransfers = monitorFileTransfers((event) => {
-        log('transfer event: ' + JSON.stringify(event));
-        if (event.type === "started") {
-          didReceiveStartEvent = true;
-        } else if (
-          event.type === "progress" &&
-          event.fractionCompleted === 1
-        ) {
-          didReceiveFinalProgressEvent = true;
-        } else if (
-          event.type === "finished"
-        ) {
-          didReceiveSuccessEvent = true;
-        }
+      const unsubscribeFromFileTransfers = watchEvents.addListener(
+        'file',
+        (event) => {
+          log('transfer event: ' + JSON.stringify(event));
+          if (event.type === 'started') {
+            didReceiveStartEvent = true;
+          } else if (
+            event.type === 'progress' &&
+            event.fractionCompleted === 1
+          ) {
+            didReceiveFinalProgressEvent = true;
+          } else if (event.type === 'finished') {
+            didReceiveSuccessEvent = true;
+          }
 
-        if (
-          didReceiveStartEvent &&
-          didReceiveFinalProgressEvent &&
-          didReceiveSuccessEvent
-        ) {
-          resolve();
-          unsubscribeFromFileTransfers();
-        }
-      });
+          if (
+            didReceiveStartEvent &&
+            didReceiveFinalProgressEvent &&
+            didReceiveSuccessEvent
+          ) {
+            resolve();
+            unsubscribeFromFileTransfers();
+          }
+        },
+      );
 
       startFileTransfer(path).catch((err) => {
         unsubscribeFromFileTransfers();

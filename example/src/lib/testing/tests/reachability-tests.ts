@@ -1,10 +1,7 @@
 import {IntegrationTest} from '../IntegrationTest';
 
 import {assert, TestLogFn} from './util';
-import {
-  getReachability,
-  subscribeToReachability,
-} from 'react-native-watch-connectivity';
+import {getReachability, watchEvents} from 'react-native-watch-connectivity';
 
 export class ReachabilityIntegrationTest extends IntegrationTest {
   constructor() {
@@ -39,12 +36,15 @@ export class ReachabilityIntegrationTest extends IntegrationTest {
       log(
         'waiting for watch to become reachable... you should open the watch app',
       );
-      const unsubscribe = subscribeToReachability((reachable1) => {
-        if (reachable1) {
-          unsubscribe();
-          resolve();
-        }
-      });
+      const unsubscribe = watchEvents.addListener(
+        'reachability',
+        (reachable1) => {
+          if (reachable1) {
+            unsubscribe();
+            resolve();
+          }
+        },
+      );
     });
   };
 
@@ -57,12 +57,15 @@ export class ReachabilityIntegrationTest extends IntegrationTest {
       log(
         'waiting for watch to become unreachable... you should close the watch app',
       );
-      const unsubscribe = subscribeToReachability((reachable1) => {
-        if (!reachable1) {
-          unsubscribe();
-          resolve();
-        }
-      });
+      const unsubscribe = watchEvents.addListener(
+        'reachability',
+        (reachable1) => {
+          if (!reachable1) {
+            unsubscribe();
+            resolve();
+          }
+        },
+      );
     });
   };
 }

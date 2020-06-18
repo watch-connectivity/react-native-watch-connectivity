@@ -1,4 +1,8 @@
-import {EventSubscriptionVendor, NativeModules} from 'react-native';
+import {
+  EventSubscriptionVendor,
+  NativeEventEmitter,
+  NativeModules,
+} from 'react-native';
 
 export type WatchPayload = Record<string, unknown>;
 
@@ -61,6 +65,7 @@ export interface IRNWatchNativeModule extends EventSubscriptionVendor {
   transferCurrentComplicationUserInfo: (userInfo: WatchPayload) => void;
 
   getReachability: (cb: (reachable: boolean) => void) => void;
+
   getIsPaired: (cb: (isPaired: boolean) => void) => void;
   getIsWatchAppInstalled: (cb: (isPaired: boolean) => void) => void;
 
@@ -110,3 +115,73 @@ if (!__mod) {
 }
 
 export const NativeModule: IRNWatchNativeModule = __mod;
+export const watchEmitter = new NativeEventEmitter(NativeModule);
+
+export enum NativeWatchEvent {
+  EVENT_FILE_TRANSFER_ERROR = 'WatchFileTransferError',
+  EVENT_FILE_TRANSFER_FINISHED = 'WatchFileTransferFinished',
+  EVENT_FILE_TRANSFER_PROGRESS = 'WatchFileTransferProgress',
+  EVENT_FILE_TRANSFER_STARTED = 'WatchFileTransferStarted',
+  EVENT_RECEIVE_MESSAGE = 'WatchReceiveMessage',
+  EVENT_WATCH_STATE_CHANGED = 'WatchStateChanged',
+  EVENT_WATCH_REACHABILITY_CHANGED = 'WatchReachabilityChanged',
+  EVENT_WATCH_USER_INFO_RECEIVED = 'WatchUserInfoReceived',
+  EVENT_APPLICATION_CONTEXT_RECEIVED = 'WatchApplicationContextReceived',
+  EVENT_PAIR_STATUS_CHANGED = 'WatchPairStatusChanged',
+  EVENT_INSTALL_STATUS_CHANGED = 'WatchInstallStatusChanged',
+}
+
+export interface NativeWatchEventPayloads {
+  [NativeWatchEvent.EVENT_FILE_TRANSFER_ERROR]: FileTransferEventPayload;
+  [NativeWatchEvent.EVENT_FILE_TRANSFER_FINISHED]: FileTransferEventPayload;
+  [NativeWatchEvent.EVENT_FILE_TRANSFER_PROGRESS]: FileTransferEventPayload;
+  [NativeWatchEvent.EVENT_FILE_TRANSFER_STARTED]: FileTransferEventPayload;
+  [NativeWatchEvent.EVENT_RECEIVE_MESSAGE]: WatchPayload & {id?: string};
+  [NativeWatchEvent.EVENT_WATCH_STATE_CHANGED]: {
+    state:
+      | 'WCSessionActivationStateNotActivated'
+      | 'WCSessionActivationStateInactive'
+      | 'WCSessionActivationStateActivated';
+  };
+  [NativeWatchEvent.EVENT_WATCH_REACHABILITY_CHANGED]: {
+    reachability: boolean;
+  };
+  [NativeWatchEvent.EVENT_WATCH_USER_INFO_RECEIVED]: QueuedUserInfo<
+    WatchPayload
+  >;
+  [NativeWatchEvent.EVENT_APPLICATION_CONTEXT_RECEIVED]: WatchPayload | null;
+  [NativeWatchEvent.EVENT_PAIR_STATUS_CHANGED]: {
+    paired: boolean;
+  };
+  [NativeWatchEvent.EVENT_INSTALL_STATUS_CHANGED]: {
+    installed: boolean;
+  };
+}
+
+export function _addListener<
+  E extends NativeWatchEvent,
+  Payload = NativeWatchEventPayloads[E]
+>(event: E, cb: (payload: Payload) => void) {
+  // Type the event name
+  if (!event) {
+    throw new Error('Must pass event');
+  }
+  const sub = watchEmitter.addListener(event, cb);
+  return () => sub.remove();
+}
+
+export function _once<
+  E extends NativeWatchEvent,
+  Payload = NativeWatchEventPayloads[E]
+>(event: E, cb: (payload: Payload) => void) {
+  // Type the event name
+  if (!event) {
+    throw new Error('Must pass event');
+  }
+  const sub = watchEmitter.once(
+    event,
+    cb,
+    undefined as any, // The typings are incorrect - context is not required
+  );
+  return () => sub.remove();
+}

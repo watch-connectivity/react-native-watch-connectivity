@@ -7,9 +7,8 @@ import * as faker from 'faker';
 import {
   getApplicationContext,
   sendMessage,
-  subscribeToApplicationContext,
-  subscribeToMessages,
   updateApplicationContext,
+  watchEvents,
 } from 'react-native-watch-connectivity';
 
 export class ApplicationContextTests extends IntegrationTest {
@@ -45,7 +44,8 @@ export class ApplicationContextTests extends IntegrationTest {
         a: faker.lorem.words(2),
       };
 
-      const unsubscribe = subscribeToApplicationContext(
+      const unsubscribe = watchEvents.addListener(
+        'application-context',
         (applicationContextFromEvent) => {
           log(
             'received application context from watch event: ' +
@@ -88,7 +88,7 @@ export class ApplicationContextTests extends IntegrationTest {
     log: TestLogFn,
   ) => {
     return new Promise((resolve, reject) => {
-      const unsubscribe = subscribeToMessages((payload) => {
+      const unsubscribe = watchEvents.addListener('message', (payload) => {
         if (payload) {
           log('Received message: ' + JSON.stringify(payload));
         }
