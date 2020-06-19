@@ -5,6 +5,8 @@ import {ApplicationContextTests} from './application-context-tests';
 import {WatchStateIntegrationTest} from './watch-state-tests';
 import {MessageDataIntegrationTest} from './message-data-tests';
 import {FileIntegrationTest} from './file-tests';
+import {PairedTests} from './paired-tests';
+import {InstalledTests} from './installed-tests';
 
 export type TestFn = (log: (str: string) => void) => Promise<void>;
 
@@ -29,6 +31,8 @@ const tests = [
   new ReachabilityIntegrationTest(),
   new ApplicationContextTests(),
   new WatchStateIntegrationTest(),
+  new PairedTests(),
+  new InstalledTests(),
 ];
 
 export default tests;

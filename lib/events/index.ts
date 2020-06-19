@@ -58,9 +58,12 @@ function addListener(
   callback: WatchEventCallbacks['reachability'],
 ): UnsubscribeFn;
 
-function addListener(
+function addListener<
+  P extends WatchPayload = WatchPayload,
+  P2 extends WatchPayload = WatchPayload
+>(
   event: WatchEvent,
-  cb: WatchEventCallbacks[typeof event],
+  cb: WatchEventCallbacks<P, P2>[typeof event],
 ): UnsubscribeFn {
   // FIXME: Some weird quirk of TypeScript means that the definition of cb needs
   // ... to be cast again in each branch of the switch statement. Why!?
