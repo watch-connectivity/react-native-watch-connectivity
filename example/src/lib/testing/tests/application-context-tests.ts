@@ -44,35 +44,28 @@ export class ApplicationContextTests extends IntegrationTest {
         a: faker.lorem.words(2),
       };
 
-      const unsubscribe = watchEvents.addListener(
-        'application-context',
-        (applicationContextFromEvent) => {
-          log(
-            'received application context from watch event: ' +
-              JSON.stringify(applicationContextFromEvent),
-          );
-          unsubscribe();
-          assert(
-            isEqual(applicationContextFromEvent, expectedApplicationContext),
-          );
-          getApplicationContext()
-            .then((applicationContextFromGetter) => {
-              log(
-                'received application context from getApplicationContext: ' +
-                  JSON.stringify(applicationContextFromGetter),
-              );
-              assert(
-                isEqual(
-                  applicationContextFromGetter,
-                  expectedApplicationContext,
-                ),
-              );
-              resolve();
-            })
-            .catch(reject);
-          resolve();
-        },
-      );
+      watchEvents.once('application-context', (applicationContextFromEvent) => {
+        log(
+          'received application context from watch event: ' +
+            JSON.stringify(applicationContextFromEvent),
+        );
+        assert(
+          isEqual(applicationContextFromEvent, expectedApplicationContext),
+        );
+        getApplicationContext()
+          .then((applicationContextFromGetter) => {
+            log(
+              'received application context from getApplicationContext: ' +
+                JSON.stringify(applicationContextFromGetter),
+            );
+            assert(
+              isEqual(applicationContextFromGetter, expectedApplicationContext),
+            );
+            resolve();
+          })
+          .catch(reject);
+        resolve();
+      });
 
       sendMessage({
         test: true,

@@ -35,7 +35,7 @@ export class InstalledTests extends IntegrationTest {
     assert(!installed);
 
     await new Promise((resolve) => {
-      watchEvents.addListener('installed', (_installed) => {
+      watchEvents.once('installed', (_installed) => {
         if (_installed) {
           log('received installed event');
           resolve();

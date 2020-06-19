@@ -62,20 +62,16 @@ export class UserInfoIntegrationTest extends IntegrationTest {
             email: 'bob@example.com',
           };
 
-          const unsubscribe = watchEvents.addListener(
-            'user-info',
-            ({userInfo: userInfoFromEvent}) => {
-              log(
-                'received user info from watch event: ' +
-                  JSON.stringify(userInfoFromEvent),
-              );
-              unsubscribe();
-              if (!isEqual(userInfoFromEvent, expectedUserInfo)) {
-                reject(new Error('User info did not match'));
-              }
-              resolve();
-            },
-          );
+          watchEvents.once('user-info', ({userInfo: userInfoFromEvent}) => {
+            log(
+              'received user info from watch event: ' +
+                JSON.stringify(userInfoFromEvent),
+            );
+            if (!isEqual(userInfoFromEvent, expectedUserInfo)) {
+              reject(new Error('User info did not match'));
+            }
+            resolve();
+          });
 
           sendMessage({test: true, text: 'send me some user info'});
           log('requested user info from watch');

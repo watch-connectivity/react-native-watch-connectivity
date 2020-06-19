@@ -1,4 +1,3 @@
-import {WatchPayload} from '../native-module';
 import {WatchEvent, WatchEventCallbacks} from './definitions';
 import {
   _subscribeNativeApplicationContextEvent,
@@ -9,103 +8,66 @@ import {
   _subscribeToNativePairedEvent,
   _subscribeToNativeReachabilityEvent,
   _subscribeToNativeSessionStateEvent,
+  AddListenerFn,
 } from './native-subscriptions';
+import {_addListener, _once, WatchPayload} from '../native-module';
 
 type UnsubscribeFn = () => void;
 
-// TODO: Be nice to be able to get rid of these overloads...
-
-function addListener(
-  eventName: 'file',
-  callback: WatchEventCallbacks['file'],
-): UnsubscribeFn;
-
-function addListener<P extends WatchPayload = WatchPayload>(
-  eventName: 'application-context',
-  callback: WatchEventCallbacks<P>['application-context'],
-): UnsubscribeFn;
-
-function addListener<P extends WatchPayload = WatchPayload>(
-  eventName: 'user-info',
-  callback: WatchEventCallbacks<P>['user-info'],
-): UnsubscribeFn;
-
-function addListener<
-  P extends WatchPayload = WatchPayload,
-  P2 extends WatchPayload = WatchPayload
+function listen<
+  P extends WatchPayload,
+  P2 extends WatchPayload,
+  E extends WatchEvent
 >(
-  eventName: 'message',
-  callback: WatchEventCallbacks<P, P2>['message'],
-): UnsubscribeFn;
-
-function addListener(
-  eventName: 'session-state',
-  callback: WatchEventCallbacks['session-state'],
-): UnsubscribeFn;
-
-function addListener(
-  eventName: 'paired',
-  callback: WatchEventCallbacks['paired'],
-): UnsubscribeFn;
-
-function addListener(
-  eventName: 'installed',
-  callback: WatchEventCallbacks['installed'],
-): UnsubscribeFn;
-
-function addListener(
-  eventName: 'reachability',
-  callback: WatchEventCallbacks['reachability'],
-): UnsubscribeFn;
-
-function addListener<
-  P extends WatchPayload = WatchPayload,
-  P2 extends WatchPayload = WatchPayload
->(
-  event: WatchEvent,
-  cb: WatchEventCallbacks<P, P2>[typeof event],
+  event: E,
+  cb: WatchEventCallbacks<P, P2>[E],
+  listener?: AddListenerFn,
 ): UnsubscribeFn {
-  // FIXME: Some weird quirk of TypeScript means that the definition of cb needs
-  // ... to be cast again in each branch of the switch statement. Why!?
+  // FIXME: Some weird quirk of TypeScript means that cb is the union of all watch event callbacks
+  // ... and therefore needs to be cast to any
+  const _cb = cb as any;
 
   switch (event) {
     case 'reachability':
-      return _subscribeToNativeReachabilityEvent(
-        cb as WatchEventCallbacks[typeof event],
-      );
+      return _subscribeToNativeReachabilityEvent(_cb, listener);
     case 'file':
-      return _subscribeNativeFileEvents(
-        cb as WatchEventCallbacks[typeof event],
-      );
+      return _subscribeNativeFileEvents(_cb, listener);
     case 'application-context':
-      return _subscribeNativeApplicationContextEvent(
-        cb as WatchEventCallbacks[typeof event],
-      );
+      return _subscribeNativeApplicationContextEvent(_cb, listener);
     case 'user-info':
-      return _subscribeNativeUserInfoEvent(
-        cb as WatchEventCallbacks[typeof event],
-      );
+      return _subscribeNativeUserInfoEvent(_cb, listener);
     case 'message':
-      return _subscribeNativeMessageEvent(
-        cb as WatchEventCallbacks[typeof event],
-      );
+      return _subscribeNativeMessageEvent(_cb, listener);
     case 'session-state':
-      return _subscribeToNativeSessionStateEvent(
-        cb as WatchEventCallbacks[typeof event],
-      );
+      return _subscribeToNativeSessionStateEvent(_cb, listener);
     case 'paired':
-      return _subscribeToNativePairedEvent(
-        cb as WatchEventCallbacks[typeof event],
-      );
+      return _subscribeToNativePairedEvent(_cb, listener);
     case 'installed':
-      return _subscribeToNativeInstalledEvent(
-        cb as WatchEventCallbacks[typeof event],
-      );
+      return _subscribeToNativeInstalledEvent(_cb, listener);
+    default:
+      throw new Error(`Unknown watch event "${event}"`);
   }
+}
+
+function addListener<
+  P extends WatchPayload,
+  P2 extends WatchPayload,
+  E extends WatchEvent
+>(event: E, cb: WatchEventCallbacks<P, P2>[E]): UnsubscribeFn {
+  return listen(event, cb, _addListener);
+}
+
+function once<
+  P extends WatchPayload,
+  P2 extends WatchPayload,
+  E extends WatchEvent
+>(event: E, cb: WatchEventCallbacks<P, P2>[E]): UnsubscribeFn {
+  return listen(event, cb, _once);
 }
 
 const watchEventEmitter = {
   addListener,
+  once,
 };
 
 export default watchEventEmitter;

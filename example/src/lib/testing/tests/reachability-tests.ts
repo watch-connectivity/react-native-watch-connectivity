@@ -36,15 +36,11 @@ export class ReachabilityIntegrationTest extends IntegrationTest {
       log(
         'waiting for watch to become reachable... you should open the watch app',
       );
-      const unsubscribe = watchEvents.addListener(
-        'reachability',
-        (reachable1) => {
-          if (reachable1) {
-            unsubscribe();
-            resolve();
-          }
-        },
-      );
+      watchEvents.once('reachability', (reachable1) => {
+        if (reachable1) {
+          resolve();
+        }
+      });
     });
   };
 
@@ -57,15 +53,11 @@ export class ReachabilityIntegrationTest extends IntegrationTest {
       log(
         'waiting for watch to become unreachable... you should close the watch app',
       );
-      const unsubscribe = watchEvents.addListener(
-        'reachability',
-        (reachable1) => {
-          if (!reachable1) {
-            unsubscribe();
-            resolve();
-          }
-        },
-      );
+      watchEvents.once('reachability', (reachable1) => {
+        if (!reachable1) {
+          resolve();
+        }
+      });
     });
   };
 }

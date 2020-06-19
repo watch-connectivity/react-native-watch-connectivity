@@ -178,10 +178,13 @@ export function _once<
   if (!event) {
     throw new Error('Must pass event');
   }
-  const sub = watchEmitter.once(
-    event,
-    cb,
-    undefined as any, // The typings are incorrect - context is not required
-  );
+
+  // TODO: Investigate NativeEventEmitter.once issues...
+  // ... can randomly throw an error: "Invariant Violation: Not in an emitting cycle; there is no current subscription"
+  const sub = watchEmitter.addListener(event, (payload) => {
+    sub.remove();
+    cb(payload);
+  });
+
   return () => sub.remove();
 }

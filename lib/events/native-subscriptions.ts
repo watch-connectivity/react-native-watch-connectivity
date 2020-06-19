@@ -11,26 +11,27 @@ import {
   WCWatchState,
 } from '../native-module';
 
+export type AddListenerFn = typeof _addListener;
+
 /**
  * Hook up to native file events
  */
-export function _subscribeNativeFileEvents(cb: WatchEventCallbacks['file']) {
+export function _subscribeNativeFileEvents(
+  cb: WatchEventCallbacks['file'],
+  addListener: AddListenerFn = _addListener,
+) {
   const subscriptions = [
-    _addListener(
-      NativeWatchEvent.EVENT_FILE_TRANSFER_ERROR,
-      (payload) => cb({type: FileTransferEvent.ERROR, ...payload}),
+    addListener(NativeWatchEvent.EVENT_FILE_TRANSFER_ERROR, (payload) =>
+      cb({type: FileTransferEvent.ERROR, ...payload}),
     ),
-    _addListener(
-      NativeWatchEvent.EVENT_FILE_TRANSFER_FINISHED,
-      (payload) => cb({type: FileTransferEvent.FINISHED, ...payload}),
+    addListener(NativeWatchEvent.EVENT_FILE_TRANSFER_FINISHED, (payload) =>
+      cb({type: FileTransferEvent.FINISHED, ...payload}),
     ),
-    _addListener(
-      NativeWatchEvent.EVENT_FILE_TRANSFER_STARTED,
-      (payload) => cb({type: FileTransferEvent.STARTED, ...payload}),
+    addListener(NativeWatchEvent.EVENT_FILE_TRANSFER_STARTED, (payload) =>
+      cb({type: FileTransferEvent.STARTED, ...payload}),
     ),
-    _addListener(
-      NativeWatchEvent.EVENT_FILE_TRANSFER_PROGRESS,
-      (payload) => cb({type: FileTransferEvent.PROGRESS, ...payload}),
+    addListener(NativeWatchEvent.EVENT_FILE_TRANSFER_PROGRESS, (payload) =>
+      cb({type: FileTransferEvent.PROGRESS, ...payload}),
     ),
   ];
 
@@ -43,8 +44,11 @@ export function _subscribeNativeFileEvents(cb: WatchEventCallbacks['file']) {
 export function _subscribeNativeMessageEvent<
   MessageToWatch extends WatchPayload = WatchPayload,
   MessageFromWatch extends WatchPayload = WatchPayload
->(cb: WatchEventCallbacks<MessageToWatch, MessageFromWatch>['message']) {
-  return _addListener<
+>(
+  cb: WatchEventCallbacks<MessageToWatch, MessageFromWatch>['message'],
+  addListener: AddListenerFn = _addListener,
+) {
+  return addListener<
     NativeWatchEvent.EVENT_RECEIVE_MESSAGE,
     MessageFromWatch & {id?: string}
   >(NativeWatchEvent.EVENT_RECEIVE_MESSAGE, (payload) => {
@@ -61,20 +65,16 @@ export function _subscribeNativeMessageEvent<
 
 export function _subscribeNativeUserInfoEvent(
   cb: WatchEventCallbacks['user-info'],
+  addListener: AddListenerFn = _addListener,
 ) {
-  return _addListener(
-    NativeWatchEvent.EVENT_WATCH_USER_INFO_RECEIVED,
-    cb,
-  );
+  return addListener(NativeWatchEvent.EVENT_WATCH_USER_INFO_RECEIVED, cb);
 }
 
 export function _subscribeNativeApplicationContextEvent(
   cb: WatchEventCallbacks['application-context'],
+  addListener: AddListenerFn = _addListener,
 ) {
-  return _addListener(
-    NativeWatchEvent.EVENT_APPLICATION_CONTEXT_RECEIVED,
-    cb,
-  );
+  return addListener(NativeWatchEvent.EVENT_APPLICATION_CONTEXT_RECEIVED, cb);
 }
 
 export enum WatchState {
@@ -91,19 +91,19 @@ const _WatchState: Record<WCWatchState, WatchState> = {
 
 export function _subscribeToNativeSessionStateEvent(
   cb: WatchEventCallbacks['session-state'],
+  addListener: AddListenerFn = _addListener,
 ) {
   // noinspection JSIgnoredPromiseFromCall
-  return _addListener(
-    NativeWatchEvent.EVENT_WATCH_STATE_CHANGED,
-    (payload) => cb(_WatchState[payload.state]),
+  return addListener(NativeWatchEvent.EVENT_WATCH_STATE_CHANGED, (payload) =>
+    cb(_WatchState[payload.state]),
   );
 }
 
 export function _subscribeToNativeReachabilityEvent(
   cb: WatchEventCallbacks['reachability'],
+  addListener: AddListenerFn = _addListener,
 ) {
-  // noinspection JSIgnoredPromiseFromCall
-  return _addListener(
+  return addListener(
     NativeWatchEvent.EVENT_WATCH_REACHABILITY_CHANGED,
     ({reachability}) => cb(reachability),
   );
@@ -111,19 +111,18 @@ export function _subscribeToNativeReachabilityEvent(
 
 export function _subscribeToNativePairedEvent(
   cb: WatchEventCallbacks['paired'],
+  addListener: AddListenerFn = _addListener,
 ) {
-  return _addListener(
-    NativeWatchEvent.EVENT_PAIR_STATUS_CHANGED,
-    ({paired}) => {
-      cb(paired);
-    },
-  );
+  return addListener(NativeWatchEvent.EVENT_PAIR_STATUS_CHANGED, ({paired}) => {
+    cb(paired);
+  });
 }
 
 export function _subscribeToNativeInstalledEvent(
   cb: WatchEventCallbacks['installed'],
+  addListener: AddListenerFn = _addListener,
 ) {
-  return _addListener(
+  return addListener(
     NativeWatchEvent.EVENT_INSTALL_STATUS_CHANGED,
     ({installed}) => {
       cb(installed);
