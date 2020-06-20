@@ -33,14 +33,14 @@ export class FileIntegrationTest extends IntegrationTest {
         'file',
         (event) => {
           log('transfer event: ' + JSON.stringify(event));
-          if (event.type === 'started') {
+          if (event.status === 'started') {
             didReceiveStartEvent = true;
           } else if (
-            event.type === 'progress' &&
+            event.status === 'progress' &&
             event.fractionCompleted === 1
           ) {
             didReceiveFinalProgressEvent = true;
-          } else if (event.type === 'finished') {
+          } else if (event.status === 'finished') {
             didReceiveSuccessEvent = true;
           }
 

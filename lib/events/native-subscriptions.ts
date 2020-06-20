@@ -22,16 +22,16 @@ export function _subscribeNativeFileEvents(
 ) {
   const subscriptions = [
     addListener(NativeWatchEvent.EVENT_FILE_TRANSFER_ERROR, (payload) =>
-      cb({type: FileTransferEvent.ERROR, ...payload}),
+      cb({status: FileTransferEvent.ERROR, ...payload}),
     ),
     addListener(NativeWatchEvent.EVENT_FILE_TRANSFER_FINISHED, (payload) =>
-      cb({type: FileTransferEvent.FINISHED, ...payload}),
+      cb({status: FileTransferEvent.FINISHED, ...payload}),
     ),
     addListener(NativeWatchEvent.EVENT_FILE_TRANSFER_STARTED, (payload) =>
-      cb({type: FileTransferEvent.STARTED, ...payload}),
+      cb({status: FileTransferEvent.STARTED, ...payload}),
     ),
     addListener(NativeWatchEvent.EVENT_FILE_TRANSFER_PROGRESS, (payload) =>
-      cb({type: FileTransferEvent.PROGRESS, ...payload}),
+      cb({status: FileTransferEvent.PROGRESS, ...payload}),
     ),
   ];
 

@@ -19,16 +19,16 @@ export enum FileTransferEvent {
 
 export type FileEvent =
   | ({
-      type: FileTransferEvent.FINISHED;
+      status: FileTransferEvent.FINISHED;
     } & NativeWatchEventPayloads[NativeWatchEvent.EVENT_FILE_TRANSFER_FINISHED])
   | ({
-      type: FileTransferEvent.ERROR;
+      status: FileTransferEvent.ERROR;
     } & NativeWatchEventPayloads[NativeWatchEvent.EVENT_FILE_TRANSFER_ERROR])
   | ({
-      type: FileTransferEvent.STARTED;
+      status: FileTransferEvent.STARTED;
     } & NativeWatchEventPayloads[NativeWatchEvent.EVENT_FILE_TRANSFER_STARTED])
   | ({
-      type: FileTransferEvent.PROGRESS;
+      status: FileTransferEvent.PROGRESS;
     } & NativeWatchEventPayloads[NativeWatchEvent.EVENT_FILE_TRANSFER_PROGRESS]);
 export type WatchMessageCallback<
   MessageToWatch = WatchPayload,
