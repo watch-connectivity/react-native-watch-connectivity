@@ -313,9 +313,11 @@ RCT_EXPORT_METHOD(transferFile:
 
     [self observeTransferProgress:transfer];
 
-    NSDictionary *eventBody = [self getProgressPayload:transfer];
+    NSMutableDictionary *eventBody = [self getProgressPayload:transfer];
 
-    [self dispatchEventWithName:EVENT_FILE_TRANSFER_STARTED body:eventBody];
+    eventBody[@"type"] = @"started";
+
+    [self dispatchEventWithName:EVENT_FILE_TRANSFER body:eventBody];
 
     callback(@[uuid]);
 }
@@ -342,7 +344,7 @@ RCT_EXPORT_METHOD(getFileTransfers:
     callback(@[payload]);
 }
 
-- (NSDictionary *)getProgressPayload:(WCSessionFileTransfer *)transfer {
+- (NSMutableDictionary *)getProgressPayload:(WCSessionFileTransfer *)transfer {
     NSString *uuid = transfer.file.metadata[@"id"];
 
     NSDictionary *transferInfo = self.fileTransfers[uuid];
@@ -357,7 +359,7 @@ RCT_EXPORT_METHOD(getFileTransfers:
 
     NSNumber *_Nonnull totalUnitCount = @(transfer.progress.totalUnitCount);
 
-    NSDictionary *body = @{
+    NSMutableDictionary *body = [@{
             @"bytesTransferred": completedUnitCount,
             @"estimatedTimeRemaining": estimatedTimeRemaining == nil ? [NSNull null] : estimatedTimeRemaining,
             @"id": uuid,
@@ -369,15 +371,17 @@ RCT_EXPORT_METHOD(getFileTransfers:
             @"metadata": transferInfo[@"metadata"],
             @"startTime": transferInfo[@"startTime"],
             @"endTime": transferInfo[@"endTime"]
-    };
+    } mutableCopy];
+
     return body;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey, id> *)change context:(void *)context {
     if ([keyPath hasPrefix:@"progress"]) {
         WCSessionFileTransfer *transfer = object;
-        NSDictionary *body = [self getProgressPayload:transfer];
-        [self dispatchEventWithName:EVENT_FILE_TRANSFER_PROGRESS body:body];
+        NSMutableDictionary *body = [self getProgressPayload:transfer];
+        body[@"type"] = @"progress";
+        [self dispatchEventWithName:EVENT_FILE_TRANSFER body:body];
     } else if ([keyPath isEqualToString:@"paired"]) {
         [self dispatchEventWithName:EVENT_PAIR_STATUS_CHANGED body:@{@"paired": change[NSKeyValueChangeNewKey]}];
     } else if ([keyPath isEqualToString:@"watchAppInstalled"]) {
@@ -406,11 +410,13 @@ didFinishFileTransfer:(WCSessionFileTransfer *)fileTransfer
         if (transferInfo) {
             if (error) {
                 transferInfo[@"error"] = error;
-                NSDictionary *payload = [self getProgressPayload:fileTransfer];
-                [self dispatchEventWithName:EVENT_FILE_TRANSFER_ERROR body:payload];
+                NSMutableDictionary *payload = [self getProgressPayload:fileTransfer];
+                payload[@"type"] = @"error";
+                [self dispatchEventWithName:EVENT_FILE_TRANSFER body:payload];
             } else {
-                NSDictionary *payload = [self getProgressPayload:fileTransfer];
-                [self dispatchEventWithName:EVENT_FILE_TRANSFER_FINISHED body:payload];
+                NSMutableDictionary *payload = [self getProgressPayload:fileTransfer];
+                payload[@"type"] = @"finished";
+                [self dispatchEventWithName:EVENT_FILE_TRANSFER body:payload];
             }
 
             WCSessionFileTransfer *transfer = transferInfo[@"transfer"];

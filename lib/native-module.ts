@@ -126,7 +126,7 @@ if (!__mod) {
 }
 
 export const NativeModule: IRNWatchNativeModule = __mod;
-export const watchEmitter = new NativeEventEmitter(NativeModule);
+export const nativeWatchEventEmitter = new NativeEventEmitter(NativeModule);
 
 export enum NativeWatchEvent {
   EVENT_FILE_TRANSFER = 'WatchFileTransfer',
@@ -171,7 +171,7 @@ export function _addListener<
   if (!event) {
     throw new Error('Must pass event');
   }
-  const sub = watchEmitter.addListener(event, cb);
+  const sub = nativeWatchEventEmitter.addListener(event, cb);
   return () => sub.remove();
 }
 
@@ -186,7 +186,7 @@ export function _once<
 
   // TODO: Investigate NativeEventEmitter.once issues...
   // ... can randomly throw an error: "Invariant Violation: Not in an emitting cycle; there is no current subscription"
-  const sub = watchEmitter.addListener(event, (payload) => {
+  const sub = nativeWatchEventEmitter.addListener(event, (payload) => {
     sub.remove();
     cb(payload);
   });

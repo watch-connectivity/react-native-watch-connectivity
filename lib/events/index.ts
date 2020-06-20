@@ -50,17 +50,17 @@ function listen<
 }
 
 function addListener<
-  P extends WatchPayload,
-  P2 extends WatchPayload,
-  E extends WatchEvent
+  P extends WatchPayload = WatchPayload,
+  P2 extends WatchPayload = WatchPayload,
+  E extends WatchEvent = any
 >(event: E, cb: WatchEventCallbacks<P, P2>[E]): UnsubscribeFn {
   return listen(event, cb, _addListener);
 }
 
 function once<
-  P extends WatchPayload,
-  P2 extends WatchPayload,
-  E extends WatchEvent
+  P extends WatchPayload = WatchPayload,
+  P2 extends WatchPayload = WatchPayload,
+  E extends WatchEvent = any
 >(event: E, cb: WatchEventCallbacks<P, P2>[E]): UnsubscribeFn {
   return listen(event, cb, _once);
 }
