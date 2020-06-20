@@ -3,27 +3,9 @@ import {
   NativeModule,
   UserInfoQueue,
   QueuedUserInfo,
-  _addListener,
-  NativeWatchEvent,
 } from './native-module';
 import sortBy from 'lodash.sortby';
-
-type UserInfoSubscription<UserInfo extends WatchPayload = WatchPayload> = (
-  queuedUserInfo: QueuedUserInfo<UserInfo>,
-) => void;
-
-/**
- * @deprecated Use addListener('user-info', event => {}) instead
- */
-export function subscribeToUserInfo<
-  UserInfo extends WatchPayload = WatchPayload
->(cb: UserInfoSubscription<UserInfo>) {
-  // noinspection JSIgnoredPromiseFromCall
-  return _addListener<
-    NativeWatchEvent.EVENT_WATCH_USER_INFO_RECEIVED,
-    QueuedUserInfo<UserInfo>
-  >(NativeWatchEvent.EVENT_WATCH_USER_INFO_RECEIVED, cb);
-}
+import watchEvents from './events';
 
 export function transferCurrentComplicationUserInfo<
   UserInfo extends WatchPayload = WatchPayload
@@ -113,8 +95,9 @@ export function consumeUserInfo<UserInfo extends WatchPayload = WatchPayload>(
     }
   }
 
-  const cancelSubscription = subscribeToUserInfo<UserInfo>(
-    ({userInfo, id, timestamp}) => {
+  const cancelSubscription = watchEvents.addListener<UserInfo>(
+    'user-info',
+    ({userInfo, timestamp, id}) => {
       const promise =
         consumer(userInfo, new Date(timestamp)) || Promise.resolve();
 

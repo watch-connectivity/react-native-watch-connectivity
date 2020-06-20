@@ -24,14 +24,14 @@ export type WatchMessageCallback<
 ) => void;
 
 export interface WatchEventCallbacks<
-  P1 extends WatchPayload = WatchPayload,
+  P extends WatchPayload = WatchPayload,
   P2 extends WatchPayload = WatchPayload
 > {
   file: (event: FileTransferEvent) => void;
-  'application-context': (payload: P1) => void;
-  'user-info': (payload: QueuedUserInfo<P1>) => void;
+  'application-context': (payload: P) => void;
+  'user-info': (payload: QueuedUserInfo<P>) => void;
   reachability: (reachable: boolean) => void;
-  message: WatchMessageCallback<P1, P2>;
+  message: WatchMessageCallback<P, P2>;
   'session-state': (state: SessionActivationState) => void;
   paired: (paired: boolean) => void;
   installed: (installed: boolean) => void;

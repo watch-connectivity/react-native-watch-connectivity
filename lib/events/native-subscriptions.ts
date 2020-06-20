@@ -51,8 +51,10 @@ export function _subscribeNativeMessageEvent<
   });
 }
 
-export function _subscribeNativeUserInfoEvent(
-  cb: WatchEventCallbacks['user-info'],
+export function _subscribeNativeUserInfoEvent<
+  UserInfo extends WatchPayload = WatchPayload
+>(
+  cb: WatchEventCallbacks<UserInfo>['user-info'],
   addListener: AddListenerFn = _addListener,
 ) {
   return addListener(NativeWatchEvent.EVENT_WATCH_USER_INFO_RECEIVED, cb);

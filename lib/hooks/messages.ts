@@ -8,7 +8,7 @@ export function useMessageListener<
   MessageToWatch extends WatchPayload = WatchPayload
 >(cb: WatchMessageListener<MessageFromWatch, MessageToWatch>) {
   useEffect(() => {
-    watchEvents.addListener<MessageFromWatch, MessageToWatch, any>(
+    watchEvents.addListener<MessageFromWatch, MessageToWatch>(
       'message',
       cb,
     );

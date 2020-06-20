@@ -14,54 +14,120 @@ import {_addListener, _once, WatchPayload} from '../native-module';
 
 type UnsubscribeFn = () => void;
 
-function listen<
-  P extends WatchPayload,
-  P2 extends WatchPayload,
-  E extends WatchEvent
->(
-  event: E,
-  cb: WatchEventCallbacks<P, P2>[E],
+function listen(
+  event: WatchEvent,
+  cb: any,
   listener?: AddListenerFn,
 ): UnsubscribeFn {
-  // FIXME: Some weird quirk of TypeScript means that cb is the union of all watch event callbacks
-  // ... and therefore needs to be cast to any
-  const _cb = cb as any;
-
   switch (event) {
     case 'reachability':
-      return _subscribeToNativeReachabilityEvent(_cb, listener);
+      return _subscribeToNativeReachabilityEvent(cb, listener);
     case 'file':
-      return _subscribeNativeFileEvents(_cb, listener);
+      return _subscribeNativeFileEvents(cb, listener);
     case 'application-context':
-      return _subscribeNativeApplicationContextEvent(_cb, listener);
+      return _subscribeNativeApplicationContextEvent(cb, listener);
     case 'user-info':
-      return _subscribeNativeUserInfoEvent(_cb, listener);
+      return _subscribeNativeUserInfoEvent(cb, listener);
     case 'message':
-      return _subscribeNativeMessageEvent(_cb, listener);
+      return _subscribeNativeMessageEvent(cb, listener);
     case 'session-state':
-      return _subscribeToNativeSessionStateEvent(_cb, listener);
+      return _subscribeToNativeSessionStateEvent(cb, listener);
     case 'paired':
-      return _subscribeToNativePairedEvent(_cb, listener);
+      return _subscribeToNativePairedEvent(cb, listener);
     case 'installed':
-      return _subscribeToNativeInstalledEvent(_cb, listener);
+      return _subscribeToNativeInstalledEvent(cb, listener);
     default:
       throw new Error(`Unknown watch event "${event}"`);
   }
 }
 
+// TODO: If anyone is aware of better way of handling overloaded functions in TypeScript, I would love to know.
+
+function addListener(
+  event: 'reachability',
+  cb: WatchEventCallbacks['reachability'],
+): UnsubscribeFn;
+
+function addListener(
+  event: 'file',
+  cb: WatchEventCallbacks['file'],
+): UnsubscribeFn;
+
+function addListener<Context extends WatchPayload = WatchPayload>(
+  event: 'application-context',
+  cb: WatchEventCallbacks<Context>['application-context'],
+): UnsubscribeFn;
+
+function addListener<UserInfo extends WatchPayload = WatchPayload>(
+  event: 'user-info',
+  cb: WatchEventCallbacks<UserInfo>['user-info'],
+): UnsubscribeFn;
+
 function addListener<
-  P extends WatchPayload = WatchPayload,
-  P2 extends WatchPayload = WatchPayload,
-  E extends WatchEvent = any
->(event: E, cb: WatchEventCallbacks<P, P2>[E]): UnsubscribeFn {
+  MessageFromWatch extends WatchPayload = WatchPayload,
+  ReplyMessage extends WatchPayload = WatchPayload
+>(
+  event: 'message',
+  cb: WatchEventCallbacks<MessageFromWatch, ReplyMessage>['message'],
+): UnsubscribeFn;
+
+function addListener(
+  event: 'session-state',
+  cb: WatchEventCallbacks['session-state'],
+): UnsubscribeFn;
+
+function addListener(
+  event: 'paired',
+  cb: WatchEventCallbacks['paired'],
+): UnsubscribeFn;
+
+function addListener(
+  event: 'installed',
+  cb: WatchEventCallbacks['installed'],
+): UnsubscribeFn;
+
+function addListener(event: WatchEvent, cb: any): UnsubscribeFn {
   return listen(event, cb, _addListener);
 }
 
+function once(
+  event: 'reachability',
+  cb: WatchEventCallbacks['reachability'],
+): UnsubscribeFn;
+
+function once(event: 'file', cb: WatchEventCallbacks['file']): UnsubscribeFn;
+
+function once<Context extends WatchPayload = WatchPayload>(
+  event: 'application-context',
+  cb: WatchEventCallbacks['application-context'],
+): UnsubscribeFn;
+
+function once<UserInfo extends WatchPayload = WatchPayload>(
+  event: 'user-info',
+  cb: WatchEventCallbacks['user-info'],
+): UnsubscribeFn;
+
 function once<
-  P extends WatchPayload = WatchPayload,
-  P2 extends WatchPayload = WatchPayload,
-  E extends WatchEvent = any
->(event: E, cb: WatchEventCallbacks<P, P2>[E]): UnsubscribeFn {
+  MessageFromWatch extends WatchPayload = WatchPayload,
+  ReplyMessage extends WatchPayload = WatchPayload
+>(event: 'message', cb: WatchEventCallbacks['message']): UnsubscribeFn;
+
+function once(
+  event: 'session-state',
+  cb: WatchEventCallbacks['session-state'],
+): UnsubscribeFn;
+
+function once(
+  event: 'paired',
+  cb: WatchEventCallbacks['paired'],
+): UnsubscribeFn;
+
+function once(
+  event: 'installed',
+  cb: WatchEventCallbacks['installed'],
+): UnsubscribeFn;
+
+function once(event: WatchEvent, cb: any): UnsubscribeFn {
   return listen(event, cb, _once);
 }
 
