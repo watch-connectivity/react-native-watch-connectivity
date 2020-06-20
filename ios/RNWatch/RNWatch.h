@@ -18,12 +18,14 @@
 
 @import WatchConnectivity;
 
+@class FileTransferInfo;
+
 @interface RNWatch : RCTEventEmitter <RCTBridgeModule, WCSessionDelegate>
 
 + (RNWatch*) sharedInstance;
 @property (nonatomic, strong) WCSession* session;
 @property (nonatomic, strong) NSCache* replyHandlers;
-@property (nonatomic, strong) NSMutableDictionary* fileTransfers;
+@property (nonatomic, strong) NSMutableDictionary<NSString*, FileTransferInfo*>* fileTransfers;
 @property (nonatomic, strong) NSMutableDictionary<NSString*, NSDictionary<NSString *,id> *>* userInfo;
 
 @end
