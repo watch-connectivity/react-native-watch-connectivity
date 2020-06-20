@@ -22,10 +22,7 @@
 #import "React/RCTEventDispatcher.h"
 #endif
 
-static NSString *EVENT_FILE_TRANSFER_ERROR = @"WatchFileTransferError";
-static NSString *EVENT_FILE_TRANSFER_FINISHED = @"WatchFileTransferFinished";
-static NSString *EVENT_FILE_TRANSFER_STARTED = @"WatchFileTransferStarted";
-static NSString *EVENT_FILE_TRANSFER_PROGRESS = @"WatchFileTransferProgress";
+static NSString *EVENT_FILE_TRANSFER = @"WatchFileTransfer";
 static NSString *EVENT_RECEIVE_MESSAGE = @"WatchReceiveMessage";
 static NSString *EVENT_RECEIVE_MESSAGE_DATA = @"WatchReceiveMessageData";
 static NSString *EVENT_WATCH_STATE_CHANGED = @"WatchStateChanged";
@@ -76,10 +73,7 @@ RCT_EXPORT_MODULE()
 
 - (NSArray<NSString *> *)supportedEvents {
     return @[
-      EVENT_FILE_TRANSFER_ERROR,
-      EVENT_FILE_TRANSFER_FINISHED,
-      EVENT_FILE_TRANSFER_PROGRESS,
-      EVENT_FILE_TRANSFER_STARTED,
+      EVENT_FILE_TRANSFER,
       EVENT_RECEIVE_MESSAGE,
       EVENT_RECEIVE_MESSAGE_DATA,
       EVENT_WATCH_STATE_CHANGED,
@@ -363,12 +357,12 @@ RCT_EXPORT_METHOD(getFileTransfers:
     NSNumber *_Nonnull totalUnitCount = @(transfer.progress.totalUnitCount);
 
     NSDictionary *body = @{
-            @"completedUnitCount": completedUnitCount,
+            @"bytesTransferred": completedUnitCount,
             @"estimatedTimeRemaining": estimatedTimeRemaining == nil ? [NSNull null] : estimatedTimeRemaining,
             @"id": uuid,
             @"fractionCompleted": fractionCompleted,
             @"throughput": throughput == nil ? [NSNull null] : throughput,
-            @"totalUnitCount": totalUnitCount,
+            @"bytesTotal": totalUnitCount,
             @"uri": transferInfo[@"uri"],
             @"error": transferInfo[@"error"],
             @"metadata": transferInfo[@"metadata"],

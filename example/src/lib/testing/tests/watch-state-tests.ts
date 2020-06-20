@@ -1,6 +1,6 @@
 import {IntegrationTest} from '../IntegrationTest';
 import {assert, TestLogFn} from './util';
-import {getWatchState, WatchState} from 'react-native-watch-connectivity';
+import {getSessionActivationState, SessionActivationState} from 'react-native-watch-connectivity';
 
 export class WatchStateIntegrationTest extends IntegrationTest {
   constructor() {
@@ -13,8 +13,8 @@ export class WatchStateIntegrationTest extends IntegrationTest {
   }
 
   async testWatchStateActive(log: TestLogFn) {
-    const state = await getWatchState();
+    const state = await getSessionActivationState();
     log('Checking initial watch state: ' + JSON.stringify(state));
-    assert(state === WatchState.Activated);
+    assert(state === SessionActivationState.Activated);
   }
 }

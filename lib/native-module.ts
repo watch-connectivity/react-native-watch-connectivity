@@ -33,19 +33,30 @@ export interface UserInfoQueue<UserInfo extends WatchPayload = WatchPayload> {
   [timestamp: string]: UserInfo;
 }
 
-export type FileTransferEventPayload = {
-  completedUnitCount: number;
+export interface NativeFileTransfer {
+  bytesTransferred: number;
   estimatedTimeRemaining: number | null;
   fractionCompleted: number;
   throughput: number | null;
-  totalUnitCount: number;
+  bytesTotal: number;
   uri: string;
   metadata: Record<string, unknown>;
   id: string;
   startTime: number;
   endTime: number | null;
   error: Error | null;
-};
+}
+
+export enum FileTransferEventType {
+  FINISHED = 'finished',
+  ERROR = 'error',
+  STARTED = 'started',
+  PROGRESS = 'progress',
+}
+
+export interface NativeFileTransferEvent extends NativeFileTransfer {
+  type: FileTransferEventType;
+}
 
 export interface IRNWatchNativeModule extends EventSubscriptionVendor {
   getSessionState: (cb: (state: WCWatchState) => void) => void;
@@ -94,7 +105,7 @@ export interface IRNWatchNativeModule extends EventSubscriptionVendor {
   ) => void;
 
   getFileTransfers: (
-    cb: (transfers: {[id: string]: FileTransferEventPayload}) => void,
+    cb: (transfers: {[id: string]: NativeFileTransfer}) => void,
   ) => void;
 
   updateApplicationContext: (context: WatchPayload) => void;
@@ -118,10 +129,7 @@ export const NativeModule: IRNWatchNativeModule = __mod;
 export const watchEmitter = new NativeEventEmitter(NativeModule);
 
 export enum NativeWatchEvent {
-  EVENT_FILE_TRANSFER_ERROR = 'WatchFileTransferError',
-  EVENT_FILE_TRANSFER_FINISHED = 'WatchFileTransferFinished',
-  EVENT_FILE_TRANSFER_PROGRESS = 'WatchFileTransferProgress',
-  EVENT_FILE_TRANSFER_STARTED = 'WatchFileTransferStarted',
+  EVENT_FILE_TRANSFER = 'WatchFileTransfer',
   EVENT_RECEIVE_MESSAGE = 'WatchReceiveMessage',
   EVENT_WATCH_STATE_CHANGED = 'WatchStateChanged',
   EVENT_WATCH_REACHABILITY_CHANGED = 'WatchReachabilityChanged',
@@ -132,10 +140,7 @@ export enum NativeWatchEvent {
 }
 
 export interface NativeWatchEventPayloads {
-  [NativeWatchEvent.EVENT_FILE_TRANSFER_ERROR]: FileTransferEventPayload;
-  [NativeWatchEvent.EVENT_FILE_TRANSFER_FINISHED]: FileTransferEventPayload;
-  [NativeWatchEvent.EVENT_FILE_TRANSFER_PROGRESS]: FileTransferEventPayload;
-  [NativeWatchEvent.EVENT_FILE_TRANSFER_STARTED]: FileTransferEventPayload;
+  [NativeWatchEvent.EVENT_FILE_TRANSFER]: NativeFileTransferEvent;
   [NativeWatchEvent.EVENT_RECEIVE_MESSAGE]: WatchPayload & {id?: string};
   [NativeWatchEvent.EVENT_WATCH_STATE_CHANGED]: {
     state:

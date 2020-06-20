@@ -16,7 +16,7 @@ import { KeyboardSpacer } from '../components/KeyboardSpacer';
 import { usePingPongEffect } from '../lib/hooks/use-ping-pong-effect';
 import Layout from '../components/Layout';
 import {
-  useReachability, useWatchState,
+  useReachability, useSessionActivationState,
   sendMessageData,
   sendMessage,
   startFileTransfer, ERROR_CODE_SESSION_UNREACHABLE,
@@ -30,7 +30,7 @@ export default function HomeScreen() {
   const [timeTakenToReply, setTimeTakenToReply] = useState<number | null>(null);
   const [useFileAPI, setUseFileAPI] = useState(true);
 
-  const watchState = useWatchState();
+  const watchState = useSessionActivationState();
   const reachable = useReachability();
 
   const pongs = usePingPongEffect();

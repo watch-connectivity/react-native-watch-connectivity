@@ -2,14 +2,15 @@
  * Hook up user-facing events to the native events, presenting a cleaner interface than
  * the raw events we receive from the native side
  */
-import {FileTransferEvent, WatchEventCallbacks} from './definitions';
+import {WatchEventCallbacks} from './definitions';
 import {
   _addListener,
   NativeModule,
   NativeWatchEvent,
   WatchPayload,
-  WCWatchState,
 } from '../native-module';
+import {_transformFilePayload} from '../files';
+import {_SessionActivationState} from '../session-activation-state';
 
 export type AddListenerFn = typeof _addListener;
 
@@ -20,22 +21,9 @@ export function _subscribeNativeFileEvents(
   cb: WatchEventCallbacks['file'],
   addListener: AddListenerFn = _addListener,
 ) {
-  const subscriptions = [
-    addListener(NativeWatchEvent.EVENT_FILE_TRANSFER_ERROR, (payload) =>
-      cb({status: FileTransferEvent.ERROR, ...payload}),
-    ),
-    addListener(NativeWatchEvent.EVENT_FILE_TRANSFER_FINISHED, (payload) =>
-      cb({status: FileTransferEvent.FINISHED, ...payload}),
-    ),
-    addListener(NativeWatchEvent.EVENT_FILE_TRANSFER_STARTED, (payload) =>
-      cb({status: FileTransferEvent.STARTED, ...payload}),
-    ),
-    addListener(NativeWatchEvent.EVENT_FILE_TRANSFER_PROGRESS, (payload) =>
-      cb({status: FileTransferEvent.PROGRESS, ...payload}),
-    ),
-  ];
-
-  return () => subscriptions.forEach((fn) => fn());
+  return addListener(NativeWatchEvent.EVENT_FILE_TRANSFER, (payload) =>
+    cb(_transformFilePayload(payload)),
+  );
 }
 
 /**
@@ -77,25 +65,13 @@ export function _subscribeNativeApplicationContextEvent(
   return addListener(NativeWatchEvent.EVENT_APPLICATION_CONTEXT_RECEIVED, cb);
 }
 
-export enum WatchState {
-  NotActivated = 'NotActivated',
-  Inactive = 'Inactive',
-  Activated = 'Activated',
-}
-
-const _WatchState: Record<WCWatchState, WatchState> = {
-  WCSessionActivationStateNotActivated: WatchState.NotActivated,
-  WCSessionActivationStateInactive: WatchState.Inactive,
-  WCSessionActivationStateActivated: WatchState.Activated,
-};
-
 export function _subscribeToNativeSessionStateEvent(
   cb: WatchEventCallbacks['session-state'],
   addListener: AddListenerFn = _addListener,
 ) {
   // noinspection JSIgnoredPromiseFromCall
   return addListener(NativeWatchEvent.EVENT_WATCH_STATE_CHANGED, (payload) =>
-    cb(_WatchState[payload.state]),
+    cb(_SessionActivationState[payload.state]),
   );
 }
 

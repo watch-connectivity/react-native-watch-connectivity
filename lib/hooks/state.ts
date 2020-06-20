@@ -1,13 +1,19 @@
-import {getWatchState, subscribeToWatchState, WatchState} from '../state';
+import {
+  getSessionActivationState,
+  SessionActivationState,
+} from '../session-activation-state';
 import {useEffect, useState} from 'react';
+import watchEvents from '../events';
 
-export function useWatchState() {
-  const [watchState, setWatchState] = useState(WatchState.NotActivated);
+export function useSessionActivationState() {
+  const [sessionActivationState, setSessionActivationState] = useState(
+    SessionActivationState.NotActivated,
+  );
 
   useEffect(() => {
-    getWatchState().then(setWatchState);
-    return subscribeToWatchState(setWatchState);
+    getSessionActivationState().then(setSessionActivationState);
+    watchEvents.addListener('session-state', setSessionActivationState);
   }, []);
 
-  return watchState;
+  return sessionActivationState;
 }

@@ -65,9 +65,9 @@ function once<
   return listen(event, cb, _once);
 }
 
-const watchEventEmitter = {
+const watchEvents = {
   addListener,
   once,
 };
 
-export default watchEventEmitter;
+export default watchEvents;

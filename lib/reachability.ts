@@ -1,8 +1,4 @@
-import {
-  _addListener,
-  NativeModule,
-  NativeWatchEvent,
-} from './native-module';
+import {_addListener, NativeModule, NativeWatchEvent} from './native-module';
 
 /**
  * @deprecated Use addListener('reachability', event => {}) instead

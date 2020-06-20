@@ -1,8 +1,9 @@
 export * from './messages';
 export * from './message-data';
-export * from './state';
+export * from './session-activation-state';
 export * from './reachability';
-export * from './files';
+export {startFileTransfer, getFileTransfers} from './files';
+export type {FileTransfer} from './files';
 export * from './user-info';
 export * from './application-context';
 export * from './hooks';
@@ -12,9 +13,10 @@ export type {
   QueuedUserInfo,
   WatchPayload,
   UserInfoQueue,
-  FileTransferEventPayload,
 } from './native-module';
 export * from './errors';
 
 export {default as watchEvents} from './events';
 export type {WatchEvent} from './events/definitions';
+export {getIsPaired} from './paired';
+export {getIsWatchAppInstalled} from './installed';

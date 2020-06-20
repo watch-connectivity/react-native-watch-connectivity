@@ -2,7 +2,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
 import {COLORS, ROW_MARGIN} from '../constants';
-import {WatchState} from '../../../lib';
+import {SessionActivationState} from '../../../lib';
 
 function MessageTimeText({
   timeTakenToReachWatch,
@@ -43,8 +43,8 @@ function FileTransferTimeText({
   return null;
 }
 
-function WatchStateText({watchState}: {watchState: WatchState}) {
-  const active = watchState === WatchState.Activated;
+function WatchStateText({watchState}: {watchState: SessionActivationState}) {
+  const active = watchState === SessionActivationState.Activated;
   const style = [
     styles.boldText,
     {color: active ? COLORS.green.normal : COLORS.orange},
@@ -60,7 +60,7 @@ export default function ReachabilityText({
   fileTransferTime,
   timeTakenToReply,
 }: {
-  watchState: WatchState;
+  watchState: SessionActivationState;
   useDataAPI: boolean;
   fileTransferTime: number | null;
   timeTakenToReply: number | null;

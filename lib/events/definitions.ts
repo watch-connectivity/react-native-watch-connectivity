@@ -3,33 +3,17 @@
  */
 
 import {
-  NativeWatchEvent,
-  NativeWatchEventPayloads,
+  FileTransferEventType,
   QueuedUserInfo,
   WatchPayload,
 } from '../native-module';
-import {WatchState} from '../state';
+import {SessionActivationState} from '../session-activation-state';
+import {FileTransfer} from '../files';
 
-export enum FileTransferEvent {
-  FINISHED = 'finished',
-  ERROR = 'error',
-  STARTED = 'started',
-  PROGRESS = 'progress',
+export interface FileTransferEvent extends FileTransfer {
+  type: FileTransferEventType;
 }
 
-export type FileEvent =
-  | ({
-      status: FileTransferEvent.FINISHED;
-    } & NativeWatchEventPayloads[NativeWatchEvent.EVENT_FILE_TRANSFER_FINISHED])
-  | ({
-      status: FileTransferEvent.ERROR;
-    } & NativeWatchEventPayloads[NativeWatchEvent.EVENT_FILE_TRANSFER_ERROR])
-  | ({
-      status: FileTransferEvent.STARTED;
-    } & NativeWatchEventPayloads[NativeWatchEvent.EVENT_FILE_TRANSFER_STARTED])
-  | ({
-      status: FileTransferEvent.PROGRESS;
-    } & NativeWatchEventPayloads[NativeWatchEvent.EVENT_FILE_TRANSFER_PROGRESS]);
 export type WatchMessageCallback<
   MessageToWatch = WatchPayload,
   MessageFromWatch = WatchPayload
@@ -43,12 +27,12 @@ export interface WatchEventCallbacks<
   P1 extends WatchPayload = WatchPayload,
   P2 extends WatchPayload = WatchPayload
 > {
-  file: (event: FileEvent) => void;
+  file: (event: FileTransferEvent) => void;
   'application-context': (payload: P1) => void;
   'user-info': (payload: QueuedUserInfo<P1>) => void;
   reachability: (reachable: boolean) => void;
   message: WatchMessageCallback<P1, P2>;
-  'session-state': (state: WatchState) => void;
+  'session-state': (state: SessionActivationState) => void;
   paired: (paired: boolean) => void;
   installed: (installed: boolean) => void;
 }

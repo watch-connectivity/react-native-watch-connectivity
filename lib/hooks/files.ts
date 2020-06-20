@@ -1,18 +1,17 @@
 import {useEffect, useState} from 'react';
-import {getFileTransfers} from '../files';
-import {FileTransferEventPayload} from '../native-module';
-import watchEventEmitter from '../events';
+import {FileTransfer, getFileTransfers} from '../files';
+import watchEvents from '../events';
 
 export function useFileTransfers() {
   const [fileTransfers, setFileTransfers] = useState<
-    FileTransferEventPayload[]
+    FileTransfer[]
   >([]);
   useEffect(() => {
     getFileTransfers().then((transfers) => {
       setFileTransfers(Object.values(transfers));
     });
 
-    return watchEventEmitter.addListener('file', () => {
+    return watchEvents.addListener('file', () => {
       getFileTransfers().then((transfers) => {
         setFileTransfers(Object.values(transfers));
       });

@@ -1,11 +1,23 @@
 import {
   FileTransferInfo,
-  FileTransferEventPayload,
+  NativeFileTransfer,
   NativeModule,
   WatchPayload,
 } from './native-module';
-import watchEventEmitter from './events';
-import {FileEvent} from './events/definitions';
+
+export interface FileTransfer {
+  bytesTransferred: number;
+  estimatedTimeRemaining: number | null;
+  fractionCompleted: number;
+  throughput: number | null;
+  bytesTotal: number;
+  uri: string;
+  metadata: Record<string, unknown>;
+  id: string;
+  startTime: Date;
+  endTime: Date | null;
+  error: Error | null;
+}
 
 export function startFileTransfer(
   uri: string,
@@ -16,17 +28,32 @@ export function startFileTransfer(
   });
 }
 
-export function getFileTransfers(): Promise<{
-  [id: string]: FileTransferEventPayload;
-}> {
-  return new Promise((resolve) => {
-    NativeModule.getFileTransfers(resolve);
-  });
+/**
+ * @private
+ */
+export function _transformFilePayload<
+  NFT extends NativeFileTransfer,
+  FT extends FileTransfer
+>({startTime, endTime, ...rest}: NFT): FT {
+  return ({
+    startTime: new Date(startTime),
+    endTime: endTime ? new Date(endTime) : null,
+    ...rest,
+  } as unknown) as FT;
 }
 
-/**
- * @deprecated Use addListener('files', event => {}) instead
- */
-export function monitorFileTransfers(cb: (event: FileEvent) => void) {
-  return watchEventEmitter.addListener('file', cb);
+export function getFileTransfers(): Promise<{
+  [id: string]: FileTransfer;
+}> {
+  const adapted: {[id: string]: FileTransfer} = {};
+
+  return new Promise((resolve) => {
+    NativeModule.getFileTransfers((transfers) => {
+      Object.values(transfers).forEach((t) => {
+        adapted[t.id] = _transformFilePayload(t);
+      });
+
+      resolve(adapted);
+    });
+  });
 }
