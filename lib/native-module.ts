@@ -101,7 +101,7 @@ export interface IRNWatchNativeModule extends EventSubscriptionVendor {
   transferFile: (
     url: string,
     metaData: WatchPayload | null,
-    cb: (info: FileTransferInfo) => void,
+    cb: (id: string) => void,
   ) => void;
 
   getFileTransfers: (

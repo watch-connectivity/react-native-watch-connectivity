@@ -1,31 +1,35 @@
-import { StatusBar, StyleSheet, TextInput, View } from 'react-native';
-import React, { useState } from 'react';
+import {StatusBar, StyleSheet, TextInput, View} from 'react-native';
+import React, {useState} from 'react';
 
 import Spinner from 'react-native-spinkit';
 
-import { pickImage } from '../lib/images';
-import { COLORS, ROW_MARGIN } from '../constants';
+import {pickImage} from '../lib/images';
+import {COLORS, ROW_MARGIN} from '../constants';
 
 import ReachabilityText from '../components/ReachabilityText';
 import WatchImage from '../components/WatchImage';
 import DualButton from '../components/DualButton';
 import LabeledSwitch from '../components/LabeledSwitch';
 
-import { configureAnimation } from '../lib/animation';
-import { KeyboardSpacer } from '../components/KeyboardSpacer';
-import { usePingPongEffect } from '../lib/hooks/use-ping-pong-effect';
+import {configureAnimation} from '../lib/animation';
+import {KeyboardSpacer} from '../components/KeyboardSpacer';
+import {usePingPongEffect} from '../lib/hooks/use-ping-pong-effect';
 import Layout from '../components/Layout';
 import {
-  useReachability, useSessionActivationState,
+  useReachability,
+  useSessionActivationState,
   sendMessageData,
   sendMessage,
-  startFileTransfer, ERROR_CODE_SESSION_UNREACHABLE,
+  startFileTransfer,
+  ERROR_CODE_SESSION_UNREACHABLE,
 } from 'react-native-watch-connectivity';
 
 export default function HomeScreen() {
   const [loading, setLoading] = useState(false);
   const [text, setText] = useState('');
-  const [timeTakenToReachWatch, setTimeTakenToReachWatch] = useState<number | null>(null);
+  const [timeTakenToReachWatch, setTimeTakenToReachWatch] = useState<
+    number | null
+  >(null);
   const [fileTransferTime, setFileTransferTime] = useState<number | null>(null);
   const [timeTakenToReply, setTimeTakenToReply] = useState<number | null>(null);
   const [useFileAPI, setUseFileAPI] = useState(true);
@@ -38,8 +42,8 @@ export default function HomeScreen() {
   return (
     <Layout>
       <View style={styles.container}>
-        <StatusBar barStyle="light-content"/>
-        <WatchImage pings={pongs}/>
+        <StatusBar barStyle="light-content" />
+        <WatchImage pings={pongs} />
         <View>
           <ReachabilityText
             watchState={watchState}
@@ -56,7 +60,7 @@ export default function HomeScreen() {
           onChangeText={setText}
           placeholder="Message"
         />
-        {loading && <Spinner type="Bounce" color={COLORS.orange} size={44}/>}
+        {loading && <Spinner type="Bounce" color={COLORS.orange} size={44} />}
         {!loading && (
           <View>
             <DualButton
@@ -68,8 +72,9 @@ export default function HomeScreen() {
                   configureAnimation();
                   setLoading(true);
 
-                  sendMessage<
-                    { elapsed: number; timestamp: number }>({ text, timestamp }, (resp) => {
+                  sendMessage<{elapsed: number; timestamp: number}>(
+                    {text, timestamp},
+                    (resp) => {
                       // FIXME: If no error ,resp should not be null
                       console.log('response received', resp);
                       configureAnimation();
@@ -79,10 +84,12 @@ export default function HomeScreen() {
                         new Date().getTime() - resp.timestamp,
                       );
 
-                    setLoading(false);
-                  }, err => {
-                      console.log('Send message error', err)
-                  })
+                      setLoading(false);
+                    },
+                    (err) => {
+                      console.log('Send message error', err);
+                    },
+                  );
                 }
               }}
               onImageButtonPress={() => {
@@ -144,7 +151,7 @@ export default function HomeScreen() {
             />
           </View>
         )}
-        <KeyboardSpacer/>
+        <KeyboardSpacer />
       </View>
     </Layout>
   );

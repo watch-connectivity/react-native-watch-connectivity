@@ -301,7 +301,8 @@ RCT_EXPORT_METHOD(transferFile:
 
     NSDictionary *transferInfo = [NSMutableDictionary dictionaryWithDictionary:@{
             @"transfer": transfer,
-            @"id": uuid, @"uri": url,
+            @"id": uuid,
+            @"uri": url,
             @"metadata": metaData,
             @"startTime": @(startTime),
             @"endTime": [NSNull null],
@@ -316,7 +317,7 @@ RCT_EXPORT_METHOD(transferFile:
 
     [self dispatchEventWithName:EVENT_FILE_TRANSFER_STARTED body:eventBody];
 
-    callback(@[eventBody]);
+    callback(@[uuid]);
 }
 
 - (void)observeTransferProgress:(WCSessionFileTransfer *)transfer {

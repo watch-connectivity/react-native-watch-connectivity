@@ -1,9 +1,4 @@
-import {
-  FileTransferInfo,
-  NativeFileTransfer,
-  NativeModule,
-  WatchPayload,
-} from './native-module';
+import {NativeFileTransfer, NativeModule, WatchPayload} from './native-module';
 
 export interface FileTransfer {
   bytesTransferred: number;
@@ -22,7 +17,7 @@ export interface FileTransfer {
 export function startFileTransfer(
   uri: string,
   metadata: WatchPayload = {},
-): Promise<FileTransferInfo> {
+): Promise<string> {
   return new Promise((resolve) => {
     NativeModule.transferFile(uri, metadata, resolve);
   });
