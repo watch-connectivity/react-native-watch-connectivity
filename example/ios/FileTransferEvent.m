@@ -13,8 +13,6 @@
 }
 
 - (NSDictionary<NSString *, id> *)serialize {
-    id null = (id) [NSNull null];
-
     return @{
             @"bytesTransferred": [self nullify:self.bytesTransferred],
             @"estimatedTimeRemaining": [self nullify:self.estimatedTimeRemaining],

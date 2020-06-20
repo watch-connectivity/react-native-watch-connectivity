@@ -305,7 +305,7 @@ RCT_EXPORT_METHOD(transferFile:
 
     FileTransferEvent *event = [self getFileTransferEvent:transfer];
 
-    [self dispatchEventWithName:EVENT_FILE_TRANSFER body:[event serializeWithEventType:FileTransferEventType.started]];
+    [self dispatchEventWithName:EVENT_FILE_TRANSFER body:[event serializeWithEventType:FILE_EVENT_STARTED]];
 
     callback(@[uuid]);
 }
@@ -337,8 +337,8 @@ RCT_EXPORT_METHOD(getFileTransfers:
     NSMutableDictionary *payload = [NSMutableDictionary new];
 
     for (NSString *transferId in transfers) {
-        NSDictionary *transferInfo = transfers[transferId];
-        WCSessionFileTransfer *fileTransfer = transferInfo[@"transfer"];
+        FileTransferInfo *transferInfo = transfers[transferId];
+        WCSessionFileTransfer *fileTransfer = transferInfo.transfer;
         FileTransferEvent *event = [self getFileTransferEvent:fileTransfer];
         payload[transferId] = [event serialize];
     }
@@ -377,7 +377,7 @@ RCT_EXPORT_METHOD(getFileTransfers:
     if ([keyPath hasPrefix:@"progress"]) {
         WCSessionFileTransfer *transfer = object;
         FileTransferEvent *event = [self getFileTransferEvent:transfer];
-        [self dispatchEventWithName:EVENT_FILE_TRANSFER body:[event serializeWithEventType:FileTransferEventType.progress]];
+        [self dispatchEventWithName:EVENT_FILE_TRANSFER body:[event serializeWithEventType:FILE_EVENT_PROGRESS]];
     } else if ([keyPath isEqualToString:@"paired"]) {
         [self dispatchEventWithName:EVENT_PAIR_STATUS_CHANGED body:@{@"paired": change[NSKeyValueChangeNewKey]}];
     } else if ([keyPath isEqualToString:@"watchAppInstalled"]) {
@@ -408,10 +408,10 @@ didFinishFileTransfer:(WCSessionFileTransfer *)fileTransfer
                 transferInfo.error = error;
                 FileTransferEvent *event = [self getFileTransferEvent:fileTransfer];
                 [self dispatchEventWithName:EVENT_FILE_TRANSFER
-                                       body:[event serializeWithEventType:FileTransferEventType.error]];
+                                       body:[event serializeWithEventType:FILE_EVENT_ERROR]];
             } else {
                 FileTransferEvent *event = [self getFileTransferEvent:fileTransfer];
-                [self dispatchEventWithName:EVENT_FILE_TRANSFER body:[event serializeWithEventType:FileTransferEventType.finished]];
+                [self dispatchEventWithName:EVENT_FILE_TRANSFER body:[event serializeWithEventType:FILE_EVENT_FINISHED]];
             }
 
             WCSessionFileTransfer *transfer = transferInfo.transfer;

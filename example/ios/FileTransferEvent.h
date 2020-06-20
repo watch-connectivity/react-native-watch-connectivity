@@ -5,24 +5,17 @@
 
 #import <Foundation/Foundation.h>
 
+
+
 @class FileTransferInfo;
 
-extern const struct FileTransferEventType {
-    __unsafe_unretained NSString *started;
-    __unsafe_unretained NSString *progress;
-    __unsafe_unretained NSString *finished;
-    __unsafe_unretained NSString *error;
-} AMPlayerState;
-
-const struct FileTransferEventType FileTransferEventType =
-        {
-                .started = @"READY",
-                .progress = @"COMPLETE",
-                .finished = @"PLAYING",
-                .error = @"PAUSED",
-        };
+static NSString *FILE_EVENT_PROGRESS = @"progress";
+static NSString *FILE_EVENT_STARTED  = @"started";
+static NSString *FILE_EVENT_FINISHED  = @"finished";
+static NSString *FILE_EVENT_ERROR  = @"error";
 
 @interface FileTransferEvent : NSObject
+
 @property(nonatomic, strong) NSNumber *bytesTransferred;
 @property(nonatomic, strong) NSNumber *estimatedTimeRemaining;
 @property(nonatomic, strong) NSString *id;
