@@ -21,7 +21,6 @@ import {
   sendMessageData,
   sendMessage,
   startFileTransfer,
-  ERROR_CODE_SESSION_UNREACHABLE,
 } from 'react-native-watch-connectivity';
 
 export default function HomeScreen() {

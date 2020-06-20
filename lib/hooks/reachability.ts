@@ -1,7 +1,4 @@
-import {
-  getReachability,
-  subscribeToReachability,
-} from '../reachability';
+import {getReachability, subscribeToReachability} from '../reachability';
 import {useEffect, useState} from 'react';
 
 export function useReachability() {

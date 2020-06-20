@@ -47,7 +47,11 @@
       "sort-package-json",
       "git add"
     ],
-    "{lib}/**/*.ts?(x)": [
+    "lib/**/*.ts?(x)": [
+      "yarn lint --fix",
+      "git add"
+    ],
+    "example/src/**/*.ts?(x)": [
       "yarn lint --fix",
       "git add"
     ]

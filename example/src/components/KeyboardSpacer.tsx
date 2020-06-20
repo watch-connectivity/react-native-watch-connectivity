@@ -6,7 +6,7 @@ import {configureAnimation} from '../lib/animation';
 export const KeyboardSpacer = () => {
   const [spacerStyle, setSpacerStyle] = useState<ViewStyle>({height: 0});
 
-  useKeyboardListener(height => {
+  useKeyboardListener((height) => {
     configureAnimation();
     setSpacerStyle({height});
   });

@@ -30,7 +30,7 @@ export function pickImage(
         },
         ...extraPickerOptions,
       },
-      response => {
+      (response) => {
         const {error} = response;
         if (response.didCancel) {
           // Do nothing
