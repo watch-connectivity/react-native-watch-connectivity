@@ -43,41 +43,46 @@ function FileTransferTimeText({
   return null;
 }
 
-function WatchStateText({watchState}: {watchState: SessionActivationState}) {
-  const active = watchState === SessionActivationState.Activated;
+function WatchStateText({
+  active,
+  children,
+}: {
+  active: Boolean;
+  children: string;
+}) {
   const style = [
     styles.boldText,
     {color: active ? COLORS.green.normal : COLORS.orange},
   ];
-  return <Text style={style}>{watchState.toUpperCase()}</Text>;
+  return <Text style={style}>{children}</Text>;
 }
 
 export default function ReachabilityText({
-  watchState,
+  installed,
   useDataAPI,
   timeTakenToReachWatch,
   reachable,
   fileTransferTime,
   timeTakenToReply,
 }: {
-  watchState: SessionActivationState;
+  installed: boolean;
   useDataAPI: boolean;
   fileTransferTime: number | null;
   timeTakenToReply: number | null;
   reachable: boolean;
   timeTakenToReachWatch: number | null;
 }) {
-  const style = [
-    styles.boldText,
-    {color: reachable ? COLORS.green.normal : COLORS.orange},
-  ];
-
   return (
     <View>
       <Text style={styles.component}>
-        Watch session is <WatchStateText watchState={watchState} />
+        Watch app is{' '}
+        <WatchStateText active={installed}>
+          {installed ? 'INSTALLED' : 'UNINSTALLED'}
+        </WatchStateText>
         &nbsp;and{' '}
-        <Text style={style}>{reachable ? 'REACHABLE' : 'UNREACHABLE'}</Text>
+        <WatchStateText active={reachable}>
+          {reachable ? 'REACHABLE' : 'UNREACHABLE'}
+        </WatchStateText>
       </Text>
       {timeTakenToReachWatch && timeTakenToReply ? (
         <MessageTimeText

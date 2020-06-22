@@ -17,10 +17,10 @@ import {usePingPongEffect} from '../lib/hooks/use-ping-pong-effect';
 import Layout from '../components/Layout';
 import {
   useReachability,
-  useSessionActivationState,
   sendMessageData,
   sendMessage,
   startFileTransfer,
+  useInstalled,
 } from 'react-native-watch-connectivity';
 
 export default function HomeScreen() {
@@ -33,7 +33,7 @@ export default function HomeScreen() {
   const [timeTakenToReply, setTimeTakenToReply] = useState<number | null>(null);
   const [useFileAPI, setUseFileAPI] = useState(true);
 
-  const watchState = useSessionActivationState();
+  const installed = useInstalled();
   const reachable = useReachability();
 
   const pongs = usePingPongEffect();
@@ -45,7 +45,7 @@ export default function HomeScreen() {
         <WatchImage pings={pongs} />
         <View>
           <ReachabilityText
-            watchState={watchState}
+            installed={installed}
             reachable={reachable}
             fileTransferTime={fileTransferTime}
             useDataAPI={!useFileAPI}
