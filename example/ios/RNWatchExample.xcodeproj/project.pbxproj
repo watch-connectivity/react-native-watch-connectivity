@@ -34,6 +34,7 @@
 		76DE47B47A0647A3BC46A586 /* Blah_Blah_Blah.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C3400AF0E6E24E49BE476863 /* Blah_Blah_Blah.jpg */; };
 		7B40C4D978EB46C397EAD578 /* JetBrainsMono-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DB67F00A48A94D64B45298C8 /* JetBrainsMono-Regular.ttf */; };
 		8A0850BBBA76458299D946E1 /* JetBrainsMono-Bold-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22EECE8E7861403B9EEF2CD3 /* JetBrainsMono-Bold-Italic.ttf */; };
+		C092E5E8C605B64EAD99B1E2 /* util.m in Sources */ = {isa = PBXBuildFile; fileRef = C092E2384CFDB8A54360F5C0 /* util.m */; };
 		C092EAAC807D763A949A3D77 /* FileTransferEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = C092EA235AEA512DFA6AE8DD /* FileTransferEvent.m */; };
 		C092EE4E66F2C3860F5A144E /* ComplicationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C092E308BC590AE54BEAC71C /* ComplicationState.swift */; };
 		F49B168D00755677620BD38E /* libPods-RNWatchExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC8FA8D735925B939C156C1 /* libPods-RNWatchExample.a */; };
@@ -126,7 +127,9 @@
 		839ADE6B86974B12822EB3FF /* JetBrainsMono-Medium-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "JetBrainsMono-Medium-Italic.ttf"; path = "../assets/fonts/JetBrainsMono-Medium-Italic.ttf"; sourceTree = "<group>"; };
 		BD0D2BBFEDBE4A72AB6CE73E /* JetBrainsMono-ExtraBold-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "JetBrainsMono-ExtraBold-Italic.ttf"; path = "../assets/fonts/JetBrainsMono-ExtraBold-Italic.ttf"; sourceTree = "<group>"; };
 		C092E08613F2C7F9F0D1C81D /* FileTransferInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileTransferInfo.m; path = ../../ios/RNWatch/FileTransferInfo.m; sourceTree = "<group>"; };
+		C092E2384CFDB8A54360F5C0 /* util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = util.m; sourceTree = "<group>"; };
 		C092E308BC590AE54BEAC71C /* ComplicationState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComplicationState.swift; sourceTree = "<group>"; };
+		C092E4A212262A45DC88104E /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
 		C092E660CE0BA6CFA90EB062 /* FileTransferInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileTransferInfo.h; path = ../../ios/RNWatch/FileTransferInfo.h; sourceTree = "<group>"; };
 		C092EA235AEA512DFA6AE8DD /* FileTransferEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileTransferEvent.m; sourceTree = "<group>"; };
 		C092EA37D2C3639540C08EC4 /* FileTransferEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileTransferEvent.h; sourceTree = "<group>"; };
@@ -246,6 +249,8 @@
 				C092E660CE0BA6CFA90EB062 /* FileTransferInfo.h */,
 				C092EA235AEA512DFA6AE8DD /* FileTransferEvent.m */,
 				C092EA37D2C3639540C08EC4 /* FileTransferEvent.h */,
+				C092E4A212262A45DC88104E /* util.h */,
+				C092E2384CFDB8A54360F5C0 /* util.m */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -511,6 +516,7 @@
 				6A55B19F2494F3A5004ECAF4 /* RNWatch.m in Sources */,
 				6AA023FA249E6081006AF264 /* FileTransferInfo.m in Sources */,
 				C092EAAC807D763A949A3D77 /* FileTransferEvent.m in Sources */,
+				C092E5E8C605B64EAD99B1E2 /* util.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

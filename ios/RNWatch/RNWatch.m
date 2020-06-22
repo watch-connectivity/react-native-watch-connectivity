@@ -1,6 +1,7 @@
 #import "RNWatch.h"
 #import "FileTransferInfo.h"
 #import "FileTransferEvent.h"
+#import "util.h"
 
 // import RCTConvert.h
 #if __has_include("RCTConvert.h")
@@ -59,7 +60,7 @@ RCT_EXPORT_MODULE()
     sharedInstance = [super init];
     self.replyHandlers = [NSCache new];
     self.fileTransfers = [NSMutableDictionary new];
-    self.userInfo = [NSMutableDictionary new];
+    self.queuedUserInfo = [NSMutableDictionary new];
 
     if ([WCSession isSupported]) {
         WCSession *session = [WCSession defaultSession];
@@ -246,7 +247,7 @@ didReceiveMessage:(NSDictionary<NSString *, id> *)message {
 - (void)  session:(WCSession *)session
 didReceiveMessage:(NSDictionary<NSString *, id> *)message
      replyHandler:(void (^)(NSDictionary<NSString *, id> *_Nonnull))replyHandler {
-    NSString *messageId = [self uuidString];
+    NSString *messageId = uuid();
     NSMutableDictionary *mutableMessage = [message mutableCopy];
     mutableMessage[@"id"] = messageId;
     [self.replyHandlers setObject:replyHandler forKey:messageId];
@@ -289,7 +290,7 @@ RCT_EXPORT_METHOD(transferFile:
             metaData:
             (nullable NSDictionary<NSString *, id> *)metaData
         callback:(RCTResponseSenderBlock) callback) {
-    double startTime = [self getJavascriptStyleTimestamp];
+    double startTime = jsTimestamp();
 
     NSMutableDictionary *mutableMetaData;
     if (metaData) {
@@ -297,29 +298,29 @@ RCT_EXPORT_METHOD(transferFile:
     } else {
         mutableMetaData = [NSMutableDictionary new];
     }
-    NSString *uuid = [self uuidString];
-    mutableMetaData[@"id"] = uuid;
+    NSString *id = uuid();
+    mutableMetaData[@"id"] = id;
     WCSessionFileTransfer *transfer = [self.session transferFile:[NSURL URLWithString:url] metadata:mutableMetaData];
 
-    [self initialiseTransferInfoWithURL:url metaData:metaData startTime:startTime uuid:uuid transfer:transfer];
+    [self initialiseTransferInfoWithURL:url metaData:metaData startTime:startTime id:id transfer:transfer];
 
     FileTransferEvent *event = [self getFileTransferEvent:transfer];
 
     [self dispatchEventWithName:EVENT_FILE_TRANSFER body:[event serializeWithEventType:FILE_EVENT_STARTED]];
 
-    callback(@[uuid]);
+    callback(@[id]);
 }
 
-- (void)initialiseTransferInfoWithURL:(NSString *)url metaData:(NSDictionary *)metaData startTime:(double)startTime uuid:(NSString *)uuid transfer:(WCSessionFileTransfer *)transfer {
+- (void)initialiseTransferInfoWithURL:(NSString *)url metaData:(NSDictionary *)metaData startTime:(double)startTime id:(NSString *)id transfer:(WCSessionFileTransfer *)transfer {
     FileTransferInfo *info = [FileTransferInfo new];
 
     info.transfer = transfer;
-    info.id = uuid;
+    info.id = id;
     info.uri = url;
     info.metaData = metaData;
     info.startTime = @(startTime);
 
-    self.fileTransfers[uuid] = info;
+    self.fileTransfers[id] = info;
 
     [self observeTransferProgress:transfer];
 }
@@ -393,7 +394,7 @@ RCT_EXPORT_METHOD(getFileTransfers:
 - (void)      session:(WCSession *)session
 didFinishFileTransfer:(WCSessionFileTransfer *)fileTransfer
                 error:(NSError *)error {
-    double endTime = [self getJavascriptStyleTimestamp];
+    double endTime = jsTimestamp();
 
     WCSessionFile *file = fileTransfer.file;
     NSDictionary<NSString *, id> *metadata = file.metadata;
@@ -458,7 +459,7 @@ didReceiveApplicationContext:(NSDictionary<NSString *, id> *)applicationContext 
 
 RCT_EXPORT_METHOD(getUserInfo:
     (RCTResponseSenderBlock) callback) {
-    callback(@[self.userInfo]);
+    callback(@[self.queuedUserInfo]);
 }
 
 RCT_EXPORT_METHOD(transferUserInfo:
@@ -468,35 +469,30 @@ RCT_EXPORT_METHOD(transferUserInfo:
 
 RCT_EXPORT_METHOD(clearUserInfoQueue:
     (RCTResponseSenderBlock) callback) {
-    self.userInfo = [NSMutableDictionary new];
-    [self dispatchEventWithName:EVENT_WATCH_USER_INFO_RECEIVED body:self.userInfo];
-    callback(@[self.userInfo]);
+    self.queuedUserInfo = [NSMutableDictionary new];
+    [self dispatchEventWithName:EVENT_WATCH_USER_INFO_RECEIVED body:self.queuedUserInfo];
+    callback(@[self.queuedUserInfo]);
 }
 
 RCT_EXPORT_METHOD(dequeueUserInfo:
     (NSArray<NSString *> *) ids withCallback:
     (RCTResponseSenderBlock) callback) {
     for (NSString *ident in ids) {
-        [self.userInfo removeObjectForKey:ident];
+        [self.queuedUserInfo removeObjectForKey:ident];
     }
-    [self dispatchEventWithName:EVENT_WATCH_USER_INFO_RECEIVED body:self.userInfo];
-    callback(@[self.userInfo]);
+    [self dispatchEventWithName:EVENT_WATCH_USER_INFO_RECEIVED body:self.queuedUserInfo];
+    callback(@[self.queuedUserInfo]);
 }
 
 - (void)session:(WCSession *)session didFinishUserInfoTransfer:(WCSessionUserInfoTransfer *)userInfoTransfer error:(NSError *)error {
     // TODO
 }
 
-- (double)getJavascriptStyleTimestamp {
-    double ts = floor([[NSDate date] timeIntervalSince1970] * 1000);
-    return ts;
-}
-
 - (void)   session:(WCSession *)session
 didReceiveUserInfo:(NSDictionary<NSString *, id> *)userInfo {
-    double ts = [self getJavascriptStyleTimestamp]; // javascript style timestamp (ms since epoch)
+    double ts = jsTimestamp();
     NSString *timestamp = [@(ts) stringValue];
-    [self.userInfo setValue:userInfo forKey:timestamp];
+    [self.queuedUserInfo setValue:userInfo forKey:timestamp];
     [self dispatchEventWithName:EVENT_WATCH_USER_INFO_RECEIVED body:@{@"userInfo": userInfo, @"timestamp": @(ts), @"id": timestamp}];
 }
 
@@ -508,18 +504,5 @@ didReceiveUserInfo:(NSDictionary<NSString *, id> *)userInfo {
                          body:(NSDictionary<NSString *, id> *)body {
     [self sendEventWithName:name body:body];
 }
-
-////////////////////////////////////////////////////////////////////////////////
-
-- (NSString *)uuidString {
-    CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
-    NSString *uuidString = (__bridge_transfer NSString *) CFUUIDCreateString(kCFAllocatorDefault, uuid);
-    CFRelease(uuid);
-    return uuidString;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-
 
 @end

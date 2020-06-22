@@ -1,0 +1,2 @@
+double jsTimestamp();
+NSString* uuid();
