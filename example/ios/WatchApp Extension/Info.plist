@@ -33,7 +33,7 @@
 		<key>NSExtensionAttributes</key>
 		<dict>
 			<key>WKAppBundleIdentifier</key>
-			<string>uk.co.mtford.RNWatchExample.watchkitapp</string>
+			<string>uk.co.mtford.RNWCExample.watchkitapp</string>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.watchkit</string>

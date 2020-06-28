@@ -4,6 +4,8 @@ import {
   NativeModules,
 } from 'react-native';
 
+import mitt from 'mitt';
+
 export type WatchPayload = Record<string, unknown>;
 
 export type WCWatchState =
@@ -16,12 +18,6 @@ export type WCWatchState =
   | 'WCSessionActivationStateInactive'
   // The session is active and the Watch app and iOS app may communicate with each other freely.
   | 'WCSessionActivationStateActivated';
-
-export type FileTransferInfo = {
-  uri: string;
-  metadata: Record<string, unknown>;
-  id: string;
-};
 
 export type QueuedUserInfo<UserInfo extends WatchPayload = WatchPayload> = {
   userInfo: UserInfo;
@@ -62,12 +58,10 @@ export interface IRNWatchNativeModule extends EventSubscriptionVendor {
   getSessionState: (cb: (state: WCWatchState) => void) => void;
 
   transferUserInfo: <UserInfo extends WatchPayload>(userInfo: UserInfo) => void;
-  getUserInfo: <UserInfo extends WatchPayload>(
+  getQueuedUserInfo: <UserInfo extends WatchPayload>(
     cb: (userInfo: UserInfoQueue<UserInfo>) => void,
   ) => void;
-  clearUserInfoQueue: <UserInfo extends WatchPayload>(
-    cb: (userInfo: UserInfoQueue<UserInfo>) => void,
-  ) => void;
+  clearUserInfoQueue: <UserInfo extends WatchPayload>(cb: () => void) => void;
   dequeueUserInfo: <UserInfo extends WatchPayload>(
     ids: string[],
     cb: (userInfo: UserInfoQueue<UserInfo>) => void,
@@ -127,8 +121,9 @@ if (!__mod) {
 
 export const NativeModule: IRNWatchNativeModule = __mod;
 export const nativeWatchEventEmitter = new NativeEventEmitter(NativeModule);
+export const jsEventEmitter = mitt();
 
-export enum NativeWatchEvent {
+export enum WatchEvent {
   EVENT_FILE_TRANSFER = 'WatchFileTransfer',
   EVENT_RECEIVE_MESSAGE = 'WatchReceiveMessage',
   EVENT_WATCH_STATE_CHANGED = 'WatchStateChanged',
@@ -137,51 +132,65 @@ export enum NativeWatchEvent {
   EVENT_APPLICATION_CONTEXT_RECEIVED = 'WatchApplicationContextReceived',
   EVENT_PAIR_STATUS_CHANGED = 'WatchPairStatusChanged',
   EVENT_INSTALL_STATUS_CHANGED = 'WatchInstallStatusChanged',
+  EVENT_ERROR = 'error',
 }
 
-export interface NativeWatchEventPayloads {
-  [NativeWatchEvent.EVENT_FILE_TRANSFER]: NativeFileTransferEvent;
-  [NativeWatchEvent.EVENT_RECEIVE_MESSAGE]: WatchPayload & {id?: string};
-  [NativeWatchEvent.EVENT_WATCH_STATE_CHANGED]: {
+export interface EventPayloads {
+  [WatchEvent.EVENT_FILE_TRANSFER]: NativeFileTransferEvent;
+  [WatchEvent.EVENT_RECEIVE_MESSAGE]: WatchPayload & {id?: string};
+  [WatchEvent.EVENT_WATCH_STATE_CHANGED]: {
     state:
       | 'WCSessionActivationStateNotActivated'
       | 'WCSessionActivationStateInactive'
       | 'WCSessionActivationStateActivated';
   };
-  [NativeWatchEvent.EVENT_WATCH_REACHABILITY_CHANGED]: {
+  [WatchEvent.EVENT_WATCH_REACHABILITY_CHANGED]: {
     reachability: boolean;
   };
-  [NativeWatchEvent.EVENT_WATCH_USER_INFO_RECEIVED]: QueuedUserInfo<
-    WatchPayload
-  >;
-  [NativeWatchEvent.EVENT_APPLICATION_CONTEXT_RECEIVED]: WatchPayload | null;
-  [NativeWatchEvent.EVENT_PAIR_STATUS_CHANGED]: {
+  [WatchEvent.EVENT_WATCH_USER_INFO_RECEIVED]: QueuedUserInfo<WatchPayload>;
+  [WatchEvent.EVENT_APPLICATION_CONTEXT_RECEIVED]: WatchPayload | null;
+  [WatchEvent.EVENT_PAIR_STATUS_CHANGED]: {
     paired: boolean;
   };
-  [NativeWatchEvent.EVENT_INSTALL_STATUS_CHANGED]: {
+  [WatchEvent.EVENT_INSTALL_STATUS_CHANGED]: {
     installed: boolean;
   };
+  [WatchEvent.EVENT_ERROR]: Error;
 }
 
-export function _addListener<
-  E extends NativeWatchEvent,
-  Payload = NativeWatchEventPayloads[E]
->(event: E, cb: (payload: Payload) => void) {
+export function _addListener<E extends WatchEvent, Payload = EventPayloads[E]>(
+  event: E,
+  cb: (payload: Payload) => void,
+) {
   // Type the event name
   if (!event) {
     throw new Error('Must pass event');
   }
+
+  if (event === 'error') {
+    jsEventEmitter.on(event, cb);
+    return () => jsEventEmitter.off(event, cb);
+  }
+
   const sub = nativeWatchEventEmitter.addListener(event, cb);
   return () => sub.remove();
 }
 
-export function _once<
-  E extends NativeWatchEvent,
-  Payload = NativeWatchEventPayloads[E]
->(event: E, cb: (payload: Payload) => void) {
+export function _once<E extends WatchEvent, Payload = EventPayloads[E]>(
+  event: E,
+  cb: (payload: Payload) => void,
+) {
   // Type the event name
   if (!event) {
     throw new Error('Must pass event');
+  }
+
+  if (event === 'error') {
+    jsEventEmitter.on(event, (payload) => {
+      jsEventEmitter.off(event, cb);
+      cb(payload);
+    });
+    return () => jsEventEmitter.off(event, cb);
   }
 
   // TODO: Investigate NativeEventEmitter.once issues...
@@ -192,4 +201,9 @@ export function _once<
   });
 
   return () => sub.remove();
+}
+
+export function _emitError(err: Error) {
+  console.error(err);
+  jsEventEmitter.emit('error', err);
 }

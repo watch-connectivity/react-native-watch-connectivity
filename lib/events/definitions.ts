@@ -2,11 +2,7 @@
  * Define events, callbacks etc
  */
 
-import {
-  FileTransferEventType,
-  QueuedUserInfo,
-  WatchPayload,
-} from '../native-module';
+import {FileTransferEventType, WatchPayload} from '../native-module';
 import {SessionActivationState} from '../session-activation-state';
 import {FileTransfer} from '../files';
 
@@ -29,12 +25,19 @@ export interface WatchEventCallbacks<
 > {
   file: (event: FileTransferEvent) => void;
   'application-context': (payload: P) => void;
-  'user-info': (payload: QueuedUserInfo<P>) => void;
+  'user-info': (
+    payload: P,
+    metadata: {
+      timestamp: number;
+      id: string;
+    },
+  ) => void;
   reachability: (reachable: boolean) => void;
   message: WatchMessageCallback<P, P2>;
   'session-state': (state: SessionActivationState) => void;
   paired: (paired: boolean) => void;
   installed: (installed: boolean) => void;
+  error: (error: Error) => void;
 }
 
 export type WatchEvent = keyof WatchEventCallbacks;

@@ -457,9 +457,11 @@ didReceiveApplicationContext:(NSDictionary<NSString *, id> *)applicationContext 
 // User Info
 ////////////////////////////////////////////////////////////////////////////////
 
-RCT_EXPORT_METHOD(getUserInfo:
+RCT_EXPORT_METHOD(getQueuedUserInfo:
     (RCTResponseSenderBlock) callback) {
     callback(@[self.queuedUserInfo]);
+    // Clear the cache.
+    self.queuedUserInfo = [NSMutableDictionary new];
 }
 
 RCT_EXPORT_METHOD(transferUserInfo:
@@ -470,8 +472,7 @@ RCT_EXPORT_METHOD(transferUserInfo:
 RCT_EXPORT_METHOD(clearUserInfoQueue:
     (RCTResponseSenderBlock) callback) {
     self.queuedUserInfo = [NSMutableDictionary new];
-    [self dispatchEventWithName:EVENT_WATCH_USER_INFO_RECEIVED body:self.queuedUserInfo];
-    callback(@[self.queuedUserInfo]);
+    callback(@[]);
 }
 
 RCT_EXPORT_METHOD(dequeueUserInfo:
@@ -497,7 +498,7 @@ didReceiveUserInfo:(NSDictionary<NSString *, id> *)userInfo {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// Helpers
+// Events
 ////////////////////////////////////////////////////////////////////////////////
 
 - (void)dispatchEventWithName:(NSString *)name

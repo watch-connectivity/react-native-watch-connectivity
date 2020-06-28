@@ -70,8 +70,10 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         })
       } else if (text == "send me some user info") {
         session.transferUserInfo(["uid": "xyz", "name": "bob", "email": "bob@example.com"])
+        replyHandler(["text": "sent you some user info!"])
       } else if (text == "send me some more user info") {
         session.transferUserInfo(["uid": "abc", "name": "mike", "email": "mike@example.com"])
+        replyHandler(["text": "sent you some more user info!"])
       } else if (text == "send me some application context") {
         do {
           try session.updateApplicationContext(message["context"] as! [String: Any])

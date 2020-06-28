@@ -25,6 +25,7 @@
     "react-native-safe-area-context": "^3.0.2",
     "@react-navigation/native": "^5.5.1",
     "@react-navigation/drawer": "^5.8.2",
+    "mitt": "^1.2.0",
     "bluebird": "^3.7.2",
     "bluebird-global": "^1.0.1",
     "faker": "^4.1.0",

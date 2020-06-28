@@ -57,7 +57,8 @@
     ]
   },
   "dependencies": {
-    "lodash.sortby": "^4.7.0"
+    "lodash.sortby": "^4.7.0",
+    "mitt": "^1.2.0"
   },
   "devDependencies": {
     "typescript": "^3.9.5",
