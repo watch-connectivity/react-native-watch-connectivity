@@ -93,11 +93,13 @@ RCT_EXPORT_MODULE()
 // Session State
 ////////////////////////////////////////////////////////////////////////////////
 
-RCT_EXPORT_METHOD(getSessionState:
-    (RCTResponseSenderBlock) callback) {
+RCT_EXPORT_METHOD(getSessionActivationState:
+    (RCTPromiseResolveBlock) resolve
+            reject:
+            (RCTPromiseRejectBlock) reject) {
     WCSessionActivationState state = self.session.activationState;
     NSString *stateString = [self _getStateString:state];
-    callback(@[stateString]);
+    resolve(stateString);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -167,8 +169,10 @@ RCT_EXPORT_METHOD(transferCurrentComplicationUserInfo:
 ////////////////////////////////////////////////////////////////////////////////
 
 RCT_EXPORT_METHOD(getReachability:
-    (RCTResponseSenderBlock) callback) {
-    callback(@[@(self.session.reachable)]);
+    (RCTPromiseResolveBlock) resolve
+            reject:
+            (RCTPromiseRejectBlock) reject) {
+    resolve(@(self.session.reachable));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -183,8 +187,10 @@ RCT_EXPORT_METHOD(getReachability:
 ////////////////////////////////////////////////////////////////////////////////
 
 RCT_EXPORT_METHOD(getIsPaired:
-    (RCTResponseSenderBlock) callback) {
-    callback(@[@(self.session.isPaired)]);
+    (RCTPromiseResolveBlock) resolve
+            reject:
+            (RCTPromiseRejectBlock) reject) {
+    resolve(@(self.session.isPaired));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -192,8 +198,10 @@ RCT_EXPORT_METHOD(getIsPaired:
 ////////////////////////////////////////////////////////////////////////////////
 
 RCT_EXPORT_METHOD(getIsWatchAppInstalled:
-    (RCTResponseSenderBlock) callback) {
-    callback(@[@(self.session.isWatchAppInstalled)]);
+    (RCTPromiseResolveBlock) resolve
+            reject:
+            (RCTPromiseRejectBlock) rejec) {
+    resolve(@(self.session.isWatchAppInstalled));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -289,7 +297,11 @@ RCT_EXPORT_METHOD(transferFile:
     (NSString *) url
             metaData:
             (nullable NSDictionary<NSString *, id> *)metaData
-        callback:(RCTResponseSenderBlock) callback) {
+            resolve:
+    (RCTPromiseResolveBlock) resolve
+            reject:
+    (RCTPromiseRejectBlock) reject
+) {
     double startTime = jsTimestamp();
 
     NSMutableDictionary *mutableMetaData;
@@ -308,7 +320,7 @@ RCT_EXPORT_METHOD(transferFile:
 
     [self dispatchEventWithName:EVENT_FILE_TRANSFER body:[event serializeWithEventType:FILE_EVENT_STARTED]];
 
-    callback(@[id]);
+    resolve(id);
 }
 
 - (void)initialiseTransferInfoWithURL:(NSString *)url metaData:(NSDictionary *)metaData startTime:(double)startTime id:(NSString *)id transfer:(WCSessionFileTransfer *)transfer {
@@ -333,7 +345,9 @@ RCT_EXPORT_METHOD(transferFile:
 }
 
 RCT_EXPORT_METHOD(getFileTransfers:
-    (RCTResponseSenderBlock) callback) {
+    (RCTPromiseResolveBlock) resolve
+            reject:
+            (RCTPromiseRejectBlock) reject) {
     NSMutableDictionary *transfers = self.fileTransfers;
     NSMutableDictionary *payload = [NSMutableDictionary new];
 
@@ -344,7 +358,7 @@ RCT_EXPORT_METHOD(getFileTransfers:
         payload[transferId] = [event serialize];
     }
 
-    callback(@[payload]);
+    resolve(payload);
 }
 
 - (FileTransferEvent *)getFileTransferEvent:(WCSessionFileTransfer *)transfer {
@@ -362,7 +376,7 @@ RCT_EXPORT_METHOD(getFileTransfers:
 
     NSNumber *_Nonnull totalUnitCount = @(transfer.progress.totalUnitCount);
 
-    FileTransferEvent * event = [[FileTransferEvent alloc] initWithTransferInfo:transferInfo];
+    FileTransferEvent *event = [[FileTransferEvent alloc] initWithTransferInfo:transferInfo];
 
     event.bytesTransferred = completedUnitCount;
     event.estimatedTimeRemaining = estimatedTimeRemaining;
@@ -436,12 +450,13 @@ RCT_EXPORT_METHOD(updateApplicationContext:
 ////////////////////////////////////////////////////////////////////////////////
 
 RCT_EXPORT_METHOD(getApplicationContext:
-    (RCTResponseSenderBlock) callback) {
+    (RCTPromiseResolveBlock) resolve
+            reject: (RCTPromiseRejectBlock) reject) {
     NSDictionary<NSString *, id> *applicationContext = self.session.applicationContext;
     if (applicationContext == nil) {
-        callback(@[[NSNull null]]);
+        resolve([NSNull null]);
     } else {
-        callback(@[applicationContext]);
+        resolve(applicationContext);
     }
 }
 
@@ -458,8 +473,10 @@ didReceiveApplicationContext:(NSDictionary<NSString *, id> *)applicationContext 
 ////////////////////////////////////////////////////////////////////////////////
 
 RCT_EXPORT_METHOD(getQueuedUserInfo:
-    (RCTResponseSenderBlock) callback) {
-    callback(@[self.queuedUserInfo]);
+    (RCTPromiseResolveBlock) resolve
+            reject:
+            (RCTPromiseRejectBlock) reject) {
+    resolve(self.queuedUserInfo);
     // Clear the cache.
     self.queuedUserInfo = [NSMutableDictionary new];
 }
@@ -470,19 +487,25 @@ RCT_EXPORT_METHOD(transferUserInfo:
 }
 
 RCT_EXPORT_METHOD(clearUserInfoQueue:
-    (RCTResponseSenderBlock) callback) {
+    (RCTPromiseResolveBlock) resolve
+            reject:
+            (RCTPromiseRejectBlock) reject) {
     self.queuedUserInfo = [NSMutableDictionary new];
-    callback(@[]);
+    resolve([NSNull null]);
 }
 
 RCT_EXPORT_METHOD(dequeueUserInfo:
-    (NSArray<NSString *> *) ids withCallback:
-    (RCTResponseSenderBlock) callback) {
+    (NSArray<NSString *> *) ids
+            resolve:
+            (RCTPromiseResolveBlock) resolve
+            reject:
+            (RCTPromiseRejectBlock) reject
+) {
     for (NSString *ident in ids) {
         [self.queuedUserInfo removeObjectForKey:ident];
     }
     [self dispatchEventWithName:EVENT_WATCH_USER_INFO_RECEIVED body:self.queuedUserInfo];
-    callback(@[self.queuedUserInfo]);
+    resolve([NSNull null]);
 }
 
 - (void)session:(WCSession *)session didFinishUserInfoTransfer:(WCSessionUserInfoTransfer *)userInfoTransfer error:(NSError *)error {

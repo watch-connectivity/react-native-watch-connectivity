@@ -18,9 +18,7 @@ export function startFileTransfer(
   uri: string,
   metadata: WatchPayload = {},
 ): Promise<string> {
-  return new Promise((resolve) => {
-    NativeModule.transferFile(uri, metadata, resolve);
-  });
+  return NativeModule.transferFile(uri, metadata);
 }
 
 /**
@@ -37,18 +35,15 @@ export function _transformFilePayload<
   } as unknown) as FT;
 }
 
-export function getFileTransfers(): Promise<{
+export async function getFileTransfers(): Promise<{
   [id: string]: FileTransfer;
 }> {
   const adapted: {[id: string]: FileTransfer} = {};
+  const transfers = await NativeModule.getFileTransfers();
 
-  return new Promise((resolve) => {
-    NativeModule.getFileTransfers((transfers) => {
-      Object.values(transfers).forEach((t) => {
-        adapted[t.id] = _transformFilePayload(t);
-      });
-
-      resolve(adapted);
-    });
+  Object.values(transfers).forEach((t) => {
+    adapted[t.id] = _transformFilePayload(t);
   });
+
+  return adapted;
 }

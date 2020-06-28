@@ -16,9 +16,7 @@ import {NativeModule} from 'react-native-watch-connectivity/native-module';
 export function _clearUserInfoQueue<
   UserInfo extends WatchPayload = WatchPayload
 >(): Promise<void> {
-  return new Promise((resolve) => {
-    NativeModule.clearUserInfoQueue(() => resolve());
-  });
+  return NativeModule.clearUserInfoQueue();
 }
 
 export class UserInfoIntegrationTest extends IntegrationTest {
@@ -69,12 +67,9 @@ export class UserInfoIntegrationTest extends IntegrationTest {
             email: 'bob@example.com',
           };
 
-          watchEvents.once('user-info', ({userInfo: userInfoFromEvent}) => {
-            log(
-              'received user info from watch event: ' +
-                JSON.stringify(userInfoFromEvent),
-            );
-            if (!isEqual(userInfoFromEvent, expectedUserInfo)) {
+          watchEvents.once('user-info', (e) => {
+            log('received user info from watch event: ' + JSON.stringify(e));
+            if (!isEqual(e, expectedUserInfo)) {
               reject(new Error('User info did not match'));
             }
 

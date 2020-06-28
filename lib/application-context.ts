@@ -7,9 +7,5 @@ export function updateApplicationContext(context: WatchPayload) {
 export function getApplicationContext<
   Context extends WatchPayload = WatchPayload
 >(): Promise<Context | null> {
-  return new Promise((resolve) => {
-    NativeModule.getApplicationContext<Context>((context) => {
-      resolve(context);
-    });
-  });
+  return NativeModule.getApplicationContext<Context>();
 }

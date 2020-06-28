@@ -32,13 +32,11 @@ function processUserInfoQueue<UserInfo extends WatchPayload = WatchPayload>(
   return userInfoArr;
 }
 
-export function getMissedUserInfo<
+export async function getMissedUserInfo<
   UserInfo extends WatchPayload = WatchPayload
 >(): Promise<UserInfo[]> {
-  return new Promise((resolve) => {
-    NativeModule.getQueuedUserInfo<UserInfo>((userInfoCache) => {
-      const items = processUserInfoQueue(userInfoCache);
-      resolve(items.map((q) => q.userInfo));
-    });
-  });
+  const userInfoCache = await NativeModule.getQueuedUserInfo<UserInfo>();
+  const items = processUserInfoQueue(userInfoCache);
+
+  return items.map((q) => q.userInfo);
 }

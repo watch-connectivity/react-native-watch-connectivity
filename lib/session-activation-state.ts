@@ -15,15 +15,9 @@ export const _SessionActivationState: Record<
   WCSessionActivationStateActivated: SessionActivationState.Activated,
 };
 
-export function getSessionActivationState(
-  cb?: (state: SessionActivationState) => void,
-): Promise<SessionActivationState> {
-  return new Promise((resolve) => {
-    NativeModule.getSessionState((state) => {
-      if (cb) {
-        cb(_SessionActivationState[state]);
-      }
-      resolve(_SessionActivationState[state]);
-    });
-  });
+export async function getSessionActivationState(): Promise<
+  SessionActivationState
+> {
+  const wcState = await NativeModule.getSessionActivationState();
+  return _SessionActivationState[wcState];
 }

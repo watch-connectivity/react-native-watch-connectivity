@@ -71,9 +71,7 @@ function _dequeueUserInfo(
     }
   });
 
-  return new Promise((resolve) => {
-    NativeModule.dequeueUserInfo(normalisedIds, () => resolve());
-  });
+  return NativeModule.dequeueUserInfo(normalisedIds);
 }
 
 export function _subscribeNativeUserInfoEvent<

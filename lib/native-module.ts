@@ -55,24 +55,21 @@ export interface NativeFileTransferEvent extends NativeFileTransfer {
 }
 
 export interface IRNWatchNativeModule extends EventSubscriptionVendor {
-  getSessionState: (cb: (state: WCWatchState) => void) => void;
+  getSessionActivationState: () => Promise<WCWatchState>;
 
   transferUserInfo: <UserInfo extends WatchPayload>(userInfo: UserInfo) => void;
-  getQueuedUserInfo: <UserInfo extends WatchPayload>(
-    cb: (userInfo: UserInfoQueue<UserInfo>) => void,
-  ) => void;
-  clearUserInfoQueue: <UserInfo extends WatchPayload>(cb: () => void) => void;
-  dequeueUserInfo: <UserInfo extends WatchPayload>(
-    ids: string[],
-    cb: (userInfo: UserInfoQueue<UserInfo>) => void,
-  ) => void;
+  getQueuedUserInfo: <UserInfo extends WatchPayload>() => Promise<
+    UserInfoQueue<UserInfo>
+  >;
+  clearUserInfoQueue: () => Promise<void>;
+  dequeueUserInfo: (ids: string[]) => Promise<void>;
 
   transferCurrentComplicationUserInfo: (userInfo: WatchPayload) => void;
 
-  getReachability: (cb: (reachable: boolean) => void) => void;
+  getReachability: () => Promise<boolean>;
 
-  getIsPaired: (cb: (isPaired: boolean) => void) => void;
-  getIsWatchAppInstalled: (cb: (isPaired: boolean) => void) => void;
+  getIsPaired: () => Promise<boolean>;
+  getIsWatchAppInstalled: () => Promise<boolean>;
 
   sendMessage: <
     Payload extends WatchPayload,
@@ -81,7 +78,7 @@ export interface IRNWatchNativeModule extends EventSubscriptionVendor {
     message: Payload,
     cb: (reply: ResponsePayload) => void,
     errCb: (err: Error) => void,
-  ) => void;
+  ) => Promise<void>;
 
   replyToMessageWithId: (messageId: string, message: WatchPayload) => void;
 
@@ -92,21 +89,15 @@ export interface IRNWatchNativeModule extends EventSubscriptionVendor {
     errorCallback: (err: Error) => void,
   ) => void;
 
-  transferFile: (
-    url: string,
-    metaData: WatchPayload | null,
-    cb: (id: string) => void,
-  ) => void;
+  transferFile: (url: string, metaData: WatchPayload | null) => Promise<string>;
 
-  getFileTransfers: (
-    cb: (transfers: {[id: string]: NativeFileTransfer}) => void,
-  ) => void;
+  getFileTransfers: () => Promise<{[id: string]: NativeFileTransfer}>;
 
   updateApplicationContext: (context: WatchPayload) => void;
 
-  getApplicationContext: <Context extends WatchPayload>(
-    cb: (context: Context | null) => void,
-  ) => void;
+  getApplicationContext: <
+    Context extends WatchPayload
+  >() => Promise<Context | null>;
 }
 
 const __mod = NativeModules.RNWatch;
