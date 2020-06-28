@@ -11,11 +11,7 @@ import {
   _subscribeToNativeSessionStateEvent,
   AddListenerFn,
 } from './subscriptions';
-import {
-  _addListener,
-  _once,
-  WatchPayload,
-} from '../native-module';
+import {_addListener, _once, WatchPayload} from '../native-module';
 
 type UnsubscribeFn = () => void;
 

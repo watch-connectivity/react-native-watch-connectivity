@@ -32,10 +32,10 @@ export function _subscribeNativeFileEvents(
  * Hook up to native message event
  */
 export function _subscribeNativeMessageEvent<
-  MessageToWatch extends WatchPayload = WatchPayload,
-  MessageFromWatch extends WatchPayload = WatchPayload
+  MessageFromWatch extends WatchPayload = WatchPayload,
+  MessageToWatch extends WatchPayload = WatchPayload
 >(
-  cb: WatchEventCallbacks<MessageToWatch, MessageFromWatch>['message'],
+  cb: WatchEventCallbacks<MessageFromWatch, MessageToWatch>['message'],
   addListener: AddListenerFn = _addListener,
 ) {
   return addListener<

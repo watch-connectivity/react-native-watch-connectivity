@@ -78,7 +78,7 @@ export interface IRNWatchNativeModule extends EventSubscriptionVendor {
     message: Payload,
     cb: (reply: ResponsePayload) => void,
     errCb: (err: Error) => void,
-  ) => Promise<void>;
+  ) => void;
 
   replyToMessageWithId: (messageId: string, message: WatchPayload) => void;
 

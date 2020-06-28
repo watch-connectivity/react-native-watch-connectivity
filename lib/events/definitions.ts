@@ -11,8 +11,8 @@ export interface FileTransferEvent extends FileTransfer {
 }
 
 export type WatchMessageCallback<
-  MessageToWatch = WatchPayload,
-  MessageFromWatch = WatchPayload
+  MessageFromWatch = WatchPayload,
+  MessageToWatch = WatchPayload
 > = (
   payload: MessageFromWatch & {id?: string},
   // if the watch sends a message without a messageId, we have no way to respond
