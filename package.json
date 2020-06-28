@@ -61,6 +61,7 @@
   },
   "devDependencies": {
     "typescript": "^3.9.5",
+    "eslint-plugin-typescript-sort-keys": "^1.2.0",
     "eslint": "^6.8.0",
     "@types/react-native": "^0.62.2",
     "@types/react": "^16.9.34",

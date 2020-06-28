@@ -11,7 +11,6 @@ import {
   WatchPayload,
 } from '../native-module';
 import {_transformFilePayload} from '../files';
-import {_SessionActivationState} from '../session-activation-state';
 
 export type AddListenerFn = typeof _addListener;
 
@@ -91,16 +90,6 @@ export function _subscribeNativeApplicationContextEvent(
   addListener: AddListenerFn = _addListener,
 ) {
   return addListener(WatchEvent.EVENT_APPLICATION_CONTEXT_RECEIVED, cb);
-}
-
-export function _subscribeToNativeSessionStateEvent(
-  cb: WatchEventCallbacks['session-state'],
-  addListener: AddListenerFn = _addListener,
-) {
-  // noinspection JSIgnoredPromiseFromCall
-  return addListener(WatchEvent.EVENT_WATCH_STATE_CHANGED, (payload) =>
-    cb(_SessionActivationState[payload.state]),
-  );
 }
 
 export function _subscribeToNativeReachabilityEvent(

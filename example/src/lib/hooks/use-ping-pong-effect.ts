@@ -1,9 +1,7 @@
 import {useCallback, useEffect, useState} from 'react';
 import {
   useReachability,
-  useSessionActivationState,
   sendMessage,
-  SessionActivationState,
   ERROR_CODE_SESSION_UNREACHABLE,
 } from 'react-native-watch-connectivity';
 
@@ -11,10 +9,9 @@ export function usePingPongEffect() {
   const [pongs, setPongs] = useState(0);
 
   const reachable = useReachability();
-  const state = useSessionActivationState();
 
   const doPing = useCallback(() => {
-    if (reachable && state === SessionActivationState.Activated) {
+    if (reachable) {
       sendMessage(
         {ping: true},
         () => {
@@ -27,7 +24,7 @@ export function usePingPongEffect() {
         },
       );
     }
-  }, [pongs, reachable, state]);
+  }, [pongs, reachable]);
 
   useEffect(() => {
     const interval = setInterval(doPing, 2000);

@@ -1,6 +1,5 @@
 export * from './messages';
 export * from './message-data';
-export * from './session-activation-state';
 export * from './reachability';
 export {startFileTransfer, getFileTransfers} from './files';
 export type {FileTransfer} from './files';

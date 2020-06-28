@@ -1,17 +1,17 @@
 import {NativeFileTransfer, NativeModule, WatchPayload} from './native-module';
 
 export interface FileTransfer {
-  bytesTransferred: number;
-  estimatedTimeRemaining: number | null;
-  fractionCompleted: number;
-  throughput: number | null;
   bytesTotal: number;
-  uri: string;
-  metadata: Record<string, unknown>;
-  id: string;
-  startTime: Date;
+  bytesTransferred: number;
   endTime: Date | null;
   error: Error | null;
+  estimatedTimeRemaining: number | null;
+  fractionCompleted: number;
+  id: string;
+  metadata: Record<string, unknown>;
+  startTime: Date;
+  throughput: number | null;
+  uri: string;
 }
 
 export function startFileTransfer(

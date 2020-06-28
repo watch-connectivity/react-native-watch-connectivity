@@ -7,7 +7,6 @@ import {
   _subscribeToNativeInstalledEvent,
   _subscribeToNativePairedEvent,
   _subscribeToNativeReachabilityEvent,
-  _subscribeToNativeSessionStateEvent,
   AddListenerFn,
 } from './subscriptions';
 import {_addListener, _once, WatchPayload} from '../native-module';
@@ -30,8 +29,6 @@ function listen<E extends WatchEvent>(
       return _subscribeNativeUserInfoEvent(cb, listener);
     case 'message':
       return _subscribeNativeMessageEvent(cb, listener);
-    case 'session-state':
-      return _subscribeToNativeSessionStateEvent(cb, listener);
     case 'paired':
       return _subscribeToNativePairedEvent(cb, listener);
     case 'installed':
@@ -72,11 +69,6 @@ function addListener<
 ): UnsubscribeFn;
 
 function addListener(
-  event: 'session-state',
-  cb: WatchEventCallbacks['session-state'],
-): UnsubscribeFn;
-
-function addListener(
   event: 'paired',
   cb: WatchEventCallbacks['paired'],
 ): UnsubscribeFn;
@@ -111,11 +103,6 @@ function once<
   MessageFromWatch extends WatchPayload = WatchPayload,
   ReplyMessage extends WatchPayload = WatchPayload
 >(event: 'message', cb: WatchEventCallbacks['message']): UnsubscribeFn;
-
-function once(
-  event: 'session-state',
-  cb: WatchEventCallbacks['session-state'],
-): UnsubscribeFn;
 
 function once(
   event: 'paired',

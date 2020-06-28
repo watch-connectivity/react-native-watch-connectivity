@@ -6,21 +6,10 @@ import {
 
 export type WatchPayload = Record<string, unknown>;
 
-export type WCWatchState =
-  // When in this state, no communication occurs between the Watch app and iOS app.
-  // It is a programmer error to try to send data to the counterpart app while in this state.
-  | 'WCSessionActivationStateNotActivated'
-  // The session was active but is transitioning to the deactivated state.
-  // The session’s delegate object may still receive data while in this state,
-  // but it is a programmer error to try to send data to the counterpart app.
-  | 'WCSessionActivationStateInactive'
-  // The session is active and the Watch app and iOS app may communicate with each other freely.
-  | 'WCSessionActivationStateActivated';
-
 export type QueuedUserInfo<UserInfo extends WatchPayload = WatchPayload> = {
-  userInfo: UserInfo;
-  timestamp: number;
   id: string;
+  timestamp: number;
+  userInfo: UserInfo;
 };
 
 export interface UserInfoQueue<UserInfo extends WatchPayload = WatchPayload> {
@@ -28,24 +17,24 @@ export interface UserInfoQueue<UserInfo extends WatchPayload = WatchPayload> {
 }
 
 export interface NativeFileTransfer {
-  bytesTransferred: number;
-  estimatedTimeRemaining: number | null;
-  fractionCompleted: number;
-  throughput: number | null;
   bytesTotal: number;
-  uri: string;
-  metadata: Record<string, unknown>;
-  id: string;
-  startTime: number;
+  bytesTransferred: number;
   endTime: number | null;
   error: Error | null;
+  estimatedTimeRemaining: number | null;
+  fractionCompleted: number;
+  id: string;
+  metadata: Record<string, unknown>;
+  startTime: number;
+  throughput: number | null;
+  uri: string;
 }
 
 export enum FileTransferEventType {
-  FINISHED = 'finished',
   ERROR = 'error',
-  STARTED = 'started',
+  FINISHED = 'finished',
   PROGRESS = 'progress',
+  STARTED = 'started',
 }
 
 export interface NativeFileTransferEvent extends NativeFileTransfer {
@@ -53,21 +42,24 @@ export interface NativeFileTransferEvent extends NativeFileTransfer {
 }
 
 export interface IRNWatchNativeModule extends EventSubscriptionVendor {
-  getSessionActivationState: () => Promise<WCWatchState>;
+  clearUserInfoQueue: () => Promise<void>;
 
-  transferUserInfo: <UserInfo extends WatchPayload>(userInfo: UserInfo) => void;
+  dequeueUserInfo: (ids: string[]) => void;
+  getApplicationContext: <
+    Context extends WatchPayload
+  >() => Promise<Context | null>;
+  getFileTransfers: () => Promise<{[id: string]: NativeFileTransfer}>;
+  getIsPaired: () => Promise<boolean>;
+
+  getIsWatchAppInstalled: () => Promise<boolean>;
+
   getQueuedUserInfo: <UserInfo extends WatchPayload>() => Promise<
     UserInfoQueue<UserInfo>
   >;
-  clearUserInfoQueue: () => Promise<void>;
-  dequeueUserInfo: (ids: string[]) => void;
-
-  transferCurrentComplicationUserInfo: (userInfo: WatchPayload) => void;
 
   getReachability: () => Promise<boolean>;
 
-  getIsPaired: () => Promise<boolean>;
-  getIsWatchAppInstalled: () => Promise<boolean>;
+  replyToMessageWithId: (messageId: string, message: WatchPayload) => void;
 
   sendMessage: <
     Payload extends WatchPayload,
@@ -78,8 +70,6 @@ export interface IRNWatchNativeModule extends EventSubscriptionVendor {
     errCb: (err: Error) => void,
   ) => void;
 
-  replyToMessageWithId: (messageId: string, message: WatchPayload) => void;
-
   sendMessageData: (
     str: string,
     encoding: number,
@@ -87,15 +77,13 @@ export interface IRNWatchNativeModule extends EventSubscriptionVendor {
     errorCallback: (err: Error) => void,
   ) => void;
 
+  transferCurrentComplicationUserInfo: (userInfo: WatchPayload) => void;
+
   transferFile: (url: string, metaData: WatchPayload | null) => Promise<string>;
 
-  getFileTransfers: () => Promise<{[id: string]: NativeFileTransfer}>;
+  transferUserInfo: <UserInfo extends WatchPayload>(userInfo: UserInfo) => void;
 
   updateApplicationContext: (context: WatchPayload) => void;
-
-  getApplicationContext: <
-    Context extends WatchPayload
-  >() => Promise<Context | null>;
 }
 
 const __mod = NativeModules.RNWatch;
@@ -112,14 +100,14 @@ export const NativeModule: IRNWatchNativeModule = __mod;
 export const nativeWatchEventEmitter = new NativeEventEmitter(NativeModule);
 
 export enum WatchEvent {
-  EVENT_FILE_TRANSFER = 'WatchFileTransfer',
-  EVENT_RECEIVE_MESSAGE = 'WatchReceiveMessage',
-  EVENT_WATCH_STATE_CHANGED = 'WatchStateChanged',
-  EVENT_WATCH_REACHABILITY_CHANGED = 'WatchReachabilityChanged',
-  EVENT_WATCH_USER_INFO_RECEIVED = 'WatchUserInfoReceived',
   EVENT_APPLICATION_CONTEXT_RECEIVED = 'WatchApplicationContextReceived',
-  EVENT_PAIR_STATUS_CHANGED = 'WatchPairStatusChanged',
+  EVENT_FILE_TRANSFER = 'WatchFileTransfer',
   EVENT_INSTALL_STATUS_CHANGED = 'WatchInstallStatusChanged',
+  EVENT_PAIR_STATUS_CHANGED = 'WatchPairStatusChanged',
+  EVENT_RECEIVE_MESSAGE = 'WatchReceiveMessage',
+  EVENT_WATCH_REACHABILITY_CHANGED = 'WatchReachabilityChanged',
+  EVENT_WATCH_STATE_CHANGED = 'WatchStateChanged',
+  EVENT_WATCH_USER_INFO_RECEIVED = 'WatchUserInfoReceived',
 }
 
 export interface EventPayloads {

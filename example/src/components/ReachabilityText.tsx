@@ -2,7 +2,6 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
 import {COLORS, ROW_MARGIN} from '../constants';
-import {SessionActivationState} from '../../../lib';
 
 function MessageTimeText({
   timeTakenToReachWatch,

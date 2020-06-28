@@ -28,7 +28,6 @@
 static NSString *EVENT_FILE_TRANSFER = @"WatchFileTransfer";
 static NSString *EVENT_RECEIVE_MESSAGE = @"WatchReceiveMessage";
 static NSString *EVENT_RECEIVE_MESSAGE_DATA = @"WatchReceiveMessageData";
-static NSString *EVENT_WATCH_STATE_CHANGED = @"WatchStateChanged";
 static NSString *EVENT_ACTIVATION_ERROR = @"WatchActivationError";
 static NSString *EVENT_WATCH_REACHABILITY_CHANGED = @"WatchReachabilityChanged";
 static NSString *EVENT_WATCH_USER_INFO_RECEIVED = @"WatchUserInfoReceived";
@@ -79,7 +78,6 @@ RCT_EXPORT_MODULE()
             EVENT_FILE_TRANSFER,
             EVENT_RECEIVE_MESSAGE,
             EVENT_RECEIVE_MESSAGE_DATA,
-            EVENT_WATCH_STATE_CHANGED,
             EVENT_ACTIVATION_ERROR,
             EVENT_WATCH_REACHABILITY_CHANGED,
             EVENT_WATCH_USER_INFO_RECEIVED,
@@ -90,26 +88,6 @@ RCT_EXPORT_MODULE()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// Session State
-////////////////////////////////////////////////////////////////////////////////
-
-RCT_EXPORT_METHOD(getSessionActivationState:
-    (RCTPromiseResolveBlock) resolve
-            reject:
-            (RCTPromiseRejectBlock) reject) {
-    WCSessionActivationState state = self.session.activationState;
-    NSString *stateString = [self _getStateString:state];
-    resolve(stateString);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-- (void)sessionWatchStateDidChange:(WCSession *)session {
-    WCSessionActivationState state = session.activationState;
-    [self _sendStateEvent:state];
-}
-
-////////////////////////////////////////////////////////////////////////////////
 
 - (void)               session:(WCSession *)session
 activationDidCompleteWithState:(WCSessionActivationState)activationState
@@ -117,7 +95,6 @@ activationDidCompleteWithState:(WCSessionActivationState)activationState
     if (error) {
         [self dispatchEventWithName:EVENT_ACTIVATION_ERROR body:@{@"error": error}];
     }
-    [self _sendStateEvent:session.activationState];
 }
 
 - (void)sessionDidDeactivate:(WCSession *)session {
@@ -126,31 +103,6 @@ activationDidCompleteWithState:(WCSessionActivationState)activationState
 
 - (void)sessionDidBecomeInactive:(WCSession *)session {
     [self dispatchEventWithName:EVENT_SESSION_BECAME_INACTIVE body:@{}];
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-- (NSString *)_getStateString:(WCSessionActivationState)state {
-    NSString *stateString;
-    switch (state) {
-        case WCSessionActivationStateNotActivated:
-            stateString = @"WCSessionActivationStateNotActivated";
-            break;
-        case WCSessionActivationStateInactive:
-            stateString = @"WCSessionActivationStateInactive";
-            break;
-        case WCSessionActivationStateActivated:
-            stateString = @"WCSessionActivationStateActivated";
-            break;
-    }
-    return stateString;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-- (void)_sendStateEvent:(WCSessionActivationState)state {
-    NSString *stateString = [self _getStateString:state];
-    [self dispatchEventWithName:EVENT_WATCH_STATE_CHANGED body:@{@"state": stateString}];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
