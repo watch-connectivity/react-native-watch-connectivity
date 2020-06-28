@@ -297,10 +297,10 @@ RCT_EXPORT_METHOD(transferFile:
     (NSString *) url
             metaData:
             (nullable NSDictionary<NSString *, id> *)metaData
-            resolve:
-    (RCTPromiseResolveBlock) resolve
-            reject:
-    (RCTPromiseRejectBlock) reject
+        resolve:
+(RCTPromiseResolveBlock) resolve
+        reject:
+(RCTPromiseRejectBlock) reject
 ) {
     double startTime = jsTimestamp();
 
@@ -451,7 +451,8 @@ RCT_EXPORT_METHOD(updateApplicationContext:
 
 RCT_EXPORT_METHOD(getApplicationContext:
     (RCTPromiseResolveBlock) resolve
-            reject: (RCTPromiseRejectBlock) reject) {
+            reject:
+            (RCTPromiseRejectBlock) reject) {
     NSDictionary<NSString *, id> *applicationContext = self.session.applicationContext;
     if (applicationContext == nil) {
         resolve([NSNull null]);
@@ -496,16 +497,11 @@ RCT_EXPORT_METHOD(clearUserInfoQueue:
 
 RCT_EXPORT_METHOD(dequeueUserInfo:
     (NSArray<NSString *> *) ids
-            resolve:
-            (RCTPromiseResolveBlock) resolve
-            reject:
-            (RCTPromiseRejectBlock) reject
 ) {
     for (NSString *ident in ids) {
         [self.queuedUserInfo removeObjectForKey:ident];
     }
     [self dispatchEventWithName:EVENT_WATCH_USER_INFO_RECEIVED body:self.queuedUserInfo];
-    resolve([NSNull null]);
 }
 
 - (void)session:(WCSession *)session didFinishUserInfoTransfer:(WCSessionUserInfoTransfer *)userInfoTransfer error:(NSError *)error {

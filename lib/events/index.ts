@@ -4,7 +4,6 @@ import {
   _subscribeNativeFileEvents,
   _subscribeNativeMessageEvent,
   _subscribeNativeUserInfoEvent,
-  _subscribeToErrorEvent,
   _subscribeToNativeInstalledEvent,
   _subscribeToNativePairedEvent,
   _subscribeToNativeReachabilityEvent,
@@ -37,8 +36,6 @@ function listen<E extends WatchEvent>(
       return _subscribeToNativePairedEvent(cb, listener);
     case 'installed':
       return _subscribeToNativeInstalledEvent(cb, listener);
-    case 'error':
-      return _subscribeToErrorEvent(cb, listener);
     default:
       throw new Error(`Unknown watch event "${event}"`);
   }
@@ -89,11 +86,6 @@ function addListener(
   cb: WatchEventCallbacks['installed'],
 ): UnsubscribeFn;
 
-function addListener(
-  event: 'error',
-  cb: WatchEventCallbacks['error'],
-): UnsubscribeFn;
-
 function addListener(event: WatchEvent, cb: any): UnsubscribeFn {
   return listen(event, cb, _addListener);
 }
@@ -134,8 +126,6 @@ function once(
   event: 'installed',
   cb: WatchEventCallbacks['installed'],
 ): UnsubscribeFn;
-
-function once(event: 'error', cb: WatchEventCallbacks['error']): UnsubscribeFn;
 
 function once(event: WatchEvent, cb: any): UnsubscribeFn {
   return listen(event, cb, _once);

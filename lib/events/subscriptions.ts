@@ -5,7 +5,6 @@
 import {WatchEventCallbacks} from './definitions';
 import {
   _addListener,
-  _emitError,
   NativeModule,
   QueuedUserInfo,
   WatchEvent,
@@ -55,9 +54,7 @@ export function _subscribeNativeMessageEvent<
 
 type UserInfoId = string | Date | number | {id: string};
 
-function _dequeueUserInfo(
-  idOrIds: UserInfoId | Array<UserInfoId>,
-): Promise<void> {
+function _dequeueUserInfo(idOrIds: UserInfoId | Array<UserInfoId>) {
   const ids: Array<UserInfoId> = Array.isArray(idOrIds) ? idOrIds : [idOrIds];
   const normalisedIds = ids.map((id) => {
     if (typeof id === 'object') {
@@ -71,7 +68,7 @@ function _dequeueUserInfo(
     }
   });
 
-  return NativeModule.dequeueUserInfo(normalisedIds);
+  NativeModule.dequeueUserInfo(normalisedIds);
 }
 
 export function _subscribeNativeUserInfoEvent<
@@ -84,11 +81,8 @@ export function _subscribeNativeUserInfoEvent<
     WatchEvent.EVENT_WATCH_USER_INFO_RECEIVED,
     QueuedUserInfo<UserInfo>
   >(WatchEvent.EVENT_WATCH_USER_INFO_RECEIVED, (item) => {
-    _dequeueUserInfo(item)
-      .then(() => {
-        cb(item.userInfo, {timestamp: item.timestamp, id: item.id});
-      })
-      .catch(_emitError);
+    _dequeueUserInfo(item);
+    cb(item.userInfo, {timestamp: item.timestamp, id: item.id});
   });
 }
 
@@ -135,11 +129,4 @@ export function _subscribeToNativeInstalledEvent(
   return addListener(WatchEvent.EVENT_INSTALL_STATUS_CHANGED, ({installed}) => {
     cb(installed);
   });
-}
-
-export function _subscribeToErrorEvent(
-  cb: WatchEventCallbacks['error'],
-  addListener: AddListenerFn = _addListener,
-) {
-  return addListener(WatchEvent.EVENT_ERROR, cb);
 }

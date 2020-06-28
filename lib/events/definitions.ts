@@ -37,7 +37,6 @@ export interface WatchEventCallbacks<
   'session-state': (state: SessionActivationState) => void;
   paired: (paired: boolean) => void;
   installed: (installed: boolean) => void;
-  error: (error: Error) => void;
 }
 
 export type WatchEvent = keyof WatchEventCallbacks;

@@ -4,8 +4,6 @@ import {
   NativeModules,
 } from 'react-native';
 
-import mitt from 'mitt';
-
 export type WatchPayload = Record<string, unknown>;
 
 export type WCWatchState =
@@ -62,7 +60,7 @@ export interface IRNWatchNativeModule extends EventSubscriptionVendor {
     UserInfoQueue<UserInfo>
   >;
   clearUserInfoQueue: () => Promise<void>;
-  dequeueUserInfo: (ids: string[]) => Promise<void>;
+  dequeueUserInfo: (ids: string[]) => void;
 
   transferCurrentComplicationUserInfo: (userInfo: WatchPayload) => void;
 
@@ -112,7 +110,6 @@ if (!__mod) {
 
 export const NativeModule: IRNWatchNativeModule = __mod;
 export const nativeWatchEventEmitter = new NativeEventEmitter(NativeModule);
-export const jsEventEmitter = mitt();
 
 export enum WatchEvent {
   EVENT_FILE_TRANSFER = 'WatchFileTransfer',
@@ -123,7 +120,6 @@ export enum WatchEvent {
   EVENT_APPLICATION_CONTEXT_RECEIVED = 'WatchApplicationContextReceived',
   EVENT_PAIR_STATUS_CHANGED = 'WatchPairStatusChanged',
   EVENT_INSTALL_STATUS_CHANGED = 'WatchInstallStatusChanged',
-  EVENT_ERROR = 'error',
 }
 
 export interface EventPayloads {
@@ -146,7 +142,6 @@ export interface EventPayloads {
   [WatchEvent.EVENT_INSTALL_STATUS_CHANGED]: {
     installed: boolean;
   };
-  [WatchEvent.EVENT_ERROR]: Error;
 }
 
 export function _addListener<E extends WatchEvent, Payload = EventPayloads[E]>(
@@ -156,11 +151,6 @@ export function _addListener<E extends WatchEvent, Payload = EventPayloads[E]>(
   // Type the event name
   if (!event) {
     throw new Error('Must pass event');
-  }
-
-  if (event === 'error') {
-    jsEventEmitter.on(event, cb);
-    return () => jsEventEmitter.off(event, cb);
   }
 
   const sub = nativeWatchEventEmitter.addListener(event, cb);
@@ -176,14 +166,6 @@ export function _once<E extends WatchEvent, Payload = EventPayloads[E]>(
     throw new Error('Must pass event');
   }
 
-  if (event === 'error') {
-    jsEventEmitter.on(event, (payload) => {
-      jsEventEmitter.off(event, cb);
-      cb(payload);
-    });
-    return () => jsEventEmitter.off(event, cb);
-  }
-
   // TODO: Investigate NativeEventEmitter.once issues...
   // ... can randomly throw an error: "Invariant Violation: Not in an emitting cycle; there is no current subscription"
   const sub = nativeWatchEventEmitter.addListener(event, (payload) => {
@@ -192,9 +174,4 @@ export function _once<E extends WatchEvent, Payload = EventPayloads[E]>(
   });
 
   return () => sub.remove();
-}
-
-export function _emitError(err: Error) {
-  console.error(err);
-  jsEventEmitter.emit('error', err);
 }
