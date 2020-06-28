@@ -120,6 +120,7 @@ function once(event: WatchEvent, cb: any): UnsubscribeFn {
 
 const watchEvents = {
   addListener,
+  on: addListener,
   once,
 };
 
