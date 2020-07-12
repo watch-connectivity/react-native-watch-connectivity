@@ -1,5 +1,4 @@
 import {IntegrationTest} from '../IntegrationTest';
-import {TestLogFn} from './util';
 
 import fs from 'react-native-fs';
 import {
@@ -8,6 +7,7 @@ import {
   watchEvents,
 } from 'react-native-watch-connectivity';
 import {TestFnOpts} from './index';
+import {UnsubscribeFn} from 'react-native-watch-connectivity/events';
 
 export class FileIntegrationTest extends IntegrationTest {
   constructor() {
@@ -20,7 +20,7 @@ export class FileIntegrationTest extends IntegrationTest {
     );
   }
 
-  testSendFile = ({log}: TestFnOpts) => {
+  testSendFile = ({log, after}: TestFnOpts) => {
     return new Promise((resolve, reject) => {
       let path = 'file://' + fs.MainBundlePath + '/Blah_Blah_Blah.jpg';
 
@@ -30,7 +30,11 @@ export class FileIntegrationTest extends IntegrationTest {
       let didReceiveFinalProgressEvent = false;
       let didReceiveSuccessEvent = false;
 
-      const unsubscribeFromFileTransfers = watchEvents.addListener(
+      let unsubscribeFromFileTransfers: UnsubscribeFn = () => {};
+
+      after(() => unsubscribeFromFileTransfers());
+
+      unsubscribeFromFileTransfers = watchEvents.addListener(
         'file',
         (event) => {
           log('transfer event: ' + JSON.stringify(event));
@@ -57,7 +61,6 @@ export class FileIntegrationTest extends IntegrationTest {
       );
 
       startFileTransfer(path).catch((err) => {
-        unsubscribeFromFileTransfers();
         reject(err);
       });
 
