@@ -11,6 +11,7 @@ import {
   WatchPayload,
 } from '../native-module';
 import {_transformFilePayload} from '../files';
+import {_getMissedUserInfo} from '../user-info';
 
 export type AddListenerFn = typeof _addListener;
 
@@ -76,12 +77,27 @@ export function _subscribeNativeUserInfoEvent<
   cb: WatchEventCallbacks<UserInfo>['user-info'],
   addListener: AddListenerFn = _addListener,
 ) {
+  let initialized = false;
+  const xtra: UserInfo[] = [];
+
+  _getMissedUserInfo<UserInfo>().then((info) => {
+    const combined = [...xtra, ...info];
+    if (combined.length) {
+      cb(combined);
+    }
+    initialized = true;
+  });
+
   return addListener<
     WatchEvent.EVENT_WATCH_USER_INFO_RECEIVED,
     QueuedUserInfo<UserInfo>
   >(WatchEvent.EVENT_WATCH_USER_INFO_RECEIVED, (item) => {
     _dequeueUserInfo(item);
-    cb(item.userInfo, {timestamp: item.timestamp, id: item.id});
+    if (initialized) {
+      cb([item.userInfo]);
+    } else {
+      xtra.push(item.userInfo);
+    }
   });
 }
 

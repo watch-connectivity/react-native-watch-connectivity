@@ -431,7 +431,7 @@ RCT_EXPORT_METHOD(getQueuedUserInfo:
             (RCTPromiseRejectBlock) reject) {
     resolve(self.queuedUserInfo);
     // Clear the cache.
-    self.queuedUserInfo = [NSMutableDictionary new];
+    [self.queuedUserInfo removeAllObjects];
 }
 
 RCT_EXPORT_METHOD(transferUserInfo:

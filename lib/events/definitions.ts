@@ -28,13 +28,7 @@ export interface WatchEventCallbacks<
   message: WatchMessageCallback<P, P2>;
   paired: (paired: boolean) => void;
   reachability: (reachable: boolean) => void;
-  'user-info': (
-    payload: P,
-    metadata: {
-      id: string;
-      timestamp: number;
-    },
-  ) => void;
+  'user-info': (payload: P[]) => void;
 }
 
 export type WatchEvent = keyof WatchEventCallbacks;

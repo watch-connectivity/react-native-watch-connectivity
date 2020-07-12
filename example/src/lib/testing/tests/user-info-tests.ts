@@ -4,20 +4,12 @@ import {isEqual} from 'lodash';
 import {assert, TestLogFn} from './util';
 import * as faker from 'faker';
 import {
-  getMissedUserInfo,
+  _getMissedUserInfo,
   sendMessage,
   transferCurrentComplicationUserInfo,
   transferUserInfo,
   watchEvents,
-  WatchPayload,
 } from 'react-native-watch-connectivity';
-import {NativeModule} from 'react-native-watch-connectivity/native-module';
-
-export function _clearUserInfoQueue<
-  UserInfo extends WatchPayload = WatchPayload
->(): Promise<void> {
-  return NativeModule.clearUserInfoQueue();
-}
 
 export class UserInfoIntegrationTest extends IntegrationTest {
   constructor() {
@@ -37,7 +29,7 @@ export class UserInfoIntegrationTest extends IntegrationTest {
   }
 
   testSendUserInfo = async (log: TestLogFn) => {
-    await _clearUserInfoQueue();
+    await _getMissedUserInfo();
     const sentUserInfo = {uid: faker.lorem.word(), name: faker.lorem.words(2)};
     const receivedUserInfo = await this.sendUserInfoAndWaitForAck(
       sentUserInfo,
@@ -47,7 +39,7 @@ export class UserInfoIntegrationTest extends IntegrationTest {
   };
 
   testTransferComplicationUserInfo = async (log: TestLogFn) => {
-    await _clearUserInfoQueue();
+    await _getMissedUserInfo();
     const sentUserInfo = {uid: faker.lorem.word(), name: faker.lorem.words(2)};
     const receivedUserInfo = await this.sendUserInfoAndWaitForAck(
       sentUserInfo,
@@ -58,7 +50,7 @@ export class UserInfoIntegrationTest extends IntegrationTest {
   };
 
   testSubscribeToUserInfo = async (log: TestLogFn) => {
-    return _clearUserInfoQueue().then(
+    return _getMissedUserInfo().then(
       () =>
         new Promise((resolve, reject) => {
           const expectedUserInfo = {
@@ -67,13 +59,19 @@ export class UserInfoIntegrationTest extends IntegrationTest {
             email: 'bob@example.com',
           };
 
-          watchEvents.once('user-info', (e) => {
-            log('received user info from watch event: ' + JSON.stringify(e));
-            if (!isEqual(e, expectedUserInfo)) {
+          watchEvents.once('user-info', (userInfoList) => {
+            log(
+              'received user info from watch event: ' +
+                JSON.stringify(userInfoList),
+            );
+
+            assert(userInfoList.length === 1);
+
+            if (!isEqual(userInfoList[0], expectedUserInfo)) {
               reject(new Error('User info did not match'));
             }
 
-            getMissedUserInfo()
+            _getMissedUserInfo()
               .then((missed) => {
                 log(`${missed.length} missed user info`);
                 assert(!missed.length, 'should have dequeued user info');
@@ -89,7 +87,7 @@ export class UserInfoIntegrationTest extends IntegrationTest {
   };
 
   testUserInfoQueue = async (log: TestLogFn) => {
-    return _clearUserInfoQueue().then(async () => {
+    return _getMissedUserInfo().then(async () => {
       let message = {test: true, text: 'send me some user info'};
       log('sent message: ' + JSON.stringify(message));
 
@@ -107,7 +105,7 @@ export class UserInfoIntegrationTest extends IntegrationTest {
         });
       });
 
-      let missedUserInfo = await getMissedUserInfo();
+      let missedUserInfo = await watchEvents.once('user-info');
 
       log('user info: ' + JSON.stringify(missedUserInfo));
 
@@ -138,7 +136,7 @@ export class UserInfoIntegrationTest extends IntegrationTest {
         'second record should match',
       );
 
-      missedUserInfo = await getMissedUserInfo();
+      missedUserInfo = await _getMissedUserInfo();
 
       assert(
         missedUserInfo.length === 0,

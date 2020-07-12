@@ -87,22 +87,50 @@ function once(
   cb: WatchEventCallbacks['reachability'],
 ): UnsubscribeFn;
 
+function once(
+  event: 'reachability',
+): Promise<Parameters<WatchEventCallbacks['reachability']>[0]>;
+
 function once(event: 'file', cb: WatchEventCallbacks['file']): UnsubscribeFn;
+
+function once(
+  event: 'file',
+): Promise<Parameters<WatchEventCallbacks['file']>[0]>;
 
 function once<Context extends WatchPayload = WatchPayload>(
   event: 'application-context',
-  cb: WatchEventCallbacks['application-context'],
+  cb: WatchEventCallbacks<Context>['application-context'],
+): UnsubscribeFn;
+
+function once<Context extends WatchPayload = WatchPayload>(
+  event: 'application-context',
+): Promise<Parameters<WatchEventCallbacks<Context>['application-context']>[0]>;
+
+function once<UserInfo extends WatchPayload = WatchPayload>(
+  event: 'user-info',
+  cb: WatchEventCallbacks<UserInfo>['user-info'],
 ): UnsubscribeFn;
 
 function once<UserInfo extends WatchPayload = WatchPayload>(
   event: 'user-info',
-  cb: WatchEventCallbacks['user-info'],
+): Promise<Parameters<WatchEventCallbacks<UserInfo>['user-info']>[0]>;
+
+function once<
+  MessageFromWatch extends WatchPayload = WatchPayload,
+  ReplyMessage extends WatchPayload = WatchPayload
+>(
+  event: 'message',
+  cb: WatchEventCallbacks<MessageFromWatch, ReplyMessage>['message'],
 ): UnsubscribeFn;
 
 function once<
   MessageFromWatch extends WatchPayload = WatchPayload,
   ReplyMessage extends WatchPayload = WatchPayload
->(event: 'message', cb: WatchEventCallbacks['message']): UnsubscribeFn;
+>(
+  event: 'message',
+): Promise<
+  Parameters<WatchEventCallbacks<MessageFromWatch, ReplyMessage>['message']>[0]
+>;
 
 function once(
   event: 'paired',
@@ -110,12 +138,26 @@ function once(
 ): UnsubscribeFn;
 
 function once(
+  event: 'paired',
+): Promise<Parameters<WatchEventCallbacks['paired']>[0]>;
+
+function once(
   event: 'installed',
   cb: WatchEventCallbacks['installed'],
 ): UnsubscribeFn;
 
-function once(event: WatchEvent, cb: any): UnsubscribeFn {
-  return listen(event, cb, _once);
+function once(
+  event: 'installed',
+): Promise<Parameters<WatchEventCallbacks['installed']>[0]>;
+
+function once(event: WatchEvent, cb?: any): UnsubscribeFn | Promise<any> {
+  if (cb) {
+    return listen(event, cb, _once);
+  } else {
+    return new Promise((resolve) => {
+      listen(event, resolve, _once);
+    });
+  }
 }
 
 const watchEvents = {

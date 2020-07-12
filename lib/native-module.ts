@@ -42,8 +42,6 @@ export interface NativeFileTransferEvent extends NativeFileTransfer {
 }
 
 export interface IRNWatchNativeModule extends EventSubscriptionVendor {
-  clearUserInfoQueue: () => Promise<void>;
-
   dequeueUserInfo: (ids: string[]) => void;
   getApplicationContext: <
     Context extends WatchPayload
