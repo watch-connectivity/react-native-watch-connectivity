@@ -7,7 +7,16 @@ import {FileIntegrationTest} from './file-tests';
 import {PairedTests} from './paired-tests';
 import {InstalledTests} from './installed-tests';
 
-export type TestFn = (log: (str: string) => void) => Promise<void>;
+export type BeforeAfterFn = () => Promise<void> | void;
+export type RegisterFn = (fn: BeforeAfterFn) => void;
+
+export type TestFnOpts = {
+  after: RegisterFn;
+  before: RegisterFn;
+  log: (str: string) => void;
+};
+
+export type TestFn = (opts: TestFnOpts) => Promise<void>;
 
 export type TestMode = 'reachable' | 'unreachable' | 'default';
 

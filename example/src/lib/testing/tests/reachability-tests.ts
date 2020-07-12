@@ -2,6 +2,7 @@ import {IntegrationTest} from '../IntegrationTest';
 
 import {assert, TestLogFn} from './util';
 import {getReachability, watchEvents} from 'react-native-watch-connectivity';
+import {TestFnOpts} from './index';
 
 export class ReachabilityIntegrationTest extends IntegrationTest {
   constructor() {
@@ -27,7 +28,7 @@ export class ReachabilityIntegrationTest extends IntegrationTest {
     }
   };
 
-  testWaitForReachability = async (log: TestLogFn) => {
+  testWaitForReachability = async ({log}: TestFnOpts) => {
     const reachable = await getReachability();
     log('checking that watch is unreachable: ' + JSON.stringify(reachable));
     assert(!reachable, 'should not be reachable to begin with');
@@ -44,7 +45,7 @@ export class ReachabilityIntegrationTest extends IntegrationTest {
     });
   };
 
-  testWaitForUnreachability = async (log: TestLogFn) => {
+  testWaitForUnreachability = async ({log}: TestFnOpts) => {
     const reachable = await getReachability();
     log('checking that watch is reachable: ' + JSON.stringify(reachable));
     assert(reachable, 'should be reachable to begin with');

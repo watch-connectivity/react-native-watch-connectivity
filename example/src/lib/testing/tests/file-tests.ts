@@ -7,6 +7,7 @@ import {
   startFileTransfer,
   watchEvents,
 } from 'react-native-watch-connectivity';
+import {TestFnOpts} from './index';
 
 export class FileIntegrationTest extends IntegrationTest {
   constructor() {
@@ -19,7 +20,7 @@ export class FileIntegrationTest extends IntegrationTest {
     );
   }
 
-  testSendFile = (log: TestLogFn) => {
+  testSendFile = ({log}: TestFnOpts) => {
     return new Promise((resolve, reject) => {
       let path = 'file://' + fs.MainBundlePath + '/Blah_Blah_Blah.jpg';
 
@@ -66,7 +67,7 @@ export class FileIntegrationTest extends IntegrationTest {
     // TODO: Clean up susbcribes on test failure (need an after func)
   };
 
-  testGetFileTransfers = async (log: TestLogFn) => {
+  testGetFileTransfers = async ({log}: TestFnOpts) => {
     const fileTransfers = await getFileTransfers();
     log('File transfers received: ' + JSON.stringify(fileTransfers, null, 2));
   };

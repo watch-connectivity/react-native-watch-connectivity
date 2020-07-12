@@ -1,7 +1,7 @@
 import {IntegrationTest} from '../IntegrationTest';
 
 import {isEqual} from 'lodash';
-import {assert, TestLogFn} from './util';
+import {assert} from './util';
 
 import * as faker from 'faker';
 import {
@@ -10,6 +10,8 @@ import {
   updateApplicationContext,
   watchEvents,
 } from 'react-native-watch-connectivity';
+import {TestFnOpts} from './index';
+import {UnsubscribeFn} from 'react-native-watch-connectivity/events';
 
 export class ApplicationContextTests extends IntegrationTest {
   constructor() {
@@ -26,9 +28,13 @@ export class ApplicationContextTests extends IntegrationTest {
     );
   }
 
-  testApplicationContext = async (log: TestLogFn) => {
+  testApplicationContext = async (opts: TestFnOpts) => {
+    const {log} = opts;
     const sentApplicationContext = {x: faker.lorem.words(3)};
-    await this.sendApplicationContextAndWaitForAck(sentApplicationContext, log);
+    await this.sendApplicationContextAndWaitForAck(
+      sentApplicationContext,
+      opts,
+    );
     const applicationContext = await getApplicationContext();
     log('got application context: ' + JSON.stringify(applicationContext));
 
@@ -38,7 +44,7 @@ export class ApplicationContextTests extends IntegrationTest {
     );
   };
 
-  testSubscribeToApplicationContext = async (log: TestLogFn) => {
+  testSubscribeToApplicationContext = async ({log}: TestFnOpts) => {
     return new Promise((resolve, reject) => {
       const expectedApplicationContext = {
         a: faker.lorem.words(2),
@@ -78,10 +84,14 @@ export class ApplicationContextTests extends IntegrationTest {
 
   private sendApplicationContextAndWaitForAck = (
     applicationContextToSend: Record<string, unknown>,
-    log: TestLogFn,
+    {log, after}: TestFnOpts,
   ) => {
+    let unsubscribe: UnsubscribeFn = () => {};
+
+    after(() => unsubscribe());
+
     return new Promise((resolve, reject) => {
-      const unsubscribe = watchEvents.addListener('message', (payload) => {
+      unsubscribe = watchEvents.addListener('message', (payload) => {
         if (payload) {
           log('Received message: ' + JSON.stringify(payload));
         }

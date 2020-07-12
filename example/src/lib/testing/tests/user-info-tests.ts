@@ -10,6 +10,7 @@ import {
   transferUserInfo,
   watchEvents,
 } from 'react-native-watch-connectivity';
+import {TestFnOpts} from './index';
 
 export class UserInfoIntegrationTest extends IntegrationTest {
   constructor() {
@@ -28,7 +29,7 @@ export class UserInfoIntegrationTest extends IntegrationTest {
     this.registerTest('User info queue', 'reachable', this.testUserInfoQueue);
   }
 
-  testSendUserInfo = async (log: TestLogFn) => {
+  testSendUserInfo = async ({log}: TestFnOpts) => {
     await _getMissedUserInfo();
     const sentUserInfo = {uid: faker.lorem.word(), name: faker.lorem.words(2)};
     const receivedUserInfo = await this.sendUserInfoAndWaitForAck(
@@ -38,7 +39,7 @@ export class UserInfoIntegrationTest extends IntegrationTest {
     assert(isEqual(sentUserInfo, receivedUserInfo));
   };
 
-  testTransferComplicationUserInfo = async (log: TestLogFn) => {
+  testTransferComplicationUserInfo = async ({log}: TestFnOpts) => {
     await _getMissedUserInfo();
     const sentUserInfo = {uid: faker.lorem.word(), name: faker.lorem.words(2)};
     const receivedUserInfo = await this.sendUserInfoAndWaitForAck(
@@ -49,7 +50,7 @@ export class UserInfoIntegrationTest extends IntegrationTest {
     assert(isEqual(sentUserInfo, receivedUserInfo));
   };
 
-  testSubscribeToUserInfo = async (log: TestLogFn) => {
+  testSubscribeToUserInfo = async ({log}: TestFnOpts) => {
     return _getMissedUserInfo().then(
       () =>
         new Promise((resolve, reject) => {
@@ -86,7 +87,7 @@ export class UserInfoIntegrationTest extends IntegrationTest {
     );
   };
 
-  testUserInfoQueue = async (log: TestLogFn) => {
+  testUserInfoQueue = async ({log}: TestFnOpts) => {
     return _getMissedUserInfo().then(async () => {
       let message = {test: true, text: 'send me some user info'};
       log('sent message: ' + JSON.stringify(message));

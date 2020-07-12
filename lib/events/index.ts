@@ -11,7 +11,7 @@ import {
 } from './subscriptions';
 import {_addListener, _once, WatchPayload} from '../native-module';
 
-type UnsubscribeFn = () => void;
+export type UnsubscribeFn = () => void;
 
 function listen<E extends WatchEvent>(
   event: E,

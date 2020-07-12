@@ -3,7 +3,8 @@ import {
   getIsWatchAppInstalled,
   watchEvents,
 } from 'react-native-watch-connectivity';
-import {assert, TestLogFn} from './util';
+import {assert} from './util';
+import {TestFnOpts} from './index';
 
 export class InstalledTests extends IntegrationTest {
   constructor() {
@@ -13,7 +14,7 @@ export class InstalledTests extends IntegrationTest {
     this.registerTest('Installed event', 'default', this.testInstalledEvent);
   }
 
-  testIsInstalled = async (log: TestLogFn) => {
+  testIsInstalled = async ({log}: TestFnOpts) => {
     const installed = await getIsWatchAppInstalled();
 
     log(installed ? 'installed' : 'not installed!');
@@ -21,7 +22,7 @@ export class InstalledTests extends IntegrationTest {
     assert(installed);
   };
 
-  testNotInstalled = async (log: TestLogFn) => {
+  testNotInstalled = async ({log}: TestFnOpts) => {
     const installed = await getIsWatchAppInstalled();
 
     log(installed ? 'installed' : 'not installed!');
@@ -29,7 +30,7 @@ export class InstalledTests extends IntegrationTest {
     assert(!installed);
   };
 
-  testInstalledEvent = async (log: TestLogFn) => {
+  testInstalledEvent = async ({log}: TestFnOpts) => {
     const installed = await getIsWatchAppInstalled();
     log(installed ? 'installed' : 'not installed!');
     assert(!installed);

@@ -1,6 +1,7 @@
 import {IntegrationTest} from '../IntegrationTest';
 import {getIsPaired} from 'react-native-watch-connectivity';
 import {assert, TestLogFn} from './util';
+import {TestFnOpts} from './index';
 
 export class PairedTests extends IntegrationTest {
   constructor() {
@@ -9,7 +10,7 @@ export class PairedTests extends IntegrationTest {
     this.registerTest('Not paired', 'default', this.testNotPaired);
   }
 
-  testIsPaired = async (log: TestLogFn) => {
+  testIsPaired = async ({log}: TestFnOpts) => {
     const paired = await getIsPaired();
 
     log(paired ? 'paired' : 'not paired!');
@@ -17,7 +18,7 @@ export class PairedTests extends IntegrationTest {
     assert(paired);
   };
 
-  testNotPaired = async (log: TestLogFn) => {
+  testNotPaired = async ({log}: TestFnOpts) => {
     const paired = await getIsPaired();
 
     log(paired ? 'paired' : 'not paired!');

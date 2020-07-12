@@ -1,12 +1,12 @@
 import {action, computed, observable, runInAction} from 'mobx';
-import {Test, TestSection} from '../tests';
+import {BeforeAfterFn, Test, TestSection} from '../tests';
 import {flatten, keys, some, keyBy} from 'lodash';
 import {IntegrationTest} from '../IntegrationTest';
 
 type TestStatus =
   | {status: 'pending'}
   | {status: 'running'}
-  | {status: 'failed'; error: Error}
+  | {error: Error; status: 'failed'}
   | {status: 'passed'};
 
 export default class TestRunner {
@@ -85,9 +85,21 @@ export default class TestRunner {
     let timeout: ReturnType<typeof setTimeout> | null = null;
 
     return new Promise((resolve, reject) => {
+      let after: BeforeAfterFn[] = [];
+      let before: BeforeAfterFn[] = [];
+
       test
-        .run((text) => {
-          this.log(name, text);
+        .run({
+          after: (fn) => after.push(fn),
+          before: (fn) => before.push(fn),
+          log: (text) => {
+            this.log(name, text);
+          },
+        })
+        .then(async () => {
+          for (let i = 0; i < before.length; i++) {
+            await before[i]();
+          }
         })
         .then(() => {
           if (!isTimedOut) {
@@ -115,6 +127,11 @@ export default class TestRunner {
 
           if (timeout) {
             clearTimeout(timeout);
+          }
+        })
+        .finally(async () => {
+          for (let i = 0; i < after.length; i++) {
+            await after[i]();
           }
         });
 

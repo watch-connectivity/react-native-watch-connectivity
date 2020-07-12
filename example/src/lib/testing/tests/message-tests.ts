@@ -1,6 +1,7 @@
 import {IntegrationTest} from '../IntegrationTest';
 import {TestLogFn} from './util';
 import {sendMessage, watchEvents} from 'react-native-watch-connectivity';
+import { TestFnOpts } from './index';
 
 export class MessagesIntegrationTest extends IntegrationTest {
   constructor() {
@@ -18,7 +19,7 @@ export class MessagesIntegrationTest extends IntegrationTest {
     );
   }
 
-  testSendMessage = async (log: TestLogFn) => {
+  testSendMessage = async ({log}: TestFnOpts) => {
     const resp = await this.sendMessage('Reply to this message', log);
     log('sent message');
 
@@ -27,7 +28,7 @@ export class MessagesIntegrationTest extends IntegrationTest {
     }
   };
 
-  testSubscribeToMessages = (log: TestLogFn) => {
+  testSubscribeToMessages = ({log}: TestFnOpts) => {
     return new Promise((resolve) => {
       const unsubscribe = watchEvents.addListener('message', (message) => {
         log('Received message ' + JSON.stringify(message));
@@ -44,7 +45,7 @@ export class MessagesIntegrationTest extends IntegrationTest {
     });
   };
 
-  testReplyToMessagesFromWatch = (log: TestLogFn) => {
+  testReplyToMessagesFromWatch = ({log}: TestFnOpts) => {
     return new Promise((resolve, reject) => {
       let receivedFirstMessage = false;
       const unsubscribe = watchEvents.addListener(

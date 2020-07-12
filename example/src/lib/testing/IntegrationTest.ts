@@ -1,4 +1,4 @@
-import {Test, TestMode} from './tests';
+import {Test, TestFnOpts, TestMode} from './tests';
 
 export class IntegrationTest {
   tests: Test[] = [];
@@ -11,7 +11,7 @@ export class IntegrationTest {
   protected registerTest(
     name: string,
     mode: TestMode,
-    fn: (log: (str: string) => void) => Promise<any>,
+    fn: (opts: TestFnOpts) => Promise<any>,
   ) {
     this.tests.push({
       name,

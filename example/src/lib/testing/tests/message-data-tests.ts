@@ -1,6 +1,6 @@
 import {IntegrationTest} from '../IntegrationTest';
-import {TestLogFn} from './util';
 import {sendMessageData} from 'react-native-watch-connectivity';
+import {TestFnOpts} from './index';
 
 export class MessageDataIntegrationTest extends IntegrationTest {
   constructor() {
@@ -12,7 +12,7 @@ export class MessageDataIntegrationTest extends IntegrationTest {
     );
   }
 
-  async testSendMessageData(log: TestLogFn) {
+  async testSendMessageData({log}: TestFnOpts) {
     const data = 'hello';
 
     log(`Sending message data: ${data}`);
