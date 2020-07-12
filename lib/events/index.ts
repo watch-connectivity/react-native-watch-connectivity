@@ -129,7 +129,7 @@ function once<
 >(
   event: 'message',
 ): Promise<
-  Parameters<WatchEventCallbacks<MessageFromWatch, ReplyMessage>['message']>[0]
+  Parameters<WatchEventCallbacks<MessageFromWatch, ReplyMessage>['message']>
 >;
 
 function once(
@@ -155,7 +155,17 @@ function once(event: WatchEvent, cb?: any): UnsubscribeFn | Promise<any> {
     return listen(event, cb, _once);
   } else {
     return new Promise((resolve) => {
-      listen(event, resolve, _once);
+      listen(
+        event,
+        (...args: any[]) => {
+          if (args.length === 1) {
+            resolve(args[0]);
+          } else {
+            resolve(args); // Only happens in the case of message
+          }
+        },
+        _once,
+      );
     });
   }
 }
