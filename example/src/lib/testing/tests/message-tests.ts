@@ -1,7 +1,8 @@
 import {IntegrationTest} from '../IntegrationTest';
 import {TestLogFn} from './util';
 import {sendMessage, watchEvents} from 'react-native-watch-connectivity';
-import { TestFnOpts } from './index';
+import {TestFnOpts} from './index';
+import {UnsubscribeFn} from 'react-native-watch-connectivity/events';
 
 export class MessagesIntegrationTest extends IntegrationTest {
   constructor() {
@@ -28,12 +29,15 @@ export class MessagesIntegrationTest extends IntegrationTest {
     }
   };
 
-  testSubscribeToMessages = ({log}: TestFnOpts) => {
+  testSubscribeToMessages = ({log, after}: TestFnOpts) => {
+    let unsubscribe: UnsubscribeFn = () => {};
+
+    after(() => unsubscribe?.());
+
     return new Promise((resolve) => {
-      const unsubscribe = watchEvents.addListener('message', (message) => {
+      unsubscribe = watchEvents.addListener('message', (message) => {
         log('Received message ' + JSON.stringify(message));
         if (message?.text === "Here's your message") {
-          unsubscribe();
           log('Unsubscribed');
           resolve();
         }
@@ -45,34 +49,32 @@ export class MessagesIntegrationTest extends IntegrationTest {
     });
   };
 
-  testReplyToMessagesFromWatch = ({log}: TestFnOpts) => {
+  testReplyToMessagesFromWatch = ({log, after}: TestFnOpts) => {
+    let unsubscribe: UnsubscribeFn = () => {};
+
+    after(() => unsubscribe?.());
+
     return new Promise((resolve, reject) => {
       let receivedFirstMessage = false;
-      const unsubscribe = watchEvents.addListener(
-        'message',
-        (message, reply) => {
-          log('Received message ' + JSON.stringify(message));
-          if (message?.text === "Here's your message") {
-            receivedFirstMessage = true;
-            log('Replied');
-            if (reply) {
-              reply({test: true, text: "And here's a response"});
-            } else {
-              unsubscribe();
-              reject(new Error('Missing reply handler'));
-            }
-          } else if (message?.text === 'Received your reply!') {
-            if (receivedFirstMessage) {
-              log('The watch received our reply!');
-              unsubscribe();
-              resolve();
-            } else {
-              unsubscribe();
-              reject(new Error(''));
-            }
+      unsubscribe = watchEvents.addListener('message', (message, reply) => {
+        log('Received message ' + JSON.stringify(message));
+        if (message?.text === "Here's your message") {
+          receivedFirstMessage = true;
+          log('Replied');
+          if (reply) {
+            reply({test: true, text: "And here's a response"});
+          } else {
+            reject(new Error('Missing reply handler'));
           }
-        },
-      );
+        } else if (message?.text === 'Received your reply!') {
+          if (receivedFirstMessage) {
+            log('The watch received our reply!');
+            resolve();
+          } else {
+            reject(new Error(''));
+          }
+        }
+      });
       log('Subscribed to messages');
       sendMessage({test: true, text: 'Send me a message, please'});
       log('Sent message');
