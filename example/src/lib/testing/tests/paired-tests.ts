@@ -1,6 +1,6 @@
 import {IntegrationTest} from '../IntegrationTest';
 import {getIsPaired} from 'react-native-watch-connectivity';
-import {assert, TestLogFn} from './util';
+import {assert} from './util';
 import {TestFnOpts} from './index';
 
 export class PairedTests extends IntegrationTest {

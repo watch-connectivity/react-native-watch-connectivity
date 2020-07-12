@@ -1,6 +1,6 @@
 import {IntegrationTest} from '../IntegrationTest';
 
-import {assert, TestLogFn} from './util';
+import {assert} from './util';
 import {getReachability, watchEvents} from 'react-native-watch-connectivity';
 import {TestFnOpts} from './index';
 

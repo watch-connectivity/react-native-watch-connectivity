@@ -1,7 +1,7 @@
 import {IntegrationTest} from '../IntegrationTest';
 
 import {isEqual} from 'lodash';
-import {assert, TestLogFn} from './util';
+import {assert} from './util';
 import * as faker from 'faker';
 import {
   _getMissedUserInfo,
@@ -11,6 +11,7 @@ import {
   watchEvents,
 } from 'react-native-watch-connectivity';
 import {TestFnOpts} from './index';
+import {UnsubscribeFn} from 'react-native-watch-connectivity/events';
 
 export class UserInfoIntegrationTest extends IntegrationTest {
   constructor() {
@@ -29,22 +30,22 @@ export class UserInfoIntegrationTest extends IntegrationTest {
     this.registerTest('User info queue', 'reachable', this.testUserInfoQueue);
   }
 
-  testSendUserInfo = async ({log}: TestFnOpts) => {
+  testSendUserInfo = async (opts: TestFnOpts) => {
     await _getMissedUserInfo();
     const sentUserInfo = {uid: faker.lorem.word(), name: faker.lorem.words(2)};
     const receivedUserInfo = await this.sendUserInfoAndWaitForAck(
       sentUserInfo,
-      log,
+      opts,
     );
     assert(isEqual(sentUserInfo, receivedUserInfo));
   };
 
-  testTransferComplicationUserInfo = async ({log}: TestFnOpts) => {
+  testTransferComplicationUserInfo = async (opts: TestFnOpts) => {
     await _getMissedUserInfo();
     const sentUserInfo = {uid: faker.lorem.word(), name: faker.lorem.words(2)};
     const receivedUserInfo = await this.sendUserInfoAndWaitForAck(
       sentUserInfo,
-      log,
+      opts,
       true,
     );
     assert(isEqual(sentUserInfo, receivedUserInfo));
@@ -148,9 +149,13 @@ export class UserInfoIntegrationTest extends IntegrationTest {
 
   private sendUserInfoAndWaitForAck = (
     userInfoToSend: Record<string, unknown>,
-    log: TestLogFn,
+    {log, after}: TestFnOpts,
     complication: boolean = false,
   ) => {
+    let unsubscribe: UnsubscribeFn = () => {};
+
+    after(() => unsubscribe());
+
     return new Promise((resolve, reject) => {
       if (complication) {
         transferCurrentComplicationUserInfo(userInfoToSend);
@@ -158,12 +163,11 @@ export class UserInfoIntegrationTest extends IntegrationTest {
         transferUserInfo(userInfoToSend);
       }
 
-      const unsubscribe = watchEvents.addListener('message', (payload) => {
+      unsubscribe = watchEvents.addListener('message', (payload) => {
         if (payload) {
           log('Received message: ' + JSON.stringify(payload));
         }
         if (payload?.text === 'user info received by the watch') {
-          unsubscribe();
           const userInfo = payload && payload['user-info'];
           if (typeof userInfo === 'object') {
             resolve(userInfo);
