@@ -20,6 +20,7 @@
 		6A45AD9F245C7949003FA7F4 /* Dummy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A45AD9E245C7949003FA7F4 /* Dummy.swift */; };
 		6A55B19F2494F3A5004ECAF4 /* RNWatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A55B19E2494F3A5004ECAF4 /* RNWatch.m */; };
 		6A810A0524BC52F400B4B864 /* FileTransferEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A810A0424BC52F400B4B864 /* FileTransferEvent.m */; };
+		6A810A0B24BC54F400B4B864 /* util.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A810A0A24BC54F400B4B864 /* util.m */; };
 		6AA023FA249E6081006AF264 /* FileTransferInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = C092E08613F2C7F9F0D1C81D /* FileTransferInfo.m */; };
 		6AD72235234899DE00DACD18 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AD72233234899DE00DACD18 /* Interface.storyboard */; };
 		6AD72237234899E000DACD18 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6AD72236234899E000DACD18 /* Assets.xcassets */; };
@@ -35,7 +36,6 @@
 		76DE47B47A0647A3BC46A586 /* Blah_Blah_Blah.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C3400AF0E6E24E49BE476863 /* Blah_Blah_Blah.jpg */; };
 		7B40C4D978EB46C397EAD578 /* JetBrainsMono-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DB67F00A48A94D64B45298C8 /* JetBrainsMono-Regular.ttf */; };
 		8A0850BBBA76458299D946E1 /* JetBrainsMono-Bold-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22EECE8E7861403B9EEF2CD3 /* JetBrainsMono-Bold-Italic.ttf */; };
-		C092E5E8C605B64EAD99B1E2 /* util.m in Sources */ = {isa = PBXBuildFile; fileRef = C092E2384CFDB8A54360F5C0 /* util.m */; };
 		C092EE4E66F2C3860F5A144E /* ComplicationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C092E308BC590AE54BEAC71C /* ComplicationState.swift */; };
 		F49B168D00755677620BD38E /* libPods-RNWatchExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC8FA8D735925B939C156C1 /* libPods-RNWatchExample.a */; };
 /* End PBXBuildFile section */
@@ -111,6 +111,8 @@
 		6A55B19E2494F3A5004ECAF4 /* RNWatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNWatch.m; path = ../../ios/RNWatch/RNWatch.m; sourceTree = "<group>"; };
 		6A810A0324BC52F300B4B864 /* FileTransferEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileTransferEvent.h; path = ../../ios/RNWatch/FileTransferEvent.h; sourceTree = "<group>"; };
 		6A810A0424BC52F400B4B864 /* FileTransferEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileTransferEvent.m; path = ../../ios/RNWatch/FileTransferEvent.m; sourceTree = "<group>"; };
+		6A810A0924BC54F400B4B864 /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = util.h; path = ../../ios/RNWatch/util.h; sourceTree = "<group>"; };
+		6A810A0A24BC54F400B4B864 /* util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = util.m; path = ../../ios/RNWatch/util.m; sourceTree = "<group>"; };
 		6AD72231234899DE00DACD18 /* WatchApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WatchApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6AD72234234899DE00DACD18 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		6AD72236234899E000DACD18 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -129,9 +131,7 @@
 		839ADE6B86974B12822EB3FF /* JetBrainsMono-Medium-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "JetBrainsMono-Medium-Italic.ttf"; path = "../assets/fonts/JetBrainsMono-Medium-Italic.ttf"; sourceTree = "<group>"; };
 		BD0D2BBFEDBE4A72AB6CE73E /* JetBrainsMono-ExtraBold-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "JetBrainsMono-ExtraBold-Italic.ttf"; path = "../assets/fonts/JetBrainsMono-ExtraBold-Italic.ttf"; sourceTree = "<group>"; };
 		C092E08613F2C7F9F0D1C81D /* FileTransferInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileTransferInfo.m; path = ../../ios/RNWatch/FileTransferInfo.m; sourceTree = "<group>"; };
-		C092E2384CFDB8A54360F5C0 /* util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = util.m; sourceTree = "<group>"; };
 		C092E308BC590AE54BEAC71C /* ComplicationState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComplicationState.swift; sourceTree = "<group>"; };
-		C092E4A212262A45DC88104E /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
 		C092E660CE0BA6CFA90EB062 /* FileTransferInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileTransferInfo.h; path = ../../ios/RNWatch/FileTransferInfo.h; sourceTree = "<group>"; };
 		C1E1E1B49CED85B15C0F4B60 /* libPods-RNWatchExample-RNWatchExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNWatchExample-RNWatchExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3400AF0E6E24E49BE476863 /* Blah_Blah_Blah.jpg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Blah_Blah_Blah.jpg; path = ../assets/images/Blah_Blah_Blah.jpg; sourceTree = "<group>"; };
@@ -207,6 +207,8 @@
 				6A810A0424BC52F400B4B864 /* FileTransferEvent.m */,
 				C092E08613F2C7F9F0D1C81D /* FileTransferInfo.m */,
 				C092E660CE0BA6CFA90EB062 /* FileTransferInfo.h */,
+				6A810A0924BC54F400B4B864 /* util.h */,
+				6A810A0A24BC54F400B4B864 /* util.m */,
 			);
 			name = "react-native-watch-connectivity";
 			sourceTree = "<group>";
@@ -257,8 +259,6 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				89392281680D35A21318B122 /* Pods */,
 				BDFA5C7EF4CC4C5F9446899A /* Resources */,
-				C092E4A212262A45DC88104E /* util.h */,
-				C092E2384CFDB8A54360F5C0 /* util.m */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -519,12 +519,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				6A810A0B24BC54F400B4B864 /* util.m in Sources */,
 				6A810A0524BC52F400B4B864 /* FileTransferEvent.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				6A45AD9F245C7949003FA7F4 /* Dummy.swift in Sources */,
 				6A55B19F2494F3A5004ECAF4 /* RNWatch.m in Sources */,
 				6AA023FA249E6081006AF264 /* FileTransferInfo.m in Sources */,
-				C092E5E8C605B64EAD99B1E2 /* util.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
