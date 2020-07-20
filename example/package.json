@@ -14,7 +14,7 @@
     "react-native-spinkit": "^1.5.0",
     "mobx": "^5.15.4",
     "mobx-react-lite": "^2.0.7",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "lodash.sortby": "^4.7.0",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-svg": "^12.1.0",
