@@ -87,6 +87,13 @@ RCT_EXPORT_MODULE()
     ];
 }
 
+- (void) dealloc{
+    if ([WCSession isSupported]) {
+        [self.session removeObserver:self forKeyPath:@"paired" context:nil];
+        [self.session removeObserver:self forKeyPath:@"watchAppInstalled" context:nil];
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 - (void)               session:(WCSession *)session
