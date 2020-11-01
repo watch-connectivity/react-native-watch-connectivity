@@ -161,3 +161,4 @@ export function _once<E extends WatchEvent, Payload = EventPayloads[E]>(
 
   return () => sub.remove();
 }
+

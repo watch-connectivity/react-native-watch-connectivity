@@ -9,6 +9,7 @@
 import WatchKit
 import WatchConnectivity
 import Foundation
+import ClockKit
 
 class InterfaceController: WKInterfaceController, WCSessionDelegate {
   @IBOutlet weak var label: WKInterfaceLabel!
