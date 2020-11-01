@@ -26,7 +26,7 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
 	<key>WKCompanionAppBundleIdentifier</key>
-	<string>uk.co.mtford.RNWCExample</string>
+	<string>uk.co.mtford.RNWatchExample</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Send images to phone</string>
 	<key>NSCameraUsageDescription</key>

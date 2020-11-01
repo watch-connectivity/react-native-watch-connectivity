@@ -86,7 +86,7 @@
 		00202CDC95014B03724DE5CC /* Pods-RNWatchExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNWatchExampleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RNWatchExampleTests/Pods-RNWatchExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		03895E05CAA1DCEF71794FCC /* Pods-RNWatchExample-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNWatchExample-tvOSTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RNWatchExample-tvOSTests/Pods-RNWatchExample-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* RNWCExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RNWCExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* RNWatchExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RNWatchExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RNWatchExample/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = RNWatchExample/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -268,7 +268,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* RNWCExample.app */,
+				13B07F961A680F5B00A75B9A /* RNWatchExample.app */,
 				6AD72231234899DE00DACD18 /* WatchApp.app */,
 				6AD7223D234899E000DACD18 /* WatchApp Extension.appex */,
 			);
@@ -330,7 +330,7 @@
 			);
 			name = RNWatchExample;
 			productName = RNWatchExample;
-			productReference = 13B07F961A680F5B00A75B9A /* RNWCExample.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* RNWatchExample.app */;
 			productType = "com.apple.product-type.application";
 		};
 		6AD72230234899DE00DACD18 /* WatchApp */ = {
@@ -599,8 +599,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.mtford.RNWCExample;
-				PRODUCT_NAME = RNWCExample;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.mtford.RNWatchExample;
+				PRODUCT_NAME = RNWatchExample;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "RNWatchExample-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -626,7 +626,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.mtford.RNWCExample;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.mtford.RNWatchExample;
 				PRODUCT_NAME = RNWatchExample;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "RNWatchExample-Bridging-Header.h";
@@ -655,7 +655,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.mtford.RNWCExample.watchkitapp.watchkitextension;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.mtford.RNWatchExample.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -688,7 +688,7 @@
 				INFOPLIST_FILE = "WatchApp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.mtford.RNWCExample.watchkitapp.watchkitextension;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.mtford.RNWatchExample.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
@@ -719,7 +719,7 @@
 				INFOPLIST_FILE = WatchApp/Info.plist;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.mtford.RNWCExample.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.mtford.RNWatchExample.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -751,7 +751,7 @@
 				IBSC_MODULE = WatchApp_Extension;
 				INFOPLIST_FILE = WatchApp/Info.plist;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.mtford.RNWCExample.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.mtford.RNWatchExample.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
