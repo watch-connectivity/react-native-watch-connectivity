@@ -218,7 +218,9 @@ RCT_EXPORT_METHOD(replyToMessageWithId:
             (NSDictionary<NSString *, id> *) message) {
     void (^replyHandler)(NSDictionary<NSString *, id> *_Nonnull)
     = [self.replyHandlers objectForKey:messageId];
-    replyHandler(message);
+    if (replyHandler != nil) {
+        replyHandler(message);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
