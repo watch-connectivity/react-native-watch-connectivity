@@ -39,7 +39,10 @@ static NSString *EVENT_INSTALL_STATUS_CHANGED = @"WatchInstallStatusChanged";
 
 static RNWatch *sharedInstance;
 
-@implementation RNWatch
+@implementation RNWatch {
+  BOOL hasObservers;
+  NSMutableArray<NSDictionary *> *pendingEvents;
+}
 
 RCT_EXPORT_MODULE()
 
@@ -60,6 +63,9 @@ RCT_EXPORT_MODULE()
     self.replyHandlers = [NSCache new];
     self.fileTransfers = [NSMutableDictionary new];
     self.queuedUserInfo = [NSMutableDictionary new];
+ 
+    hasObservers = NO;
+    pendingEvents = [NSMutableArray array];
 
     if ([WCSession isSupported]) {
         WCSession *session = [WCSession defaultSession];
@@ -86,6 +92,19 @@ RCT_EXPORT_MODULE()
             EVENT_INSTALL_STATUS_CHANGED
     ];
 }
+
+-(void)startObserving {
+  hasObservers = YES;
+ 
+  for (NSDictionary *event in pendingEvents) {
+      [self sendEventWithName:[event objectForKey:@"name"] body:[event objectForKey:@"body"]];
+  }
+}
+
+-(void)stopObserving {
+  hasObservers = NO;
+}
+
 
 - (void) dealloc{
     if ([WCSession isSupported]) {
@@ -199,7 +218,9 @@ RCT_EXPORT_METHOD(replyToMessageWithId:
             (NSDictionary<NSString *, id> *) message) {
     void (^replyHandler)(NSDictionary<NSString *, id> *_Nonnull)
     = [self.replyHandlers objectForKey:messageId];
-    replyHandler(message);
+    if (replyHandler != nil) {
+        replyHandler(message);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -218,6 +239,7 @@ didReceiveMessage:(NSDictionary<NSString *, id> *)message
     NSMutableDictionary *mutableMessage = [message mutableCopy];
     mutableMessage[@"id"] = messageId;
     [self.replyHandlers setObject:replyHandler forKey:messageId];
+    
     [self dispatchEventWithName:EVENT_RECEIVE_MESSAGE body:mutableMessage];
 }
 
@@ -481,7 +503,12 @@ didReceiveUserInfo:(NSDictionary<NSString *, id> *)userInfo {
 
 - (void)dispatchEventWithName:(NSString *)name
                          body:(NSDictionary<NSString *, id> *)body {
-    [self sendEventWithName:name body:body];
+    
+  if (!hasObservers) {
+      [pendingEvents addObject:@{@"name": name, @"body": body}];
+  } else {
+      [self sendEventWithName:name body:body];
+  }
 }
 
 
