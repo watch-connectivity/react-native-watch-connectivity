@@ -482,7 +482,10 @@ RCT_EXPORT_METHOD(dequeueUserInfo:
     for (NSString *ident in ids) {
         [self.queuedUserInfo removeObjectForKey:ident];
     }
-    [self dispatchEventWithName:EVENT_WATCH_USER_INFO_RECEIVED body:self.queuedUserInfo];
+
+    if (!ids || !ids.count){
+        [self dispatchEventWithName:EVENT_WATCH_USER_INFO_RECEIVED body:self.queuedUserInfo];
+    }
 }
 
 - (void)session:(WCSession *)session didFinishUserInfoTransfer:(WCSessionUserInfoTransfer *)userInfoTransfer error:(NSError *)error {
