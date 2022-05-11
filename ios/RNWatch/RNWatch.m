@@ -486,6 +486,9 @@ RCT_EXPORT_METHOD(dequeueUserInfo:
 }
 
 - (void)session:(WCSession *)session didFinishUserInfoTransfer:(WCSessionUserInfoTransfer *)userInfoTransfer error:(NSError *)error {
+    if (error) {
+        NSLog(@"Error: %@ %@", error, [error userInfo]);
+    }
     // TODO
 }
 
