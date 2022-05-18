@@ -56,3 +56,7 @@ pod 'RNWatch', :path => '../node_modules/react-native-watch-connectivity'
 ```
 
 and run `pod install`.
+
+### Expo Support
+
+This library has been successfully used in Expo apps (Bare Workflow with EAS Build).
