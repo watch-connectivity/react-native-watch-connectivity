@@ -36,6 +36,7 @@ static NSString *EVENT_SESSION_DID_DEACTIVATE = @"WatchSessionDidDeactivate";
 static NSString *EVENT_SESSION_BECAME_INACTIVE = @"WatchSessionBecameInactive";
 static NSString *EVENT_PAIR_STATUS_CHANGED = @"WatchPairStatusChanged";
 static NSString *EVENT_INSTALL_STATUS_CHANGED = @"WatchInstallStatusChanged";
+static NSString *EVENT_WATCH_SEND_ERROR = @"WatchSendError";
 
 static RNWatch *sharedInstance;
 
@@ -89,7 +90,8 @@ RCT_EXPORT_MODULE()
             EVENT_WATCH_USER_INFO_RECEIVED,
             EVENT_APPLICATION_CONTEXT_RECEIVED,
             EVENT_PAIR_STATUS_CHANGED,
-            EVENT_INSTALL_STATUS_CHANGED
+            EVENT_INSTALL_STATUS_CHANGED,
+            EVENT_WATCH_SEND_ERROR
     ];
 }
 
@@ -425,7 +427,12 @@ didFinishFileTransfer:(WCSessionFileTransfer *)fileTransfer
 
 RCT_EXPORT_METHOD(updateApplicationContext:
     (NSDictionary<NSString *, id> *) context) {
-    [self.session updateApplicationContext:context error:nil];
+    NSError *error = nil;
+    [self.session updateApplicationContext:context error:&error];
+    if (error) {
+        NSLog(@"Application context update error: %@ %@", error, [error userInfo]);
+        [self dispatchEventWithName:EVENT_WATCH_SEND_ERROR body:@{@"context": context, @"error": error}];
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -491,8 +498,8 @@ RCT_EXPORT_METHOD(dequeueUserInfo:
 - (void)session:(WCSession *)session didFinishUserInfoTransfer:(WCSessionUserInfoTransfer *)userInfoTransfer error:(NSError *)error {
     if (error) {
         NSLog(@"Error: %@ %@", error, [error userInfo]);
+        [self dispatchEventWithName:EVENT_WATCH_SEND_ERROR body:@{@"userInfoTransfer": userInfoTransfer, @"error": error}];
     }
-    // TODO
 }
 
 - (void)   session:(WCSession *)session

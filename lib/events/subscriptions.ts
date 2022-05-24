@@ -135,3 +135,10 @@ export function _subscribeToNativeInstalledEvent(
     cb(installed);
   });
 }
+
+export function _subscribeNativeSendErrorEvent(
+  cb: WatchEventCallbacks['send-error'],
+  addListener: AddListenerFn = _addListener,
+) {
+  return addListener(WatchEvent.EVENT_WATCH_SEND_ERROR, cb);
+}
