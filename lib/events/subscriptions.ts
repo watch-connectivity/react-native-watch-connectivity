@@ -136,9 +136,16 @@ export function _subscribeToNativeInstalledEvent(
   });
 }
 
-export function _subscribeNativeSendErrorEvent(
-  cb: WatchEventCallbacks['send-error'],
+export function _subscribeNativeApplicationContextErrorEvent(
+  cb: WatchEventCallbacks['application-context-error'],
   addListener: AddListenerFn = _addListener,
 ) {
-  return addListener(WatchEvent.EVENT_WATCH_SEND_ERROR, cb);
+  return addListener(WatchEvent.EVENT_WATCH_APPLICATION_CONTEXT_ERROR, cb);
+}
+
+export function _subscribeNativeUserInfoErrorEvent(
+  cb: WatchEventCallbacks['user-info-error'],
+  addListener: AddListenerFn = _addListener,
+) {
+  return addListener(WatchEvent.EVENT_WATCH_USER_INFO_ERROR, cb);
 }

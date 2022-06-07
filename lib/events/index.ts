@@ -7,7 +7,8 @@ import {
   _subscribeToNativeInstalledEvent,
   _subscribeToNativePairedEvent,
   _subscribeToNativeReachabilityEvent,
-  _subscribeNativeSendErrorEvent,
+  _subscribeNativeApplicationContextErrorEvent,
+  _subscribeNativeUserInfoErrorEvent,
   AddListenerFn,
 } from './subscriptions';
 import {_addListener, _once, WatchPayload} from '../native-module';
@@ -34,8 +35,10 @@ function listen<E extends WatchEvent>(
       return _subscribeToNativePairedEvent(cb, listener);
     case 'installed':
       return _subscribeToNativeInstalledEvent(cb, listener);
-    case 'send-error':
-      return _subscribeNativeSendErrorEvent(cb, listener);
+    case 'application-context-error':
+      return _subscribeNativeApplicationContextErrorEvent(cb, listener);
+    case 'user-info-error':
+      return _subscribeNativeUserInfoErrorEvent(cb, listener);
     default:
       throw new Error(`Unknown watch event "${event}"`);
   }
@@ -82,8 +85,13 @@ function addListener(
 ): UnsubscribeFn;
 
 function addListener<Context extends WatchPayload = WatchPayload>(
-  event: 'send-error',
-  cb: WatchEventCallbacks<Context>['send-error'],
+  event: 'application-context-error',
+  cb: WatchEventCallbacks<Context>['application-context-error'],
+): UnsubscribeFn;
+
+function addListener<Context extends WatchPayload = WatchPayload>(
+  event: 'user-info-error',
+  cb: WatchEventCallbacks<Context>['user-info-error'],
 ): UnsubscribeFn;
 
 function addListener(event: WatchEvent, cb: any): UnsubscribeFn {
@@ -159,13 +167,22 @@ function once(
 ): Promise<Parameters<WatchEventCallbacks['installed']>[0]>;
 
 function once<Context extends WatchPayload = WatchPayload>(
-  event: 'send-error',
-  cb: WatchEventCallbacks<Context>['send-error'],
+  event: 'application-context-error',
+  cb: WatchEventCallbacks<Context>['application-context-error'],
 ): UnsubscribeFn;
 
 function once<Context extends WatchPayload = WatchPayload>(
-  event: 'send-error',
-): Promise<Parameters<WatchEventCallbacks<Context>['send-error']>[0]>;
+  event: 'application-context-error',
+): Promise<Parameters<WatchEventCallbacks<Context>['application-context-error']>[0]>;
+
+function once<Context extends WatchPayload = WatchPayload>(
+  event: 'user-info-error',
+  cb: WatchEventCallbacks<Context>['user-info-error'],
+): UnsubscribeFn;
+
+function once<Context extends WatchPayload = WatchPayload>(
+  event: 'user-info-error',
+): Promise<Parameters<WatchEventCallbacks<Context>['user-info-error']>[0]>;
 
 function once(event: WatchEvent, cb?: any): UnsubscribeFn | Promise<any> {
   if (cb) {

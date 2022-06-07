@@ -106,7 +106,8 @@ export enum WatchEvent {
   EVENT_WATCH_REACHABILITY_CHANGED = 'WatchReachabilityChanged',
   EVENT_WATCH_STATE_CHANGED = 'WatchStateChanged',
   EVENT_WATCH_USER_INFO_RECEIVED = 'WatchUserInfoReceived',
-  EVENT_WATCH_SEND_ERROR = 'WatchSendError',
+  EVENT_WATCH_APPLICATION_CONTEXT_ERROR = 'WatchApplicationContextError',
+  EVENT_WATCH_USER_INFO_ERROR = 'WatchUserInfoError',
 }
 
 export interface EventPayloads {
@@ -129,6 +130,8 @@ export interface EventPayloads {
   [WatchEvent.EVENT_INSTALL_STATUS_CHANGED]: {
     installed: boolean;
   };
+  [WatchEvent.EVENT_WATCH_APPLICATION_CONTEXT_ERROR]: Error;
+  [WatchEvent.EVENT_WATCH_USER_INFO_ERROR]: Error;
 }
 
 export function _addListener<E extends WatchEvent, Payload = EventPayloads[E]>(

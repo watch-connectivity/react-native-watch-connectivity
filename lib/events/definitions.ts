@@ -29,7 +29,8 @@ export interface WatchEventCallbacks<
   paired: (paired: boolean) => void;
   reachability: (reachable: boolean) => void;
   'user-info': (payload: P[]) => void;
-  'send-error': (payload: P) => void;
+  'application-context-error': (payload: P) => void;
+  'user-info-error': (payload: P) => void;
 }
 
 export type WatchEvent = keyof WatchEventCallbacks;
