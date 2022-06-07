@@ -106,6 +106,7 @@ export enum WatchEvent {
   EVENT_WATCH_REACHABILITY_CHANGED = 'WatchReachabilityChanged',
   EVENT_WATCH_STATE_CHANGED = 'WatchStateChanged',
   EVENT_WATCH_USER_INFO_RECEIVED = 'WatchUserInfoReceived',
+  EVENT_WATCH_SEND_ERROR = 'WatchSendError',
 }
 
 export interface EventPayloads {
