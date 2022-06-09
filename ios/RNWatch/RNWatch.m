@@ -37,7 +37,7 @@ static NSString *EVENT_SESSION_BECAME_INACTIVE = @"WatchSessionBecameInactive";
 static NSString *EVENT_PAIR_STATUS_CHANGED = @"WatchPairStatusChanged";
 static NSString *EVENT_INSTALL_STATUS_CHANGED = @"WatchInstallStatusChanged";
 static NSString *EVENT_WATCH_USER_INFO_ERROR = @"WatchUserInfoError";
-static NSString *EVENT_WATCH_APPLICATION_CONTEXT_ERROR = @"WatchAppContextError";
+static NSString *EVENT_WATCH_APPLICATION_CONTEXT_ERROR = @"WatchApplicationContextError";
 
 static RNWatch *sharedInstance;
 
