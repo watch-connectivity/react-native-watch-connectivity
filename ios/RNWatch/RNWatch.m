@@ -435,7 +435,7 @@ RCT_EXPORT_METHOD(updateApplicationContext:
     [self.session updateApplicationContext:context error:&error];
     if (error) {
         NSLog(@"Application context update error: %@ %@", error, [error userInfo]);
-        [self dispatchEventWithName:EVENT_WATCH_APPLICATION_CONTEXT_ERROR body:@{@"context": context, @"error": error}];
+        [self dispatchEventWithName:EVENT_WATCH_APPLICATION_CONTEXT_ERROR body:@{@"context": context, @"error": [error userInfo]}];
     }
 }
 
@@ -502,7 +502,7 @@ RCT_EXPORT_METHOD(dequeueUserInfo:
 - (void)session:(WCSession *)session didFinishUserInfoTransfer:(WCSessionUserInfoTransfer *)userInfoTransfer error:(NSError *)error {
     if (error) {
         NSLog(@"Error: %@ %@", error, [error userInfo]);
-        [self dispatchEventWithName:EVENT_WATCH_USER_INFO_ERROR body:@{@"userInfoTransfer": userInfoTransfer, @"error": error}];
+        [self dispatchEventWithName:EVENT_WATCH_USER_INFO_ERROR body:@{@"userInfoTransfer": userInfoTransfer, @"error": [error userInfo]}];
     }
 }
 
