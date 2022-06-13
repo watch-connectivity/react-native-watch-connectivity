@@ -501,7 +501,7 @@ RCT_EXPORT_METHOD(dequeueUserInfo:
 
 - (void)session:(WCSession *)session didFinishUserInfoTransfer:(WCSessionUserInfoTransfer *)userInfoTransfer error:(NSError *)error {
     if (error) {
-        NSLog(@"Error: %@ %@", error, [error userInfo]);
+        NSLog(@"User info transfer error: %@ %@", error, [error userInfo]);
         [self dispatchEventWithName:EVENT_WATCH_USER_INFO_ERROR body:@{@"userInfo": [userInfoTransfer userInfo], @"error": [error userInfo]}];
     }
 }
