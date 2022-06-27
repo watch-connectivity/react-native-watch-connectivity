@@ -5,16 +5,7 @@
  */
 'use strict';
 
-const warning = require('fbjs/lib/warning');
-
-const RNWatch = {
-  test: function () {
-    warning('Not supported on Android.');
-  },
-  useInstalled: () => false,
-  usePaired: () => false,
-  useReachability: () => false,
-  useApplicationContext: () => false,
-};
-
-export default RNWatch;
+export const useInstalled = () => false;
+export const usePaired = () => false;
+export const useReachability = () => false;
+export const useApplicationContext = () => false;
