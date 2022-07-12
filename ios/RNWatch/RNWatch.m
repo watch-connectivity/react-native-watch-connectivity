@@ -26,6 +26,7 @@
 #endif
 
 static NSString *EVENT_FILE_TRANSFER = @"WatchFileTransfer";
+static NSString *EVENT_WATCH_FILE_RECEIVED = @"WatchFileReceived";
 static NSString *EVENT_RECEIVE_MESSAGE = @"WatchReceiveMessage";
 static NSString *EVENT_RECEIVE_MESSAGE_DATA = @"WatchReceiveMessageData";
 static NSString *EVENT_ACTIVATION_ERROR = @"WatchActivationError";
@@ -64,6 +65,7 @@ RCT_EXPORT_MODULE()
     sharedInstance = [super init];
     self.replyHandlers = [NSCache new];
     self.fileTransfers = [NSMutableDictionary new];
+    self.queuedFiles = [NSMutableDictionary new];
     self.queuedUserInfo = [NSMutableDictionary new];
  
     hasObservers = NO;
@@ -84,6 +86,7 @@ RCT_EXPORT_MODULE()
 - (NSArray<NSString *> *)supportedEvents {
     return @[
             EVENT_FILE_TRANSFER,
+            EVENT_WATCH_FILE_RECEIVED,
             EVENT_RECEIVE_MESSAGE,
             EVENT_RECEIVE_MESSAGE_DATA,
             EVENT_ACTIVATION_ERROR,
@@ -348,6 +351,35 @@ RCT_EXPORT_METHOD(getFileTransfers:
     resolve(payload);
 }
 
+RCT_EXPORT_METHOD(getQueuedFiles:
+    (RCTPromiseResolveBlock) resolve
+            reject:
+            (RCTPromiseRejectBlock) reject) {
+    resolve(self.queuedFiles);
+    // Clear the cache.
+    [self.queuedFiles removeAllObjects];
+}
+
+RCT_EXPORT_METHOD(clearFilesQueue:
+    (RCTPromiseResolveBlock) resolve
+            reject:
+            (RCTPromiseRejectBlock) reject) {
+    self.queuedFiles = [NSMutableDictionary new];
+    resolve([NSNull null]);
+}
+
+RCT_EXPORT_METHOD(dequeueFile:
+    (NSArray<NSString *> *) ids
+) {
+    for (NSString *id in ids) {
+        [self.queuedFiles removeObjectForKey:id];
+    }
+
+    if (!ids || !ids.count){
+        [self dispatchEventWithName:EVENT_WATCH_FILE_RECEIVED body:self.queuedFiles];
+    }
+}
+
 - (FileTransferEvent *)getFileTransferEvent:(WCSessionFileTransfer *)transfer {
     NSString *uuid = transfer.file.metadata[@"id"];
 
@@ -387,9 +419,20 @@ RCT_EXPORT_METHOD(getFileTransfers:
     }
 }
 
-- (void)session:(WCSession *)session
- didReceiveFile:(WCSessionFile *)file {
-    // TODO
+- (void)session:(WCSession *)session didReceiveFile:(WCSessionFile *)file {
+  NSNumber *timestamp = @(jsTimestamp());
+  NSString *id = [timestamp stringValue];
+  NSURL *url = file.fileURL;
+  
+  NSDictionary *fileInfo = @{
+    @"id": id,
+    @"timestamp": timestamp,
+    @"url": url.absoluteString,
+    @"metadata": file.metadata != nil ? file.metadata : [NSNull null]
+  };
+  
+  [self.queuedFiles setValue:fileInfo forKey:id];
+  [self dispatchEventWithName:EVENT_WATCH_FILE_RECEIVED body:fileInfo];
 }
 
 - (void)      session:(WCSession *)session
