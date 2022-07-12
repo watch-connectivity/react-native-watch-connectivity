@@ -16,6 +16,17 @@ export interface UserInfoQueue<UserInfo extends WatchPayload = WatchPayload> {
   [timestamp: string]: UserInfo;
 }
 
+export interface FileQueue {
+  [timestamp: string]: QueuedFile;
+}
+
+export type QueuedFile = {
+  id: string;
+  metadata?: any;
+  timestamp: number;
+  url: string;
+};
+
 export interface NativeFileTransfer {
   bytesTotal: number;
   bytesTransferred: number;
@@ -42,6 +53,7 @@ export interface NativeFileTransferEvent extends NativeFileTransfer {
 }
 
 export interface IRNWatchNativeModule extends EventSubscriptionVendor {
+  dequeueFile: (ids: string[]) => void;
   dequeueUserInfo: (ids: string[]) => void;
   getApplicationContext: <
     Context extends WatchPayload
@@ -51,6 +63,7 @@ export interface IRNWatchNativeModule extends EventSubscriptionVendor {
 
   getIsWatchAppInstalled: () => Promise<boolean>;
 
+  getQueuedFile: () => Promise<FileQueue>;
   getQueuedUserInfo: <UserInfo extends WatchPayload>() => Promise<
     UserInfoQueue<UserInfo>
   >;
@@ -103,11 +116,12 @@ export enum WatchEvent {
   EVENT_INSTALL_STATUS_CHANGED = 'WatchInstallStatusChanged',
   EVENT_PAIR_STATUS_CHANGED = 'WatchPairStatusChanged',
   EVENT_RECEIVE_MESSAGE = 'WatchReceiveMessage',
+  EVENT_WATCH_APPLICATION_CONTEXT_ERROR = 'WatchApplicationContextError',
+  EVENT_WATCH_FILE_RECEIVED = 'WatchFileReceived',
   EVENT_WATCH_REACHABILITY_CHANGED = 'WatchReachabilityChanged',
   EVENT_WATCH_STATE_CHANGED = 'WatchStateChanged',
-  EVENT_WATCH_USER_INFO_RECEIVED = 'WatchUserInfoReceived',
-  EVENT_WATCH_APPLICATION_CONTEXT_ERROR = 'WatchApplicationContextError',
   EVENT_WATCH_USER_INFO_ERROR = 'WatchUserInfoError',
+  EVENT_WATCH_USER_INFO_RECEIVED = 'WatchUserInfoReceived',
 }
 
 export interface EventPayloads {
@@ -122,6 +136,7 @@ export interface EventPayloads {
   [WatchEvent.EVENT_WATCH_REACHABILITY_CHANGED]: {
     reachability: boolean;
   };
+  [WatchEvent.EVENT_WATCH_FILE_RECEIVED]: QueuedFile;
   [WatchEvent.EVENT_WATCH_USER_INFO_RECEIVED]: QueuedUserInfo<WatchPayload>;
   [WatchEvent.EVENT_APPLICATION_CONTEXT_RECEIVED]: WatchPayload | null;
   [WatchEvent.EVENT_PAIR_STATUS_CHANGED]: {
@@ -165,4 +180,3 @@ export function _once<E extends WatchEvent, Payload = EventPayloads[E]>(
 
   return () => sub.remove();
 }
-

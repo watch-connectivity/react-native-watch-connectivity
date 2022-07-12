@@ -23,13 +23,14 @@ export interface WatchEventCallbacks<
   P2 extends WatchPayload = WatchPayload
 > {
   'application-context': (payload: P) => void;
+  'application-context-error': (payload: P) => void;
   file: (event: FileTransferEvent) => void;
+  'file-received': (payload: P[]) => void;
   installed: (installed: boolean) => void;
   message: WatchMessageCallback<P, P2>;
   paired: (paired: boolean) => void;
   reachability: (reachable: boolean) => void;
   'user-info': (payload: P[]) => void;
-  'application-context-error': (payload: P) => void;
   'user-info-error': (payload: P) => void;
 }
 

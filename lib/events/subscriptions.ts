@@ -9,8 +9,9 @@ import {
   QueuedUserInfo,
   WatchEvent,
   WatchPayload,
+  QueuedFile,
 } from '../native-module';
-import {_transformFilePayload} from '../files';
+import {_getMissedFile, _transformFilePayload} from '../files';
 import {_getMissedUserInfo} from '../user-info';
 
 export type AddListenerFn = typeof _addListener;
@@ -99,6 +100,53 @@ export function _subscribeNativeUserInfoEvent<
       xtra.push(item.userInfo);
     }
   });
+}
+
+type FileId = string | Date | number | {id: string};
+
+function _dequeueFile(idOrIds: FileId | Array<FileId>) {
+  const ids: Array<FileId> = Array.isArray(idOrIds) ? idOrIds : [idOrIds];
+  const normalisedIds = ids.map((id) => {
+    if (typeof id === 'object') {
+      if (id instanceof Date) {
+        return id.getTime().toString();
+      } else {
+        return id.id;
+      }
+    } else {
+      return id.toString();
+    }
+  });
+
+  NativeModule.dequeueFile(normalisedIds);
+}
+
+export function _subscribeNativeFileReceivedEvent(
+  cb: WatchEventCallbacks['file-received'],
+  addListener: AddListenerFn = _addListener,
+) {
+  let initialized = false;
+  const xtra: QueuedFile[] = [];
+
+  _getMissedFile().then((info) => {
+    const combined = [...xtra, ...info];
+    if (combined.length) {
+      cb(combined);
+    }
+    initialized = true;
+  });
+
+  return addListener<WatchEvent.EVENT_WATCH_FILE_RECEIVED, QueuedFile>(
+    WatchEvent.EVENT_WATCH_FILE_RECEIVED,
+    (item) => {
+      _dequeueFile(item);
+      if (initialized) {
+        cb([item]);
+      } else {
+        xtra.push(item);
+      }
+    },
+  );
 }
 
 export function _subscribeNativeApplicationContextEvent(

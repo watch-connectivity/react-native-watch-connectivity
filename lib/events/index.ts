@@ -10,6 +10,7 @@ import {
   _subscribeNativeApplicationContextErrorEvent,
   _subscribeNativeUserInfoErrorEvent,
   AddListenerFn,
+  _subscribeNativeFileReceivedEvent,
 } from './subscriptions';
 import {_addListener, _once, WatchPayload} from '../native-module';
 
@@ -29,6 +30,8 @@ function listen<E extends WatchEvent>(
       return _subscribeNativeApplicationContextEvent(cb, listener);
     case 'user-info':
       return _subscribeNativeUserInfoEvent(cb, listener);
+    case 'file-received':
+      return _subscribeNativeFileReceivedEvent(cb, listener);
     case 'message':
       return _subscribeNativeMessageEvent(cb, listener);
     case 'paired':
@@ -64,6 +67,11 @@ function addListener<Context extends WatchPayload = WatchPayload>(
 function addListener<UserInfo extends WatchPayload = WatchPayload>(
   event: 'user-info',
   cb: WatchEventCallbacks<UserInfo>['user-info'],
+): UnsubscribeFn;
+
+function addListener(
+  event: 'file-received',
+  cb: WatchEventCallbacks['file-received'],
 ): UnsubscribeFn;
 
 function addListener<
@@ -131,6 +139,15 @@ function once<UserInfo extends WatchPayload = WatchPayload>(
   event: 'user-info',
 ): Promise<Parameters<WatchEventCallbacks<UserInfo>['user-info']>[0]>;
 
+function once(
+  event: 'file-received',
+  cb: WatchEventCallbacks['file-received'],
+): UnsubscribeFn;
+
+function once(
+  event: 'file-received',
+): Promise<Parameters<WatchEventCallbacks['file-received']>[0]>;
+
 function once<
   MessageFromWatch extends WatchPayload = WatchPayload,
   ReplyMessage extends WatchPayload = WatchPayload
@@ -173,7 +190,9 @@ function once<Context extends WatchPayload = WatchPayload>(
 
 function once<Context extends WatchPayload = WatchPayload>(
   event: 'application-context-error',
-): Promise<Parameters<WatchEventCallbacks<Context>['application-context-error']>[0]>;
+): Promise<
+  Parameters<WatchEventCallbacks<Context>['application-context-error']>[0]
+>;
 
 function once<Context extends WatchPayload = WatchPayload>(
   event: 'user-info-error',
