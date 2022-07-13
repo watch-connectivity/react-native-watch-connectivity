@@ -423,9 +423,10 @@ RCT_EXPORT_METHOD(dequeueFile:
 
 - (void)session:(WCSession *)session didReceiveFile:(WCSessionFile *)file {
   NSFileManager *fileManager = NSFileManager.defaultManager;
-  NSURL *folderPath = [fileManager URLsForDirectory:NSDocumentDirectory
-                                          inDomains:NSUserDomainMask][0];
-  NSString *destinationPath = [folderPath URLByAppendingPathComponent:file.fileURL.lastPathComponent].absoluteString;
+  NSURL *directoryPath = [[fileManager URLsForDirectory:NSDocumentDirectory
+                                              inDomains:NSUserDomainMask][0] URLByAppendingPathComponent:@"FilesReceived"];
+  
+  NSString *destinationPath = [directoryPath URLByAppendingPathComponent:file.fileURL.lastPathComponent].absoluteString;
   NSError *error;
   [fileManager copyItemAtPath:file.fileURL.absoluteString
                        toPath:destinationPath
