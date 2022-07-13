@@ -1,6 +1,6 @@
 'use strict';
 Object.defineProperty(exports, '__esModule', {value: true});
-exports._subscribeNativeUserInfoErrorEvent = exports._subscribeNativeApplicationContextErrorEvent = exports._subscribeToNativeInstalledEvent = exports._subscribeToNativePairedEvent = exports._subscribeToNativeReachabilityEvent = exports._subscribeNativeApplicationContextEvent = exports._subscribeNativeFileReceivedEvent = exports._subscribeNativeUserInfoEvent = exports._subscribeNativeMessageEvent = exports._subscribeNativeFileEvents = void 0;
+exports._subscribeNativeFileReceivedErrorEvent = exports._subscribeNativeUserInfoErrorEvent = exports._subscribeNativeApplicationContextErrorEvent = exports._subscribeToNativeInstalledEvent = exports._subscribeToNativePairedEvent = exports._subscribeToNativeReachabilityEvent = exports._subscribeNativeApplicationContextEvent = exports._subscribeNativeFileReceivedEvent = exports._subscribeNativeUserInfoEvent = exports._subscribeNativeMessageEvent = exports._subscribeNativeFileEvents = void 0;
 const native_module_1 = require('../native-module');
 const files_1 = require('../files');
 const user_info_1 = require('../user-info');
@@ -183,3 +183,10 @@ function _subscribeNativeUserInfoErrorEvent(
   );
 }
 exports._subscribeNativeUserInfoErrorEvent = _subscribeNativeUserInfoErrorEvent;
+function _subscribeNativeFileReceivedErrorEvent(
+  cb,
+  addListener = native_module_1._addListener,
+) {
+  return addListener(native_module_1.WatchEvent.EVENT_WATCH_FILE_ERROR, cb);
+}
+exports._subscribeNativeFileReceivedErrorEvent = _subscribeNativeFileReceivedErrorEvent;

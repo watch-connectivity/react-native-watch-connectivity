@@ -44,6 +44,10 @@ declare function addListener<Context extends WatchPayload = WatchPayload>(
   event: 'user-info-error',
   cb: WatchEventCallbacks<Context>['user-info-error'],
 ): UnsubscribeFn;
+declare function addListener<Context extends WatchPayload = WatchPayload>(
+  event: 'file-received-error',
+  cb: WatchEventCallbacks<Context>['file-received-error'],
+): UnsubscribeFn;
 declare function once(
   event: 'reachability',
   cb: WatchEventCallbacks['reachability'],
@@ -124,6 +128,13 @@ declare function once<Context extends WatchPayload = WatchPayload>(
 declare function once<Context extends WatchPayload = WatchPayload>(
   event: 'user-info-error',
 ): Promise<Parameters<WatchEventCallbacks<Context>['user-info-error']>[0]>;
+declare function once<Context extends WatchPayload = WatchPayload>(
+  event: 'file-received-error',
+  cb: WatchEventCallbacks<Context>['file-received-error'],
+): UnsubscribeFn;
+declare function once<Context extends WatchPayload = WatchPayload>(
+  event: 'file-received-error',
+): Promise<Parameters<WatchEventCallbacks<Context>['file-received-error']>[0]>;
 declare const watchEvents: {
   addListener: typeof addListener;
   on: typeof addListener;

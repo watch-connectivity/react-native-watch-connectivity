@@ -25,6 +25,7 @@ var WatchEvent;
     WatchEvent["EVENT_PAIR_STATUS_CHANGED"] = "WatchPairStatusChanged";
     WatchEvent["EVENT_RECEIVE_MESSAGE"] = "WatchReceiveMessage";
     WatchEvent["EVENT_WATCH_APPLICATION_CONTEXT_ERROR"] = "WatchApplicationContextError";
+    WatchEvent["EVENT_WATCH_FILE_ERROR"] = "WatchFileError";
     WatchEvent["EVENT_WATCH_FILE_RECEIVED"] = "WatchFileReceived";
     WatchEvent["EVENT_WATCH_REACHABILITY_CHANGED"] = "WatchReachabilityChanged";
     WatchEvent["EVENT_WATCH_STATE_CHANGED"] = "WatchStateChanged";

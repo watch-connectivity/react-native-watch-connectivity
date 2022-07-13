@@ -197,3 +197,10 @@ export function _subscribeNativeUserInfoErrorEvent(
 ) {
   return addListener(WatchEvent.EVENT_WATCH_USER_INFO_ERROR, cb);
 }
+
+export function _subscribeNativeFileReceivedErrorEvent(
+  cb: WatchEventCallbacks['file-received-error'],
+  addListener: AddListenerFn = _addListener,
+) {
+  return addListener(WatchEvent.EVENT_WATCH_FILE_ERROR, cb);
+}

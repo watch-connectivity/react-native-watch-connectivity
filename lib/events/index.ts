@@ -11,6 +11,7 @@ import {
   _subscribeNativeUserInfoErrorEvent,
   AddListenerFn,
   _subscribeNativeFileReceivedEvent,
+  _subscribeNativeFileReceivedErrorEvent,
 } from './subscriptions';
 import {_addListener, _once, WatchPayload, QueuedFile} from '../native-module';
 
@@ -42,6 +43,8 @@ function listen<E extends WatchEvent>(
       return _subscribeNativeApplicationContextErrorEvent(cb, listener);
     case 'user-info-error':
       return _subscribeNativeUserInfoErrorEvent(cb, listener);
+    case 'file-received-error':
+      return _subscribeNativeFileReceivedErrorEvent(cb, listener);
     default:
       throw new Error(`Unknown watch event "${event}"`);
   }
@@ -100,6 +103,11 @@ function addListener<Context extends WatchPayload = WatchPayload>(
 function addListener<Context extends WatchPayload = WatchPayload>(
   event: 'user-info-error',
   cb: WatchEventCallbacks<Context>['user-info-error'],
+): UnsubscribeFn;
+
+function addListener<Context extends WatchPayload = WatchPayload>(
+  event: 'file-received-error',
+  cb: WatchEventCallbacks<Context>['file-received-error'],
 ): UnsubscribeFn;
 
 function addListener(event: WatchEvent, cb: any): UnsubscribeFn {
@@ -202,6 +210,15 @@ function once<Context extends WatchPayload = WatchPayload>(
 function once<Context extends WatchPayload = WatchPayload>(
   event: 'user-info-error',
 ): Promise<Parameters<WatchEventCallbacks<Context>['user-info-error']>[0]>;
+
+function once<Context extends WatchPayload = WatchPayload>(
+  event: 'file-received-error',
+  cb: WatchEventCallbacks<Context>['file-received-error'],
+): UnsubscribeFn;
+
+function once<Context extends WatchPayload = WatchPayload>(
+  event: 'file-received-error',
+): Promise<Parameters<WatchEventCallbacks<Context>['file-received-error']>[0]>;
 
 function once(event: WatchEvent, cb?: any): UnsubscribeFn | Promise<any> {
   if (cb) {

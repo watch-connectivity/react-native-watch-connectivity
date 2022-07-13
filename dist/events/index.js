@@ -30,6 +30,11 @@ function listen(event, cb, listener) {
       );
     case 'user-info-error':
       return subscriptions_1._subscribeNativeUserInfoErrorEvent(cb, listener);
+    case 'file-received-error':
+      return subscriptions_1._subscribeNativeFileReceivedErrorEvent(
+        cb,
+        listener,
+      );
     default:
       throw new Error(`Unknown watch event "${event}"`);
   }

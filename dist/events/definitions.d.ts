@@ -23,6 +23,7 @@ export interface WatchEventCallbacks<
   'application-context-error': (payload: P) => void;
   file: (event: FileTransferEvent) => void;
   'file-received': (payload: P[]) => void;
+  'file-received-error': (payload: P[]) => void;
   installed: (installed: boolean) => void;
   message: WatchMessageCallback<P, P2>;
   paired: (paired: boolean) => void;

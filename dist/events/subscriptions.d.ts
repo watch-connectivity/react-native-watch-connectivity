@@ -56,3 +56,7 @@ export declare function _subscribeNativeUserInfoErrorEvent(
   cb: WatchEventCallbacks['user-info-error'],
   addListener?: AddListenerFn,
 ): () => void;
+export declare function _subscribeNativeFileReceivedErrorEvent(
+  cb: WatchEventCallbacks['file-received-error'],
+  addListener?: AddListenerFn,
+): () => void;
