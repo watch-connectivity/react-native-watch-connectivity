@@ -63,7 +63,7 @@ export interface IRNWatchNativeModule extends EventSubscriptionVendor {
 
   getIsWatchAppInstalled: () => Promise<boolean>;
 
-  getQueuedFile: () => Promise<FileQueue>;
+  getQueuedFiles: () => Promise<FileQueue>;
   getQueuedUserInfo: <UserInfo extends WatchPayload>() => Promise<
     UserInfoQueue<UserInfo>
   >;

@@ -43,7 +43,7 @@ function processFileQueue(queue) {
  * @private
  */
 async function _getMissedFile() {
-    const fileCache = await native_module_1.NativeModule.getQueuedFile();
+    const fileCache = await native_module_1.NativeModule.getQueuedFiles();
     const items = processFileQueue(fileCache);
     return items;
 }
