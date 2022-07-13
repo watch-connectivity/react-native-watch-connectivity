@@ -1,5 +1,5 @@
 import {WatchEventCallbacks} from './definitions';
-import {WatchPayload} from '../native-module';
+import {WatchPayload, QueuedFile} from '../native-module';
 export declare type UnsubscribeFn = () => void;
 declare function addListener(
   event: 'reachability',
@@ -19,7 +19,7 @@ declare function addListener<UserInfo extends WatchPayload = WatchPayload>(
 ): UnsubscribeFn;
 declare function addListener(
   event: 'file-received',
-  cb: WatchEventCallbacks['file-received'],
+  cb: WatchEventCallbacks<QueuedFile>['file-received'],
 ): UnsubscribeFn;
 declare function addListener<
   MessageFromWatch extends WatchPayload = WatchPayload,
@@ -43,6 +43,10 @@ declare function addListener<Context extends WatchPayload = WatchPayload>(
 declare function addListener<Context extends WatchPayload = WatchPayload>(
   event: 'user-info-error',
   cb: WatchEventCallbacks<Context>['user-info-error'],
+): UnsubscribeFn;
+declare function addListener<Context extends WatchPayload = WatchPayload>(
+  event: 'file-received-error',
+  cb: WatchEventCallbacks<Context>['file-received-error'],
 ): UnsubscribeFn;
 declare function once(
   event: 'reachability',
@@ -124,6 +128,13 @@ declare function once<Context extends WatchPayload = WatchPayload>(
 declare function once<Context extends WatchPayload = WatchPayload>(
   event: 'user-info-error',
 ): Promise<Parameters<WatchEventCallbacks<Context>['user-info-error']>[0]>;
+declare function once<Context extends WatchPayload = WatchPayload>(
+  event: 'file-received-error',
+  cb: WatchEventCallbacks<Context>['file-received-error'],
+): UnsubscribeFn;
+declare function once<Context extends WatchPayload = WatchPayload>(
+  event: 'file-received-error',
+): Promise<Parameters<WatchEventCallbacks<Context>['file-received-error']>[0]>;
 declare const watchEvents: {
   addListener: typeof addListener;
   on: typeof addListener;
