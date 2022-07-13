@@ -27,6 +27,7 @@
 
 static NSString *EVENT_FILE_TRANSFER = @"WatchFileTransfer";
 static NSString *EVENT_WATCH_FILE_RECEIVED = @"WatchFileReceived";
+static NSString *EVENT_WATCH_FILE_ERROR = @"WatchFileError";
 static NSString *EVENT_RECEIVE_MESSAGE = @"WatchReceiveMessage";
 static NSString *EVENT_RECEIVE_MESSAGE_DATA = @"WatchReceiveMessageData";
 static NSString *EVENT_ACTIVATION_ERROR = @"WatchActivationError";
@@ -87,6 +88,7 @@ RCT_EXPORT_MODULE()
     return @[
             EVENT_FILE_TRANSFER,
             EVENT_WATCH_FILE_RECEIVED,
+            EVENT_WATCH_FILE_ERROR,
             EVENT_RECEIVE_MESSAGE,
             EVENT_RECEIVE_MESSAGE_DATA,
             EVENT_ACTIVATION_ERROR,
@@ -420,16 +422,29 @@ RCT_EXPORT_METHOD(dequeueFile:
 }
 
 - (void)session:(WCSession *)session didReceiveFile:(WCSessionFile *)file {
+  NSFileManager *fileManager = NSFileManager.defaultManager;
+  NSString *destinationPath = [fileManager URLsForDirectory:NSDocumentDirectory
+                                                  inDomains:NSUserDomainMask][0].absoluteString;
+  NSError *error;
+  [fileManager copyItemAtPath:file.fileURL.absoluteString
+                       toPath:destinationPath
+                        error:&error];
+  
   NSNumber *timestamp = @(jsTimestamp());
   NSString *id = [timestamp stringValue];
-  NSURL *url = file.fileURL;
   
   NSDictionary *fileInfo = @{
     @"id": id,
     @"timestamp": timestamp,
-    @"url": url.absoluteString,
+    @"url": destinationPath,
     @"metadata": file.metadata != nil ? file.metadata : [NSNull null]
   };
+  
+  if (error) {
+    NSLog(@"Copying received file error: %@ %@", error, error.userInfo);
+    [self dispatchEventWithName:EVENT_WATCH_FILE_ERROR body:@{@"fileInfo": fileInfo, @"error": error.userInfo}];
+    return;
+  }
   
   [self.queuedFiles setValue:fileInfo forKey:id];
   [self dispatchEventWithName:EVENT_WATCH_FILE_RECEIVED body:fileInfo];
