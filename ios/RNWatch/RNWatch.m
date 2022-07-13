@@ -423,10 +423,13 @@ RCT_EXPORT_METHOD(dequeueFile:
 
 - (void)session:(WCSession *)session didReceiveFile:(WCSessionFile *)file {
   NSFileManager *fileManager = NSFileManager.defaultManager;
-  NSURL *directoryPath = [[fileManager URLsForDirectory:NSDocumentDirectory
-                                              inDomains:NSUserDomainMask][0] URLByAppendingPathComponent:@"FilesReceived"];
+  NSURL *directoryURL = [[fileManager URLsForDirectory:NSDocumentDirectory
+                                             inDomains:NSUserDomainMask][0] URLByAppendingPathComponent:@"FilesReceived"];
+  if (![fileManager fileExistsAtPath:directoryURL.absoluteString]) {
+    [fileManager createDirectoryAtURL:directoryURL withIntermediateDirectories:YES attributes:nil error:nil];
+  }
   
-  NSString *destinationPath = [directoryPath URLByAppendingPathComponent:file.fileURL.lastPathComponent].absoluteString;
+  NSString *destinationPath = [directoryURL URLByAppendingPathComponent:file.fileURL.lastPathComponent].absoluteString;
   NSError *error;
   [fileManager copyItemAtPath:file.fileURL.absoluteString
                        toPath:destinationPath
@@ -444,7 +447,7 @@ RCT_EXPORT_METHOD(dequeueFile:
   
   if (error) {
     NSLog(@"Copying received file error: %@ %@", error, error.userInfo);
-    [self dispatchEventWithName:EVENT_WATCH_FILE_ERROR body:@{@"fileInfo": fileInfo, @"error": error.userInfo}];
+    [self dispatchEventWithName:EVENT_WATCH_FILE_ERROR body:@{@"fileInfo": fileInfo,  @"error": error, @"errorUserInfo": error.userInfo}];
     return;
   }
   
