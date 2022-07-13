@@ -1,5 +1,5 @@
 import {WatchEventCallbacks} from './definitions';
-import {WatchPayload} from '../native-module';
+import {WatchPayload, QueuedFile} from '../native-module';
 export declare type UnsubscribeFn = () => void;
 declare function addListener(
   event: 'reachability',
@@ -19,7 +19,7 @@ declare function addListener<UserInfo extends WatchPayload = WatchPayload>(
 ): UnsubscribeFn;
 declare function addListener(
   event: 'file-received',
-  cb: WatchEventCallbacks['file-received'],
+  cb: WatchEventCallbacks<QueuedFile>['file-received'],
 ): UnsubscribeFn;
 declare function addListener<
   MessageFromWatch extends WatchPayload = WatchPayload,

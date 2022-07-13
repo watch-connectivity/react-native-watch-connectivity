@@ -12,7 +12,7 @@ import {
   AddListenerFn,
   _subscribeNativeFileReceivedEvent,
 } from './subscriptions';
-import {_addListener, _once, WatchPayload} from '../native-module';
+import {_addListener, _once, WatchPayload, QueuedFile} from '../native-module';
 
 export type UnsubscribeFn = () => void;
 
@@ -71,7 +71,7 @@ function addListener<UserInfo extends WatchPayload = WatchPayload>(
 
 function addListener(
   event: 'file-received',
-  cb: WatchEventCallbacks['file-received'],
+  cb: WatchEventCallbacks<QueuedFile>['file-received'],
 ): UnsubscribeFn;
 
 function addListener<
