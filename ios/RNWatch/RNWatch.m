@@ -425,14 +425,14 @@ RCT_EXPORT_METHOD(dequeueFile:
   NSFileManager *fileManager = NSFileManager.defaultManager;
   NSURL *directoryURL = [[fileManager URLsForDirectory:NSDocumentDirectory
                                              inDomains:NSUserDomainMask][0] URLByAppendingPathComponent:@"FilesReceived"];
-  if (![fileManager fileExistsAtPath:directoryURL.absoluteString]) {
+  if (![fileManager fileExistsAtPath:directoryURL.path]) {
     [fileManager createDirectoryAtURL:directoryURL withIntermediateDirectories:YES attributes:nil error:nil];
   }
   
-  NSString *destinationPath = [directoryURL URLByAppendingPathComponent:file.fileURL.lastPathComponent].absoluteString;
+  NSURL *destinationURL = [directoryURL URLByAppendingPathComponent:file.fileURL.lastPathComponent];
   NSError *error;
-  [fileManager copyItemAtPath:file.fileURL.absoluteString
-                       toPath:destinationPath
+  [fileManager copyItemAtPath:file.fileURL.path
+                       toPath:destinationURL.path
                         error:&error];
   
   NSNumber *timestamp = @(jsTimestamp());
@@ -441,7 +441,7 @@ RCT_EXPORT_METHOD(dequeueFile:
   NSDictionary *fileInfo = @{
     @"id": id,
     @"timestamp": timestamp,
-    @"url": destinationPath,
+    @"url": destinationURL.absoluteString,
     @"metadata": file.metadata != nil ? file.metadata : [NSNull null]
   };
   
