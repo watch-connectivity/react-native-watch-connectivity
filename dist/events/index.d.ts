@@ -41,6 +41,18 @@ declare function addListener<Context extends WatchPayload = WatchPayload>(
   cb: WatchEventCallbacks<Context>['application-context-error'],
 ): UnsubscribeFn;
 declare function addListener<Context extends WatchPayload = WatchPayload>(
+  event: 'activation-error',
+  cb: WatchEventCallbacks<Context>['activation-error'],
+): UnsubscribeFn;
+declare function addListener<Context extends WatchPayload = WatchPayload>(
+  event: 'session-became-inactive',
+  cb: WatchEventCallbacks<Context>['session-became-inactive'],
+): UnsubscribeFn;
+declare function addListener<Context extends WatchPayload = WatchPayload>(
+  event: 'session-did-deactivate',
+  cb: WatchEventCallbacks<Context>['session-did-deactivate'],
+): UnsubscribeFn;
+declare function addListener<Context extends WatchPayload = WatchPayload>(
   event: 'user-info-error',
   cb: WatchEventCallbacks<Context>['user-info-error'],
 ): UnsubscribeFn;
