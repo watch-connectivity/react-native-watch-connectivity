@@ -111,11 +111,14 @@ export const NativeModule: IRNWatchNativeModule = __mod;
 export const nativeWatchEventEmitter = new NativeEventEmitter(NativeModule);
 
 export enum WatchEvent {
+  EVENT_ACTIVATION_ERROR = 'WatchActivationError',
   EVENT_APPLICATION_CONTEXT_RECEIVED = 'WatchApplicationContextReceived',
   EVENT_FILE_TRANSFER = 'WatchFileTransfer',
   EVENT_INSTALL_STATUS_CHANGED = 'WatchInstallStatusChanged',
   EVENT_PAIR_STATUS_CHANGED = 'WatchPairStatusChanged',
   EVENT_RECEIVE_MESSAGE = 'WatchReceiveMessage',
+  EVENT_SESSION_BECAME_INACTIVE = 'WatchSessionBecameInactive',
+  EVENT_SESSION_DID_DEACTIVATE = 'WatchSessionDidDeactivate',
   EVENT_WATCH_APPLICATION_CONTEXT_ERROR = 'WatchApplicationContextError',
   EVENT_WATCH_FILE_ERROR = 'WatchFileError',
   EVENT_WATCH_FILE_RECEIVED = 'WatchFileReceived',
@@ -149,6 +152,9 @@ export interface EventPayloads {
   [WatchEvent.EVENT_WATCH_APPLICATION_CONTEXT_ERROR]: Error;
   [WatchEvent.EVENT_WATCH_USER_INFO_ERROR]: Error;
   [WatchEvent.EVENT_WATCH_FILE_ERROR]: Error;
+  [WatchEvent.EVENT_ACTIVATION_ERROR]: Error;
+  [WatchEvent.EVENT_SESSION_BECAME_INACTIVE]: Error;
+  [WatchEvent.EVENT_SESSION_DID_DEACTIVATE]: Error;
 }
 
 export function _addListener<E extends WatchEvent, Payload = EventPayloads[E]>(

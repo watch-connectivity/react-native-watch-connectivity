@@ -60,3 +60,15 @@ export declare function _subscribeNativeFileReceivedErrorEvent(
   cb: WatchEventCallbacks['file-received-error'],
   addListener?: AddListenerFn,
 ): () => void;
+export declare function _subscribeNativeActivationErrorEvent(
+  cb: WatchEventCallbacks['activation-error'],
+  addListener?: AddListenerFn,
+): () => void;
+export declare function _subscribeNativeSesssionBecameInactiveErrorEvent(
+  cb: WatchEventCallbacks['session-became-inactive'],
+  addListener?: AddListenerFn,
+): () => void;
+export declare function _subscribeNativeSessionDidDeactivateErrorEvent(
+  cb: WatchEventCallbacks['session-did-deactivate'],
+  addListener?: AddListenerFn,
+): () => void;

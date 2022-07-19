@@ -12,6 +12,9 @@ import {
   AddListenerFn,
   _subscribeNativeFileReceivedEvent,
   _subscribeNativeFileReceivedErrorEvent,
+  _subscribeNativeActivationErrorEvent,
+  _subscribeNativeSesssionBecameInactiveErrorEvent,
+  _subscribeNativeSessionDidDeactivateErrorEvent,
 } from './subscriptions';
 import {_addListener, _once, WatchPayload, QueuedFile} from '../native-module';
 
@@ -45,6 +48,12 @@ function listen<E extends WatchEvent>(
       return _subscribeNativeUserInfoErrorEvent(cb, listener);
     case 'file-received-error':
       return _subscribeNativeFileReceivedErrorEvent(cb, listener);
+    case 'activation-error':
+      return _subscribeNativeActivationErrorEvent(cb, listener);
+    case 'session-became-inactive':
+      return _subscribeNativeSesssionBecameInactiveErrorEvent(cb, listener);
+    case 'session-did-deactivate':
+      return _subscribeNativeSessionDidDeactivateErrorEvent(cb, listener);
     default:
       throw new Error(`Unknown watch event "${event}"`);
   }
@@ -200,6 +209,37 @@ function once<Context extends WatchPayload = WatchPayload>(
   event: 'application-context-error',
 ): Promise<
   Parameters<WatchEventCallbacks<Context>['application-context-error']>[0]
+>;
+
+function once<Context extends WatchPayload = WatchPayload>(
+  event: 'activation-error',
+  cb: WatchEventCallbacks<Context>['activation-error'],
+): UnsubscribeFn;
+
+function once<Context extends WatchPayload = WatchPayload>(
+  event: 'activation-error',
+): Promise<Parameters<WatchEventCallbacks<Context>['activation-error']>[0]>;
+
+function once<Context extends WatchPayload = WatchPayload>(
+  event: 'session-became-inactive',
+  cb: WatchEventCallbacks<Context>['session-became-inactive'],
+): UnsubscribeFn;
+
+function once<Context extends WatchPayload = WatchPayload>(
+  event: 'session-became-inactive',
+): Promise<
+  Parameters<WatchEventCallbacks<Context>['session-became-inactive']>[0]
+>;
+
+function once<Context extends WatchPayload = WatchPayload>(
+  event: 'session-did-deactivate',
+  cb: WatchEventCallbacks<Context>['session-did-deactivate'],
+): UnsubscribeFn;
+
+function once<Context extends WatchPayload = WatchPayload>(
+  event: 'session-did-deactivate',
+): Promise<
+  Parameters<WatchEventCallbacks<Context>['session-did-deactivate']>[0]
 >;
 
 function once<Context extends WatchPayload = WatchPayload>(

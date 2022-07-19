@@ -19,6 +19,7 @@ export interface WatchEventCallbacks<
   P extends WatchPayload = WatchPayload,
   P2 extends WatchPayload = WatchPayload
 > {
+  'activation-error': (payload: P) => void;
   'application-context': (payload: P) => void;
   'application-context-error': (payload: P) => void;
   file: (event: FileTransferEvent) => void;
@@ -28,6 +29,8 @@ export interface WatchEventCallbacks<
   message: WatchMessageCallback<P, P2>;
   paired: (paired: boolean) => void;
   reachability: (reachable: boolean) => void;
+  'session-became-inactive': (payload: P) => void;
+  'session-did-deactivate': (payload: P) => void;
   'user-info': (payload: P[]) => void;
   'user-info-error': (payload: P) => void;
 }

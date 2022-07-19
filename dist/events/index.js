@@ -35,6 +35,18 @@ function listen(event, cb, listener) {
         cb,
         listener,
       );
+    case 'activation-error':
+      return subscriptions_1._subscribeNativeActivationErrorEvent(cb, listener);
+    case 'session-became-inactive':
+      return subscriptions_1._subscribeNativeSesssionBecameInactiveErrorEvent(
+        cb,
+        listener,
+      );
+    case 'session-did-deactivate':
+      return subscriptions_1._subscribeNativeSessionDidDeactivateErrorEvent(
+        cb,
+        listener,
+      );
     default:
       throw new Error(`Unknown watch event "${event}"`);
   }

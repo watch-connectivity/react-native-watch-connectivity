@@ -19,11 +19,14 @@ exports.NativeModule = __mod;
 exports.nativeWatchEventEmitter = new react_native_1.NativeEventEmitter(exports.NativeModule);
 var WatchEvent;
 (function (WatchEvent) {
+    WatchEvent["EVENT_ACTIVATION_ERROR"] = "WatchActivationError";
     WatchEvent["EVENT_APPLICATION_CONTEXT_RECEIVED"] = "WatchApplicationContextReceived";
     WatchEvent["EVENT_FILE_TRANSFER"] = "WatchFileTransfer";
     WatchEvent["EVENT_INSTALL_STATUS_CHANGED"] = "WatchInstallStatusChanged";
     WatchEvent["EVENT_PAIR_STATUS_CHANGED"] = "WatchPairStatusChanged";
     WatchEvent["EVENT_RECEIVE_MESSAGE"] = "WatchReceiveMessage";
+    WatchEvent["EVENT_SESSION_BECAME_INACTIVE"] = "WatchSessionBecameInactive";
+    WatchEvent["EVENT_SESSION_DID_DEACTIVATE"] = "WatchSessionDidDeactivate";
     WatchEvent["EVENT_WATCH_APPLICATION_CONTEXT_ERROR"] = "WatchApplicationContextError";
     WatchEvent["EVENT_WATCH_FILE_ERROR"] = "WatchFileError";
     WatchEvent["EVENT_WATCH_FILE_RECEIVED"] = "WatchFileReceived";

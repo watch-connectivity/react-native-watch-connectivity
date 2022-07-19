@@ -122,6 +122,31 @@ declare function once<Context extends WatchPayload = WatchPayload>(
   Parameters<WatchEventCallbacks<Context>['application-context-error']>[0]
 >;
 declare function once<Context extends WatchPayload = WatchPayload>(
+  event: 'activation-error',
+  cb: WatchEventCallbacks<Context>['activation-error'],
+): UnsubscribeFn;
+declare function once<Context extends WatchPayload = WatchPayload>(
+  event: 'activation-error',
+): Promise<Parameters<WatchEventCallbacks<Context>['activation-error']>[0]>;
+declare function once<Context extends WatchPayload = WatchPayload>(
+  event: 'session-became-inactive',
+  cb: WatchEventCallbacks<Context>['session-became-inactive'],
+): UnsubscribeFn;
+declare function once<Context extends WatchPayload = WatchPayload>(
+  event: 'session-became-inactive',
+): Promise<
+  Parameters<WatchEventCallbacks<Context>['session-became-inactive']>[0]
+>;
+declare function once<Context extends WatchPayload = WatchPayload>(
+  event: 'session-did-deactivate',
+  cb: WatchEventCallbacks<Context>['session-did-deactivate'],
+): UnsubscribeFn;
+declare function once<Context extends WatchPayload = WatchPayload>(
+  event: 'session-did-deactivate',
+): Promise<
+  Parameters<WatchEventCallbacks<Context>['session-did-deactivate']>[0]
+>;
+declare function once<Context extends WatchPayload = WatchPayload>(
   event: 'user-info-error',
   cb: WatchEventCallbacks<Context>['user-info-error'],
 ): UnsubscribeFn;

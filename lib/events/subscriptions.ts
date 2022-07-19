@@ -204,3 +204,24 @@ export function _subscribeNativeFileReceivedErrorEvent(
 ) {
   return addListener(WatchEvent.EVENT_WATCH_FILE_ERROR, cb);
 }
+
+export function _subscribeNativeActivationErrorEvent(
+  cb: WatchEventCallbacks['activation-error'],
+  addListener: AddListenerFn = _addListener,
+) {
+  return addListener(WatchEvent.EVENT_WATCH_FILE_ERROR, cb);
+}
+
+export function _subscribeNativeSesssionBecameInactiveErrorEvent(
+  cb: WatchEventCallbacks['session-became-inactive'],
+  addListener: AddListenerFn = _addListener,
+) {
+  return addListener(WatchEvent.EVENT_WATCH_FILE_ERROR, cb);
+}
+
+export function _subscribeNativeSessionDidDeactivateErrorEvent(
+  cb: WatchEventCallbacks['session-did-deactivate'],
+  addListener: AddListenerFn = _addListener,
+) {
+  return addListener(WatchEvent.EVENT_WATCH_FILE_ERROR, cb);
+}
