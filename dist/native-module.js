@@ -21,6 +21,7 @@ var WatchEvent;
 (function (WatchEvent) {
     WatchEvent["EVENT_ACTIVATION_ERROR"] = "WatchActivationError";
     WatchEvent["EVENT_APPLICATION_CONTEXT_RECEIVED"] = "WatchApplicationContextReceived";
+    WatchEvent["EVENT_APPLICATION_CONTEXT_RECEIVED_ERROR"] = "WatchApplicationContextReceivedError";
     WatchEvent["EVENT_FILE_TRANSFER"] = "WatchFileTransfer";
     WatchEvent["EVENT_INSTALL_STATUS_CHANGED"] = "WatchInstallStatusChanged";
     WatchEvent["EVENT_PAIR_STATUS_CHANGED"] = "WatchPairStatusChanged";

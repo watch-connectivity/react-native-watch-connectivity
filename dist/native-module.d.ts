@@ -64,6 +64,7 @@ export declare const nativeWatchEventEmitter: NativeEventEmitter;
 export declare enum WatchEvent {
     EVENT_ACTIVATION_ERROR = "WatchActivationError",
     EVENT_APPLICATION_CONTEXT_RECEIVED = "WatchApplicationContextReceived",
+    EVENT_APPLICATION_CONTEXT_RECEIVED_ERROR = "WatchApplicationContextReceivedError",
     EVENT_FILE_TRANSFER = "WatchFileTransfer",
     EVENT_INSTALL_STATUS_CHANGED = "WatchInstallStatusChanged",
     EVENT_PAIR_STATUS_CHANGED = "WatchPairStatusChanged",
@@ -104,6 +105,7 @@ export interface EventPayloads {
     [WatchEvent.EVENT_ACTIVATION_ERROR]: Error;
     [WatchEvent.EVENT_SESSION_BECAME_INACTIVE]: Error;
     [WatchEvent.EVENT_SESSION_DID_DEACTIVATE]: Error;
+    [WatchEvent.EVENT_APPLICATION_CONTEXT_RECEIVED_ERROR]: Error;
 }
 export declare function _addListener<E extends WatchEvent, Payload = EventPayloads[E]>(event: E, cb: (payload: Payload) => void): () => void;
 export declare function _once<E extends WatchEvent, Payload = EventPayloads[E]>(event: E, cb: (payload: Payload) => void): () => void;

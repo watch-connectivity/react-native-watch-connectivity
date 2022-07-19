@@ -52,6 +52,10 @@ export declare function _subscribeNativeApplicationContextErrorEvent(
   cb: WatchEventCallbacks['application-context-error'],
   addListener?: AddListenerFn,
 ): () => void;
+export declare function _subscribeNativeApplicationContextReceivedErrorEvent(
+  cb: WatchEventCallbacks['application-context-received-error'],
+  addListener?: AddListenerFn,
+): () => void;
 export declare function _subscribeNativeUserInfoErrorEvent(
   cb: WatchEventCallbacks['user-info-error'],
   addListener?: AddListenerFn,

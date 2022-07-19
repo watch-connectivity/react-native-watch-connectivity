@@ -28,6 +28,11 @@ function listen(event, cb, listener) {
         cb,
         listener,
       );
+    case 'application-context-received-error':
+      return subscriptions_1._subscribeNativeApplicationContextReceivedErrorEvent(
+        cb,
+        listener,
+      );
     case 'user-info-error':
       return subscriptions_1._subscribeNativeUserInfoErrorEvent(cb, listener);
     case 'file-received-error':

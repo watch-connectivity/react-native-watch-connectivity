@@ -22,6 +22,7 @@ export interface WatchEventCallbacks<
   'activation-error': (payload: P) => void;
   'application-context': (payload: P) => void;
   'application-context-error': (payload: P) => void;
+  'application-context-received-error': (payload: P) => void;
   file: (event: FileTransferEvent) => void;
   'file-received': (payload: P[]) => void;
   'file-received-error': (payload: P[]) => void;

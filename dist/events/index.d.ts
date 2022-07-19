@@ -41,6 +41,10 @@ declare function addListener<Context extends WatchPayload = WatchPayload>(
   cb: WatchEventCallbacks<Context>['application-context-error'],
 ): UnsubscribeFn;
 declare function addListener<Context extends WatchPayload = WatchPayload>(
+  event: 'application-context-received-error',
+  cb: WatchEventCallbacks<Context>['application-context-received-error'],
+): UnsubscribeFn;
+declare function addListener<Context extends WatchPayload = WatchPayload>(
   event: 'activation-error',
   cb: WatchEventCallbacks<Context>['activation-error'],
 ): UnsubscribeFn;
@@ -132,6 +136,17 @@ declare function once<Context extends WatchPayload = WatchPayload>(
   event: 'application-context-error',
 ): Promise<
   Parameters<WatchEventCallbacks<Context>['application-context-error']>[0]
+>;
+declare function once<Context extends WatchPayload = WatchPayload>(
+  event: 'application-context-received-error',
+  cb: WatchEventCallbacks<Context>['application-context-received-error'],
+): UnsubscribeFn;
+declare function once<Context extends WatchPayload = WatchPayload>(
+  event: 'application-context-received-error',
+): Promise<
+  Parameters<
+    WatchEventCallbacks<Context>['application-context-received-error']
+  >[0]
 >;
 declare function once<Context extends WatchPayload = WatchPayload>(
   event: 'activation-error',

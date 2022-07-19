@@ -1,6 +1,6 @@
 'use strict';
 Object.defineProperty(exports, '__esModule', {value: true});
-exports._subscribeNativeSessionDidDeactivateErrorEvent = exports._subscribeNativeSesssionBecameInactiveErrorEvent = exports._subscribeNativeActivationErrorEvent = exports._subscribeNativeFileReceivedErrorEvent = exports._subscribeNativeUserInfoErrorEvent = exports._subscribeNativeApplicationContextErrorEvent = exports._subscribeToNativeInstalledEvent = exports._subscribeToNativePairedEvent = exports._subscribeToNativeReachabilityEvent = exports._subscribeNativeApplicationContextEvent = exports._subscribeNativeFileReceivedEvent = exports._subscribeNativeUserInfoEvent = exports._subscribeNativeMessageEvent = exports._subscribeNativeFileEvents = void 0;
+exports._subscribeNativeSessionDidDeactivateErrorEvent = exports._subscribeNativeSesssionBecameInactiveErrorEvent = exports._subscribeNativeActivationErrorEvent = exports._subscribeNativeFileReceivedErrorEvent = exports._subscribeNativeUserInfoErrorEvent = exports._subscribeNativeApplicationContextReceivedErrorEvent = exports._subscribeNativeApplicationContextErrorEvent = exports._subscribeToNativeInstalledEvent = exports._subscribeToNativePairedEvent = exports._subscribeToNativeReachabilityEvent = exports._subscribeNativeApplicationContextEvent = exports._subscribeNativeFileReceivedEvent = exports._subscribeNativeUserInfoEvent = exports._subscribeNativeMessageEvent = exports._subscribeNativeFileEvents = void 0;
 const native_module_1 = require('../native-module');
 const files_1 = require('../files');
 const user_info_1 = require('../user-info');
@@ -173,6 +173,16 @@ function _subscribeNativeApplicationContextErrorEvent(
   );
 }
 exports._subscribeNativeApplicationContextErrorEvent = _subscribeNativeApplicationContextErrorEvent;
+function _subscribeNativeApplicationContextReceivedErrorEvent(
+  cb,
+  addListener = native_module_1._addListener,
+) {
+  return addListener(
+    native_module_1.WatchEvent.EVENT_APPLICATION_CONTEXT_RECEIVED_ERROR,
+    cb,
+  );
+}
+exports._subscribeNativeApplicationContextReceivedErrorEvent = _subscribeNativeApplicationContextReceivedErrorEvent;
 function _subscribeNativeUserInfoErrorEvent(
   cb,
   addListener = native_module_1._addListener,

@@ -191,6 +191,13 @@ export function _subscribeNativeApplicationContextErrorEvent(
   return addListener(WatchEvent.EVENT_WATCH_APPLICATION_CONTEXT_ERROR, cb);
 }
 
+export function _subscribeNativeApplicationContextReceivedErrorEvent(
+  cb: WatchEventCallbacks['application-context-received-error'],
+  addListener: AddListenerFn = _addListener,
+) {
+  return addListener(WatchEvent.EVENT_APPLICATION_CONTEXT_RECEIVED_ERROR, cb);
+}
+
 export function _subscribeNativeUserInfoErrorEvent(
   cb: WatchEventCallbacks['user-info-error'],
   addListener: AddListenerFn = _addListener,

@@ -15,6 +15,7 @@ import {
   _subscribeNativeActivationErrorEvent,
   _subscribeNativeSesssionBecameInactiveErrorEvent,
   _subscribeNativeSessionDidDeactivateErrorEvent,
+  _subscribeNativeApplicationContextReceivedErrorEvent,
 } from './subscriptions';
 import {_addListener, _once, WatchPayload, QueuedFile} from '../native-module';
 
@@ -44,6 +45,8 @@ function listen<E extends WatchEvent>(
       return _subscribeToNativeInstalledEvent(cb, listener);
     case 'application-context-error':
       return _subscribeNativeApplicationContextErrorEvent(cb, listener);
+    case 'application-context-received-error':
+      return _subscribeNativeApplicationContextReceivedErrorEvent(cb, listener);
     case 'user-info-error':
       return _subscribeNativeUserInfoErrorEvent(cb, listener);
     case 'file-received-error':
@@ -107,6 +110,11 @@ function addListener(
 function addListener<Context extends WatchPayload = WatchPayload>(
   event: 'application-context-error',
   cb: WatchEventCallbacks<Context>['application-context-error'],
+): UnsubscribeFn;
+
+function addListener<Context extends WatchPayload = WatchPayload>(
+  event: 'application-context-received-error',
+  cb: WatchEventCallbacks<Context>['application-context-received-error'],
 ): UnsubscribeFn;
 
 function addListener<Context extends WatchPayload = WatchPayload>(
@@ -224,6 +232,19 @@ function once<Context extends WatchPayload = WatchPayload>(
   event: 'application-context-error',
 ): Promise<
   Parameters<WatchEventCallbacks<Context>['application-context-error']>[0]
+>;
+
+function once<Context extends WatchPayload = WatchPayload>(
+  event: 'application-context-received-error',
+  cb: WatchEventCallbacks<Context>['application-context-received-error'],
+): UnsubscribeFn;
+
+function once<Context extends WatchPayload = WatchPayload>(
+  event: 'application-context-received-error',
+): Promise<
+  Parameters<
+    WatchEventCallbacks<Context>['application-context-received-error']
+  >[0]
 >;
 
 function once<Context extends WatchPayload = WatchPayload>(

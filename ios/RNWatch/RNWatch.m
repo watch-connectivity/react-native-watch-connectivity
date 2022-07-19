@@ -34,6 +34,7 @@ static NSString *EVENT_ACTIVATION_ERROR = @"WatchActivationError";
 static NSString *EVENT_WATCH_REACHABILITY_CHANGED = @"WatchReachabilityChanged";
 static NSString *EVENT_WATCH_USER_INFO_RECEIVED = @"WatchUserInfoReceived";
 static NSString *EVENT_APPLICATION_CONTEXT_RECEIVED = @"WatchApplicationContextReceived";
+static NSString *EVENT_APPLICATION_CONTEXT_RECEIVED_ERROR = @"WatchApplicationContextReceivedError";
 static NSString *EVENT_SESSION_DID_DEACTIVATE = @"WatchSessionDidDeactivate";
 static NSString *EVENT_SESSION_BECAME_INACTIVE = @"WatchSessionBecameInactive";
 static NSString *EVENT_PAIR_STATUS_CHANGED = @"WatchPairStatusChanged";
@@ -95,6 +96,7 @@ RCT_EXPORT_MODULE()
             EVENT_WATCH_REACHABILITY_CHANGED,
             EVENT_WATCH_USER_INFO_RECEIVED,
             EVENT_APPLICATION_CONTEXT_RECEIVED,
+            EVENT_APPLICATION_CONTEXT_RECEIVED_ERROR,
             EVENT_PAIR_STATUS_CHANGED,
             EVENT_INSTALL_STATUS_CHANGED,
             EVENT_SESSION_BECAME_INACTIVE,
@@ -520,8 +522,16 @@ RCT_EXPORT_METHOD(getApplicationContext:
 
 - (void)             session:(WCSession *)session
 didReceiveApplicationContext:(NSDictionary<NSString *, id> *)applicationContext {
-    [self.session updateApplicationContext:applicationContext error:nil];
-    [self dispatchEventWithName:EVENT_APPLICATION_CONTEXT_RECEIVED body:applicationContext];
+    NSError *error = nil;
+    [self.session updateApplicationContext:applicationContext error:&error];
+
+    if (error) {
+        NSLog(@"Application context recieve error: %@", error);
+        [self dispatchEventWithName:EVENT_APPLICATION_CONTEXT_RECEIVED_ERROR body:@{@"error": error}];
+    } else {
+        [self dispatchEventWithName:EVENT_APPLICATION_CONTEXT_RECEIVED body:applicationContext];
+    }
+    
 }
 
 ////////////////////////////////////////////////////////////////////////////////
