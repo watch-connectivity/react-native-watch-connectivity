@@ -1,4 +1,11 @@
-import {NativeFileTransfer, NativeModule, WatchPayload} from './native-module';
+import sortBy from 'lodash.sortby';
+import {
+  FileQueue,
+  NativeFileTransfer,
+  NativeModule,
+  QueuedFile,
+  WatchPayload,
+} from './native-module';
 
 export interface FileTransfer {
   bytesTotal: number;
@@ -46,4 +53,27 @@ export async function getFileTransfers(): Promise<{
   });
 
   return adapted;
+}
+
+function processFileQueue(queue: FileQueue) {
+  const fileArr: QueuedFile[] = sortBy(
+    Object.entries(queue).map(([id, file]) => ({
+      id,
+      url: file.url,
+      metadata: file.metadata,
+      timestamp: parseInt(id, 10),
+    })),
+    (u) => u.timestamp,
+  );
+  return fileArr;
+}
+
+/**
+ * @private
+ */
+export async function _getMissedFile(): Promise<QueuedFile[]> {
+  const fileCache = await NativeModule.getQueuedFiles();
+  const items = processFileQueue(fileCache);
+
+  return items;
 }

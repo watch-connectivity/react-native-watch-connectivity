@@ -26,12 +26,15 @@
 #endif
 
 static NSString *EVENT_FILE_TRANSFER = @"WatchFileTransfer";
+static NSString *EVENT_WATCH_FILE_RECEIVED = @"WatchFileReceived";
+static NSString *EVENT_WATCH_FILE_ERROR = @"WatchFileError";
 static NSString *EVENT_RECEIVE_MESSAGE = @"WatchReceiveMessage";
 static NSString *EVENT_RECEIVE_MESSAGE_DATA = @"WatchReceiveMessageData";
 static NSString *EVENT_ACTIVATION_ERROR = @"WatchActivationError";
 static NSString *EVENT_WATCH_REACHABILITY_CHANGED = @"WatchReachabilityChanged";
 static NSString *EVENT_WATCH_USER_INFO_RECEIVED = @"WatchUserInfoReceived";
 static NSString *EVENT_APPLICATION_CONTEXT_RECEIVED = @"WatchApplicationContextReceived";
+static NSString *EVENT_APPLICATION_CONTEXT_RECEIVED_ERROR = @"WatchApplicationContextReceivedError";
 static NSString *EVENT_SESSION_DID_DEACTIVATE = @"WatchSessionDidDeactivate";
 static NSString *EVENT_SESSION_BECAME_INACTIVE = @"WatchSessionBecameInactive";
 static NSString *EVENT_PAIR_STATUS_CHANGED = @"WatchPairStatusChanged";
@@ -64,6 +67,7 @@ RCT_EXPORT_MODULE()
     sharedInstance = [super init];
     self.replyHandlers = [NSCache new];
     self.fileTransfers = [NSMutableDictionary new];
+    self.queuedFiles = [NSMutableDictionary new];
     self.queuedUserInfo = [NSMutableDictionary new];
  
     hasObservers = NO;
@@ -84,12 +88,15 @@ RCT_EXPORT_MODULE()
 - (NSArray<NSString *> *)supportedEvents {
     return @[
             EVENT_FILE_TRANSFER,
+            EVENT_WATCH_FILE_RECEIVED,
+            EVENT_WATCH_FILE_ERROR,
             EVENT_RECEIVE_MESSAGE,
             EVENT_RECEIVE_MESSAGE_DATA,
             EVENT_ACTIVATION_ERROR,
             EVENT_WATCH_REACHABILITY_CHANGED,
             EVENT_WATCH_USER_INFO_RECEIVED,
             EVENT_APPLICATION_CONTEXT_RECEIVED,
+            EVENT_APPLICATION_CONTEXT_RECEIVED_ERROR,
             EVENT_PAIR_STATUS_CHANGED,
             EVENT_INSTALL_STATUS_CHANGED,
             EVENT_SESSION_BECAME_INACTIVE,
@@ -348,6 +355,35 @@ RCT_EXPORT_METHOD(getFileTransfers:
     resolve(payload);
 }
 
+RCT_EXPORT_METHOD(getQueuedFiles:
+    (RCTPromiseResolveBlock) resolve
+            reject:
+            (RCTPromiseRejectBlock) reject) {
+    resolve(self.queuedFiles);
+    // Clear the cache.
+    [self.queuedFiles removeAllObjects];
+}
+
+RCT_EXPORT_METHOD(clearFilesQueue:
+    (RCTPromiseResolveBlock) resolve
+            reject:
+            (RCTPromiseRejectBlock) reject) {
+    self.queuedFiles = [NSMutableDictionary new];
+    resolve([NSNull null]);
+}
+
+RCT_EXPORT_METHOD(dequeueFile:
+    (NSArray<NSString *> *) ids
+) {
+    for (NSString *id in ids) {
+        [self.queuedFiles removeObjectForKey:id];
+    }
+
+    if (!ids || !ids.count){
+        [self dispatchEventWithName:EVENT_WATCH_FILE_RECEIVED body:self.queuedFiles];
+    }
+}
+
 - (FileTransferEvent *)getFileTransferEvent:(WCSessionFileTransfer *)transfer {
     NSString *uuid = transfer.file.metadata[@"id"];
 
@@ -387,9 +423,38 @@ RCT_EXPORT_METHOD(getFileTransfers:
     }
 }
 
-- (void)session:(WCSession *)session
- didReceiveFile:(WCSessionFile *)file {
-    // TODO
+- (void)session:(WCSession *)session didReceiveFile:(WCSessionFile *)file {
+  NSFileManager *fileManager = NSFileManager.defaultManager;
+  NSURL *directoryURL = [[fileManager URLsForDirectory:NSDocumentDirectory
+                                             inDomains:NSUserDomainMask][0] URLByAppendingPathComponent:@"FilesReceived"];
+  if (![fileManager fileExistsAtPath:directoryURL.path]) {
+    [fileManager createDirectoryAtURL:directoryURL withIntermediateDirectories:YES attributes:nil error:nil];
+  }
+  
+  NSURL *destinationURL = [directoryURL URLByAppendingPathComponent:file.fileURL.lastPathComponent];
+  NSError *error;
+  [fileManager copyItemAtPath:file.fileURL.path
+                       toPath:destinationURL.path
+                        error:&error];
+  
+  NSNumber *timestamp = @(jsTimestamp());
+  NSString *id = [timestamp stringValue];
+  
+  NSDictionary *fileInfo = @{
+    @"id": id,
+    @"timestamp": timestamp,
+    @"url": destinationURL.absoluteString,
+    @"metadata": file.metadata != nil ? file.metadata : [NSNull null]
+  };
+  
+  if (error) {
+    NSLog(@"Copying received file error: %@ %@", error, error.userInfo);
+    [self dispatchEventWithName:EVENT_WATCH_FILE_ERROR body:@{@"fileInfo": fileInfo,  @"error": error, @"errorUserInfo": error.userInfo}];
+    return;
+  }
+  
+  [self.queuedFiles setValue:fileInfo forKey:id];
+  [self dispatchEventWithName:EVENT_WATCH_FILE_RECEIVED body:fileInfo];
 }
 
 - (void)      session:(WCSession *)session
@@ -457,8 +522,16 @@ RCT_EXPORT_METHOD(getApplicationContext:
 
 - (void)             session:(WCSession *)session
 didReceiveApplicationContext:(NSDictionary<NSString *, id> *)applicationContext {
-    [self.session updateApplicationContext:applicationContext error:nil];
-    [self dispatchEventWithName:EVENT_APPLICATION_CONTEXT_RECEIVED body:applicationContext];
+    NSError *error = nil;
+    [self.session updateApplicationContext:applicationContext error:&error];
+
+    if (error) {
+        NSLog(@"Application context recieve error: %@", error);
+        [self dispatchEventWithName:EVENT_APPLICATION_CONTEXT_RECEIVED_ERROR body:@{@"error": error}];
+    } else {
+        [self dispatchEventWithName:EVENT_APPLICATION_CONTEXT_RECEIVED body:applicationContext];
+    }
+    
 }
 
 ////////////////////////////////////////////////////////////////////////////////
