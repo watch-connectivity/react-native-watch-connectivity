@@ -15,3 +15,13 @@ NSString* uuid() {
     CFRelease(uuid);
     return uuidString;
 }
+
+NSDictionary* dictionaryFromError(NSError *error) {
+  NSMutableDictionary *result = NSMutableDictionary.new;
+  result[@"code"] = @(error.code);
+  result[@"domain"] = error.domain;
+  if (error.userInfo) {
+    result[@"userInfo"] = error.userInfo;
+  }
+  return (NSDictionary *) result;
+}
