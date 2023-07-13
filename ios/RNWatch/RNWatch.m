@@ -132,7 +132,7 @@ RCT_EXPORT_MODULE()
 activationDidCompleteWithState:(WCSessionActivationState)activationState
                          error:(NSError *)error {
     if (error) {
-        [self dispatchEventWithName:EVENT_ACTIVATION_ERROR body:@{@"error": error}];
+        [self dispatchEventWithName:EVENT_ACTIVATION_ERROR body:@{@"error": dictionaryFromError(error)}];
     }
 }
 
@@ -500,7 +500,7 @@ RCT_EXPORT_METHOD(updateApplicationContext:
     [self.session updateApplicationContext:context error:&error];
     if (error) {
         NSLog(@"Application context update error: %@ %@", error, [error userInfo]);
-        [self dispatchEventWithName:EVENT_WATCH_APPLICATION_CONTEXT_ERROR body:@{@"context": context, @"error": [error userInfo]}];
+        [self dispatchEventWithName:EVENT_WATCH_APPLICATION_CONTEXT_ERROR body:@{@"context": context, @"error": dictionaryFromError(error)}];
     }
 }
 
@@ -527,7 +527,7 @@ didReceiveApplicationContext:(NSDictionary<NSString *, id> *)applicationContext 
 
     if (error) {
         NSLog(@"Application context recieve error: %@", error);
-        [self dispatchEventWithName:EVENT_APPLICATION_CONTEXT_RECEIVED_ERROR body:@{@"error": error}];
+        [self dispatchEventWithName:EVENT_APPLICATION_CONTEXT_RECEIVED_ERROR body:@{@"error": dictionaryFromError(error)}];
     } else {
         [self dispatchEventWithName:EVENT_APPLICATION_CONTEXT_RECEIVED body:applicationContext];
     }
@@ -575,7 +575,7 @@ RCT_EXPORT_METHOD(dequeueUserInfo:
 - (void)session:(WCSession *)session didFinishUserInfoTransfer:(WCSessionUserInfoTransfer *)userInfoTransfer error:(NSError *)error {
     if (error) {
         NSLog(@"User info transfer error: %@ %@", error, [error userInfo]);
-        [self dispatchEventWithName:EVENT_WATCH_USER_INFO_ERROR body:@{@"userInfo": [userInfoTransfer userInfo], @"error": [error userInfo]}];
+      [self dispatchEventWithName:EVENT_WATCH_USER_INFO_ERROR body:@{@"userInfo": [userInfoTransfer userInfo], @"error": dictionaryFromError(error)}];
     }
 }
 
