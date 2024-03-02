@@ -249,11 +249,10 @@ function addXcodeTarget(
     TARGETED_DEVICE_FAMILY: 4,
     CLANG_ENABLE_MODULES: 'YES',
     ENABLE_PREVIEWS: 'YES',
-    INFOPLIST_KEY_CFBundleDisplayName: '"$(APP_NAME)"',
+    INFOPLIST_KEY_CFBundleDisplayName: quoted(target.displayName),
     INFOPLIST_KEY_UISupportedInterfaceOrientations:
       '"UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown"',
-    INFOPLIST_KEY_WKCompanionAppBundleIdentifier:
-      '"$(COMPANION_BUNDLE_IDENTIFIER)"',
+    INFOPLIST_KEY_WKCompanionAppBundleIdentifier: quoted(target.bundleId),
     SDKROOT: 'watchos',
     SKIP_INSTALL: 'YES',
     SWIFT_ACTIVE_COMPILATION_CONDITIONS: 'DEBUG',
