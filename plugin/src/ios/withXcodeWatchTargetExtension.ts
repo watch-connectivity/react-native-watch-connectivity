@@ -218,7 +218,6 @@ function addXcodeTarget(
 
   const PRODUCT_BUNDLE_IDENTIFIER = quoted(`${target.bundleId}.watchkitapp`);
   const INFOPLIST_FILE = quoted(`${target.name}/${infoPlistFile}`);
-  console.log('🚀 ~ INFOPLIST_FILE:', INFOPLIST_FILE);
   const buildSettings = {
     INFOPLIST_FILE,
     PRODUCT_BUNDLE_IDENTIFIER,
