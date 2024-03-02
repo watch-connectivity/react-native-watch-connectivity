@@ -1,8 +1,8 @@
 import {ConfigPlugin} from '@expo/config-plugins';
-import {WithExtensionProps} from './@types';
+import {IosExtensionTarget} from './@types';
 import {withXCodeExtensionTargets} from './ios/withXcodeWatchTargetExtension';
 
-const withWatchConfigs: ConfigPlugin<WithExtensionProps> = (
+const withWatchConfigs: ConfigPlugin<IosExtensionTarget> = (
   config,
   options,
 ) => {

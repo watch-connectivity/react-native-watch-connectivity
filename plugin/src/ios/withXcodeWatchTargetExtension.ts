@@ -2,14 +2,14 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import {ConfigPlugin, withXcodeProject} from '@expo/config-plugins';
-import {IosExtensionTarget, WithExtensionProps} from '../@types';
 
+import {IosExtensionTarget} from '../@types';
 import {XcodeProject} from 'xcode';
 import {getFilesForXcode} from './getFiles';
 
-export const withXCodeExtensionTargets: ConfigPlugin<WithExtensionProps> = (
+export const withXCodeExtensionTargets: ConfigPlugin<IosExtensionTarget> = (
   config,
-  options: WithExtensionProps,
+  options: IosExtensionTarget,
 ) => {
   return withXcodeProject(config, async (newConfig) => {
     try {
@@ -22,9 +22,10 @@ export const withXCodeExtensionTargets: ConfigPlugin<WithExtensionProps> = (
         xcodeProject,
         projectRoot,
         platformProjectPath,
-        options.targets,
+        options,
         projectName,
       );
+
       return newConfig;
     } catch (e) {
       console.error(e);
@@ -37,18 +38,16 @@ async function updateXCodeProj(
   _xcodeProject: XcodeProject,
   projectRoot: string,
   platformProjectPath: string,
-  targets: IosExtensionTarget[],
+  target: IosExtensionTarget,
   projectName?: string,
 ) {
-  targets.forEach((target) => {
-    addXcodeTarget(
-      _xcodeProject,
-      projectRoot,
-      platformProjectPath,
-      target,
-      projectName,
-    );
-  });
+  addXcodeTarget(
+    _xcodeProject,
+    projectRoot,
+    platformProjectPath,
+    target,
+    projectName,
+  );
 }
 
 function addXcodeTarget(
@@ -127,8 +126,9 @@ function addXcodeTarget(
   );
 
   // add build phase
+  // source files
   xcodeProject.addBuildPhase(
-    target.sourceFiles,
+    files.sourceFiles,
     'PBXSourcesBuildPhase',
     'Sources',
     newTarget.uuid,
@@ -136,6 +136,7 @@ function addXcodeTarget(
     target.name,
   );
 
+  // resources
   xcodeProject.addBuildPhase(
     files.resourcesFiles,
     'PBXResourcesBuildPhase',
@@ -144,6 +145,18 @@ function addXcodeTarget(
     targetType,
     target.name,
   );
+
+  // frameworks
+  if (target.frameworks) {
+    xcodeProject.addBuildPhase(
+      target.frameworks,
+      'PBXFrameworksBuildPhase',
+      'Frameworks',
+      newTarget.uuid,
+      targetType,
+      target.name,
+    );
+  }
 
   // // We need to embed the watch app into the main app, this is done automatically for
   // // watchos2 apps, but not for the new regular application coded watch apps

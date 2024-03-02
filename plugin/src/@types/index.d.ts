@@ -1,5 +1,3 @@
-type IosExtensionTargetType = 'watch' | 'widget' | 'complication';
-
 export type IosExtensionTarget = {
   bundleId: string;
   companionAppBundleId?: string;
@@ -8,11 +6,4 @@ export type IosExtensionTarget = {
   frameworks: string[];
   name: string;
   sourceDir: string;
-  sourceFiles: string[];
-  type: IosExtensionTargetType;
-};
-
-type WithExtensionProps = {
-  devTeamId: string;
-  targets: IosExtensionTarget[];
 };
