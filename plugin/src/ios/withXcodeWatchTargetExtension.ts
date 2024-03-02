@@ -2,28 +2,10 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import {ConfigPlugin, withXcodeProject} from '@expo/config-plugins';
-import {getPbxproj, savePbxproj} from './utils';
+import {IosExtensionTarget, WithExtensionProps} from '../@types';
 
 import {XcodeProject} from 'xcode';
-
-const WATCH_BUILD_CONFIGURATION_SETTINGS = {
-  ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'YES',
-  ASSETCATALOG_COMPILER_APPICON_NAME: 'AppIcon',
-  ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: 'AccentColor',
-  ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: 'NO',
-  CODE_SIGN_STYLE: 'Automatic',
-  CURRENT_PROJECT_VERSION: '1',
-  ENABLE_PREVIEWS: 'YES',
-  GENERATE_INFOPLIST_FILE: 'YES',
-  LD_RUNPATH_SEARCH_PATHS: '"$(inherited) @executable_path/Frameworks"',
-  MARKETING_VERSION: '1.0',
-  SDKROOT: 'watchos',
-  SKIP_INSTALL: 'YES',
-  SWIFT_EMIT_LOC_STRINGS: 'YES',
-  SWIFT_VERSION: '5.0',
-  TARGETED_DEVICE_FAMILY: '4',
-  WATCHOS_DEPLOYMENT_TARGET: '9.4',
-};
+import {getFilesForXcode} from './getFiles';
 
 export const withXCodeExtensionTargets: ConfigPlugin<WithExtensionProps> = (
   config,
@@ -31,17 +13,15 @@ export const withXCodeExtensionTargets: ConfigPlugin<WithExtensionProps> = (
 ) => {
   return withXcodeProject(config, async (newConfig) => {
     try {
+      const xcodeProject = newConfig.modResults;
       const projectName = newConfig.modRequest.projectName;
       const projectRoot = newConfig.modRequest.projectRoot;
       const platformProjectPath = newConfig.modRequest.platformProjectRoot;
-      // const bundleId = config.ios?.bundleIdentifier || '';
-      const projectPath = `${newConfig.modRequest.platformProjectRoot}/${projectName}.xcodeproj/project.pbxproj`;
 
       await updateXCodeProj(
+        xcodeProject,
         projectRoot,
-        projectPath,
         platformProjectPath,
-        options.devTeamId,
         options.targets,
         projectName,
       );
@@ -54,54 +34,48 @@ export const withXCodeExtensionTargets: ConfigPlugin<WithExtensionProps> = (
 };
 
 async function updateXCodeProj(
+  _xcodeProject: XcodeProject,
   projectRoot: string,
-  projectPath: string,
   platformProjectPath: string,
-  developmentTeamId: string,
   targets: IosExtensionTarget[],
   projectName?: string,
 ) {
-  let xcodeProject: XcodeProject;
-  try {
-    xcodeProject = getPbxproj(projectPath);
-  } catch (e) {
-    console.error(e);
-    return;
-  }
-
   targets.forEach((target) => {
     addXcodeTarget(
-      xcodeProject,
+      _xcodeProject,
       projectRoot,
       platformProjectPath,
-      developmentTeamId,
       target,
       projectName,
     );
   });
-
-  savePbxproj(xcodeProject);
 }
-
-const resourcesFiles = ['Assets.xcassets', 'Info.plist'];
 
 function addXcodeTarget(
   xcodeProject: XcodeProject,
   projectRoot: string,
   platformProjectPath: string,
-  developmentTeamId: string,
   target: IosExtensionTarget,
   projectName?: string,
 ) {
-  const watchAppTargetName = target.name;
   const targetSourceDirPath = path.join(projectRoot, target.sourceDir);
 
   const targetFilesDir = path.join(platformProjectPath, target.name);
   fs.cpSync(targetSourceDirPath, targetFilesDir, {recursive: true});
 
-  // TODO: check entitlements
+  const files = getFilesForXcode(targetFilesDir);
+  const infoPlistFile = files.resourcesFiles.find((file) =>
+    file.includes('Info.plist'),
+  );
 
-  const targetFiles = [...resourcesFiles, ...target.sourceFiles];
+  files.resourcesFiles = files.resourcesFiles.map((file) =>
+    path.join(target.name, file),
+  );
+  files.sourceFiles = files.sourceFiles.map((file) =>
+    path.join(target.name, file),
+  );
+
+  const targetFiles = [...files.sourceFiles, ...files.resourcesFiles];
 
   const pbxGroup = xcodeProject.addPbxGroup(
     targetFiles,
@@ -109,15 +83,23 @@ function addXcodeTarget(
     target.name,
   );
 
-  // Add the new PBXGroup to the top level group. This makes the
-  // files / folder appear in the file explorer in Xcode.
+  // fix path because parser is adding a path by default, and we need to remove it
+  // this is because in process of pod install react native is resolving all files with suffix `Info.Plist`
+  // and internally it's based of PBXFileReference files, and we need to inject path there.
+  // example:
+  // CE58CC31F8C44FB1AF07D819 /* Watch-Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "Watch-Info.plist"; path = "watch/Watch-Info.plist"; sourceTree = "<group>"; };
+  // react native will use `path` to resolve the file, and do pod install.
+  // now, if we also are having a path to the pbxGroup, xcode will resolve it to the wrong path.
+  // so we need to remove it.
+  // reference: https://github.com/facebook/react-native/blob/v0.73.2/packages/react-native/scripts/cocoapods/utils.rb#L545
+  //
+  delete pbxGroup.pbxGroup.path;
+
+  // // Add the new PBXGroup to the top level group. This makes the
+  // // files / folder appear in the file explorer in Xcode.
   const groups = xcodeProject.hash.project.objects.PBXGroup;
   Object.keys(groups).forEach(function (groupKey) {
-    // some groups have name and path (Main App), some have only path (Tests), some have only name (Frameworks)
-    if (
-      groups[groupKey].name === undefined &&
-      groups[groupKey].path === undefined
-    ) {
+    if (groups[groupKey].name === undefined) {
       // @ts-expect-error type error
       xcodeProject.addToPbxGroup(pbxGroup.uuid, groupKey);
     }
@@ -134,17 +116,7 @@ function addXcodeTarget(
 
   // add target
   // use application not watch2_app https://stackoverflow.com/a/75432468
-  let targetType = 'application';
-  switch (target.type) {
-    case 'widget':
-      targetType = 'app_extension';
-      break;
-    case 'complication':
-      targetType = 'app_extension';
-      break;
-    default:
-      break;
-  }
+  const targetType = 'application';
 
   const newTarget = xcodeProject.addTarget(
     target.name,
@@ -165,7 +137,7 @@ function addXcodeTarget(
   );
 
   xcodeProject.addBuildPhase(
-    resourcesFiles,
+    files.resourcesFiles,
     'PBXResourcesBuildPhase',
     'Resources',
     newTarget.uuid,
@@ -173,16 +145,16 @@ function addXcodeTarget(
     target.name,
   );
 
-  // We need to embed the watch app into the main app, this is done automatically for
-  // watchos2 apps, but not for the new regular application coded watch apps
-  // Create CopyFiles phase in first target
-  // Xcode by default is creating a different build phase with name "Embed Watch Content".
-  // Parser doesn't have this build phase, but after some research "Embed Watch Content"
-  // is just a renamed version of "Copy Files" build phase with dstSubfolderSpec set to 16 ("Products Directory").
-  // So we can just create a new "Copy Files" build phase and set dstSubfolderSpec set to 16 later.
-  // more information here: https://stackoverflow.com/questions/45104037/need-to-add-an-embed-watch-content-build-phase-to-my-ios-app
+  // // We need to embed the watch app into the main app, this is done automatically for
+  // // watchos2 apps, but not for the new regular application coded watch apps
+  // // Create CopyFiles phase in first target
+  // // Xcode by default is creating a different build phase with name "Embed Watch Content".
+  // // Parser doesn't have this build phase, but after some research "Embed Watch Content"
+  // // is just a renamed version of "Copy Files" build phase with dstSubfolderSpec set to 16 ("Products Directory").
+  // // So we can just create a new "Copy Files" build phase and set dstSubfolderSpec set to 16 later.
+  // // more information here: https://stackoverflow.com/questions/45104037/need-to-add-an-embed-watch-content-build-phase-to-my-ios-app
   const watchBuildPhase = xcodeProject.addBuildPhase(
-    [quoted(watchAppTargetName + '.app')],
+    [quoted(target.name + '.app')],
     'PBXCopyFilesBuildPhase',
     'Embed Watch Content',
     xcodeProject.getFirstTarget().uuid,
@@ -190,18 +162,18 @@ function addXcodeTarget(
     quoted('$(CONTENTS_FOLDER_PATH)/Watch'),
   );
 
-  // by default xcode PBXCopyFilesBuildPhase have "wrapper" for dstSubfolderSpec, but the correct one for the watch app is "Products Directory"
-  //   # dstSubfolderSpec property value used in a PBXCopyFilesBuildPhase object.
-  // 'BUILT_PRODUCTS_DIR': 16,  # Products Directory
-  //  : 1,                      # Wrapper
-  //  : 6,                      # Executables: 6
-  //  : 7,                      # Resources
-  //  : 15,                     # Java Resources
-  //  : 10,                     # Frameworks
-  //  : 11,                     # Shared Frameworks
-  //  : 12,                     # Shared Support
-  //  : 13,                     # PlugIns
-  // more info here: https://stackoverflow.com/a/16619840
+  // // by default xcode PBXCopyFilesBuildPhase have "wrapper" for dstSubfolderSpec, but the correct one for the watch app is "Products Directory"
+  // //   # dstSubfolderSpec property value used in a PBXCopyFilesBuildPhase object.
+  // // 'BUILT_PRODUCTS_DIR': 16,  # Products Directory
+  // //  : 1,                      # Wrapper
+  // //  : 6,                      # Executables: 6
+  // //  : 7,                      # Resources
+  // //  : 15,                     # Java Resources
+  // //  : 10,                     # Frameworks
+  // //  : 11,                     # Shared Frameworks
+  // //  : 12,                     # Shared Support
+  // //  : 13,                     # PlugIns
+  // // more info here: https://stackoverflow.com/a/16619840
   // @ts-expect-error addBuildPhase below have dstSubfolderSpec.
   watchBuildPhase.buildPhase.dstSubfolderSpec = 16;
 
@@ -221,9 +193,9 @@ function addXcodeTarget(
       // remove it from the array
       const embedWatchContent = buildPhases.splice(embedWatchContentIndex, 1);
 
-      // find the "Start Packager" build phase
+      // find the "[Expo] Configure project" build phase
       const startPackagerIndex = buildPhases.findIndex(
-        (buildPhase) => buildPhase.comment === 'Start Packager',
+        (buildPhase) => buildPhase.comment === '[Expo] Configure project',
       );
 
       // add it to before the "Start Packager" build phase
@@ -231,7 +203,65 @@ function addXcodeTarget(
     }
   });
 
-  // TODO: check complication
+  const PRODUCT_BUNDLE_IDENTIFIER = quoted(`${target.bundleId}.watchkitapp`);
+  const INFOPLIST_FILE = quoted(`${target.name}/${infoPlistFile}`);
+  console.log('🚀 ~ INFOPLIST_FILE:', INFOPLIST_FILE);
+  const buildSettings = {
+    INFOPLIST_FILE,
+    PRODUCT_BUNDLE_IDENTIFIER,
+    ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'YES',
+    ASSETCATALOG_COMPILER_APPICON_NAME: 'AppIcon',
+    ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: 'AccentColor',
+    CLANG_ANALYZER_NONNULL: 'YES',
+    CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION: 'YES_AGGRESSIVE',
+    CLANG_CXX_LANGUAGE_STANDARD: '"gnu++20"',
+    CLANG_ENABLE_OBJC_WEAK: 'YES',
+    CLANG_WARN_DOCUMENTATION_COMMENTS: 'YES',
+    GENERATE_INFOPLIST_FILE: 'YES',
+    CLANG_WARN_UNGUARDED_AVAILABILITY: 'YES_AGGRESSIVE',
+    CODE_SIGN_STYLE: 'Automatic',
+    // CURRENT_PROJECT_VERSION: quoted(configurationJson.buildNumber),
+    CURRENT_PROJECT_VERSION: quoted(1),
+    DEBUG_INFORMATION_FORMAT: 'dwarf',
+    SWIFT_VERSION: '5.0',
+    GCC_C_LANGUAGE_STANDARD: 'gnu11',
+    LD_RUNPATH_SEARCH_PATHS: '"$(inherited) @executable_path/Frameworks"',
+    // MARKETING_VERSION: quoted(configurationJson.appVersion),
+    MARKETING_VERSION: quoted(1),
+    MTL_ENABLE_DEBUG_INFO: 'INCLUDE_SOURCE',
+    MTL_FAST_MATH: 'YES',
+    PRODUCT_NAME: '"$(TARGET_NAME)"',
+    SWIFT_EMIT_LOC_STRINGS: 'YES',
+    // 4 is watchkit App and Watchkit Extension
+    TARGETED_DEVICE_FAMILY: 4,
+    CLANG_ENABLE_MODULES: 'YES',
+    ENABLE_PREVIEWS: 'YES',
+    INFOPLIST_KEY_CFBundleDisplayName: '"$(APP_NAME)"',
+    INFOPLIST_KEY_UISupportedInterfaceOrientations:
+      '"UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown"',
+    INFOPLIST_KEY_WKCompanionAppBundleIdentifier:
+      '"$(COMPANION_BUNDLE_IDENTIFIER)"',
+    SDKROOT: 'watchos',
+    SKIP_INSTALL: 'YES',
+    SWIFT_ACTIVE_COMPILATION_CONDITIONS: 'DEBUG',
+    SWIFT_OPTIMIZATION_LEVEL: '"-Onone"',
+    WATCHOS_DEPLOYMENT_TARGET: quoted('7.0'),
+  };
+  /* Update build configurations */
+  const configurations = xcodeProject.pbxXCBuildConfigurationSection();
+
+  for (const key in configurations) {
+    if (typeof configurations[key].buildSettings !== 'undefined') {
+      const productName = configurations[key].buildSettings.PRODUCT_NAME;
+      if (productName === quoted(target.name)) {
+        // add the build settings
+        configurations[key].buildSettings = {
+          ...configurations[key].buildSettings,
+          ...buildSettings,
+        };
+      }
+    }
+  }
 }
 
 function quoted<T>(t: T) {

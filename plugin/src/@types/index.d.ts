@@ -1,6 +1,6 @@
 type IosExtensionTargetType = 'watch' | 'widget' | 'complication';
 
-type IosExtensionTarget = {
+export type IosExtensionTarget = {
   bundleId: string;
   companionAppBundleId?: string;
   displayName?: string;
