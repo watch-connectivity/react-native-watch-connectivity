@@ -256,7 +256,7 @@ function addXcodeTarget(
     SKIP_INSTALL: 'YES',
     SWIFT_ACTIVE_COMPILATION_CONDITIONS: 'DEBUG',
     SWIFT_OPTIMIZATION_LEVEL: '"-Onone"',
-    WATCHOS_DEPLOYMENT_TARGET: quoted('7.0'),
+    WATCHOS_DEPLOYMENT_TARGET: quoted(target.deploymentTarget ?? '7.0'),
   };
   /* Update build configurations */
   const configurations = xcodeProject.pbxXCBuildConfigurationSection();
