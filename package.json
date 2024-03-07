@@ -36,7 +36,7 @@
   ],
   "homepage": "http://mtford.co.uk/react-native-watch-connectivity/",
   "scripts": {
-    "build": "rm -rf ./build && mkdir ./build && cp ./lib/RNWatch.d.ts ./build/RNWatch.d.ts && expo-module build",
+    "build": "mkdir -p ./build && cp ./lib/RNWatch.d.ts ./build/RNWatch.d.ts && expo-module build",
     "post-build": "cp ./lib/RNWatch.d.ts ./build/RNWatch.d.ts",
     "clean": "expo-module clean",
     "test": "expo-module test",
