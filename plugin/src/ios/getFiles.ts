@@ -6,7 +6,15 @@ export type WidgetFiles = {
 };
 
 // TODO: check if need more extensions here???
-const resourceFileExtensions = ['png', 'jpg', 'jpeg', 'plist', 'xcassets'];
+const resourceFileExtensions = [
+  'png',
+  'jpg',
+  'jpeg',
+  'plist',
+  'xcassets',
+  'mp4',
+  'mp3',
+];
 
 const isResourceFile = (fileExtension?: string) => {
   if (!fileExtension) {
