@@ -574,8 +574,15 @@ RCT_EXPORT_METHOD(dequeueUserInfo:
 
 - (void)session:(WCSession *)session didFinishUserInfoTransfer:(WCSessionUserInfoTransfer *)userInfoTransfer error:(NSError *)error {
     if (error) {
-        NSLog(@"User info transfer error: %@ %@", error, [error userInfo]);
-      [self dispatchEventWithName:EVENT_WATCH_USER_INFO_ERROR body:@{@"userInfo": [userInfoTransfer userInfo], @"error": dictionaryFromError(error)}];
+	NSLog(@"User info transfer error: %@ %@", error, [error userInfo]);
+        [self dispatchEventWithName:EVENT_WATCH_USER_INFO_ERROR body:@{@"userInfo": [userInfoTransfer userInfo], @"error": [error userInfo]}];
+        
+	NSDictionary *errorUserInfo = [error userInfo];
+        NSDictionary *transferUserInfo = [userInfoTransfer userInfo];
+        NSLog(@"User info transfer error: %@ %@", error, errorUserInfo);
+
+        // Use empty dictionaries as fallback since NSDictionary literals cannot contain nil
+        [self dispatchEventWithName:EVENT_WATCH_USER_INFO_ERROR body:@{@"userInfo": transferUserInfo ?: @{}, @"error": errorUserInfo ?: @{}}];
     }
 }
 
