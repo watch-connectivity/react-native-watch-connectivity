@@ -1,17 +1,54 @@
 {
   "name": "react-native-watch-connectivity",
-  "version": "1.1.0",
-  "description": "React Native library to enable communication with Apple Watch app",
-  "main": "dist/index.js",
+  "version": "2.0.0",
+  "description": "Communicate with your Apple Watch apps over the React Native bridge",
+  "main": "./lib/module/index.js",
+  "types": "./lib/typescript/src/index.d.ts",
+  "exports": {
+    ".": {
+      "source": "./src/index.tsx",
+      "types": "./lib/typescript/src/index.d.ts",
+      "default": "./lib/module/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
-    "dist",
+    "src",
+    "lib",
+    "android",
     "ios",
-    "LICENSE.md",
-    "README.md",
-    "RNWatch.podspec"
+    "*.podspec",
+    "react-native.config.js",
+    "!ios/build",
+    "!android/build",
+    "!android/gradle",
+    "!android/gradlew",
+    "!android/gradlew.bat",
+    "!android/local.properties",
+    "!**/__tests__",
+    "!**/__fixtures__",
+    "!**/__mocks__",
+    "!**/.*"
   ],
-  "types": "dist/index.d.ts",
-  "license": "MIT",
+  "scripts": {
+    "example": "yarn workspace react-native-watch-connectivity-example",
+    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
+    "prepare": "bob build",
+    "typecheck": "tsc",
+    "lint": "eslint \"**/*.{js,ts,tsx}\""
+  },
+  "keywords": [
+    "react-native",
+    "ios",
+    "watch",
+    "apple-watch",
+    "watchconnectivity",
+    "watchos"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mtford90/react-native-watch-connectivity.git"
+  },
   "author": {
     "name": "Michael Ford",
     "email": "mtford@gmail.com"
@@ -26,60 +63,82 @@
       "email": "mars@metaphor.io"
     }
   ],
-  "keywords": [
-    "react-native",
-    "ios",
-    "watch",
-    "apple-watch"
-  ],
-  "homepage": "http://mtford.co.uk/react-native-watch-connectivity/",
-  "scripts": {
-    "build": "rm -rf dist && yarn tsc && cp ./lib/RNWatch.d.ts ./dist/RNWatch.d.ts && yarn lint ./dist/**/*.d.ts ./dist/**/*.js --fix --quiet",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx",
-    "precommit": "tsc --skipLibCheck && lint-staged"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mtford90/react-native-watch-connectivity/issues"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/mtford90/react-native-watch-connectivity.git"
-  },
-  "peerDependencies": {
-    "react": ">=15.1",
-    "react-native": ">=0.40"
-  },
-  "lint-staged": {
-    "package.json": [
-      "sort-package-json",
-      "git add"
-    ],
-    "lib/**/*.ts?(x)": [
-      "yarn lint --fix",
-      "git add"
-    ],
-    "example/src/**/*.ts?(x)": [
-      "yarn lint --fix",
-      "git add"
-    ]
-  },
-  "dependencies": {
-    "lodash.sortby": "^4.7.0"
+  "homepage": "https://github.com/mtford90/react-native-watch-connectivity#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "typescript": "^3.9.5",
-    "eslint-plugin-typescript-sort-keys": "^1.2.0",
-    "eslint": "^6.8.0",
-    "@types/react-native": "^0.62.2",
-    "@types/react": "^16.9.34",
-    "react-native": "^0.62.2",
-    "react": "16.11.0",
-    "@react-native-community/eslint-config": "^1.1.0",
-    "lint-staged": "^10.1.3",
-    "husky": "^4.2.5",
-    "sort-package-json": "^1.41.0",
-    "prettier": "^2.0.4",
-    "eslint-plugin-prettier": "^3.1.3",
-    "@types/lodash.sortby": "^4.7.6"
+    "@eslint/compat": "^1.3.2",
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.35.0",
+    "@react-native/babel-preset": "0.84.0",
+    "@react-native/eslint-config": "0.83.0",
+    "@types/react": "^19.2.0",
+    "del-cli": "^6.0.0",
+    "eslint": "^9.35.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "prettier": "^2.8.8",
+    "react": "19.2.3",
+    "react-native": "0.84.0",
+    "react-native-builder-bob": "^0.40.18",
+    "turbo": "^2.5.6",
+    "typescript": "^5.9.2"
   },
-  "jest": {
-    "preset": "react-native"
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "workspaces": [
+    "example"
+  ],
+  "packageManager": "yarn@4.11.0",
+  "engines": {
+    "node": ">= 22.11.0"
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      [
+        "module",
+        {
+          "esm": true
+        }
+      ],
+      [
+        "typescript",
+        {
+          "project": "tsconfig.build.json"
+        }
+      ]
+    ]
+  },
+  "codegenConfig": {
+    "name": "WatchConnectivitySpec",
+    "type": "modules",
+    "jsSrcsDir": "src",
+    "android": {
+      "javaPackageName": "com.watchconnectivity"
+    }
+  },
+  "prettier": {
+    "quoteProps": "consistent",
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "useTabs": false
+  },
+  "create-react-native-library": {
+    "type": "turbo-module",
+    "languages": "kotlin-objc",
+    "tools": [
+      "eslint"
+    ],
+    "version": "0.57.2"
   }
 }
