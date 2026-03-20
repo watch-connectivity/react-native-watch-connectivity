@@ -1,22 +1,30 @@
 {
   "compilerOptions": {
-    /* Basic Options */
-    "target": "esnext",
-    "module": "commonjs",
-    "lib": ["es6", "es2019"],
-    "allowJs": true,
-    "isolatedModules": true,
-    "skipLibCheck": true,
-    "jsx": "react-native",
-    "strict": true,
-    "outDir": "dist",
-    "declaration": true,
-    "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
+    "rootDir": ".",
+    "paths": {
+      "react-native-watch-connectivity": ["./src/index"]
+    },
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "customConditions": ["react-native-strict-api"],
     "esModuleInterop": true,
-    "experimentalDecorators": true
-  },
-  "include": [
-    "./lib/**/*"
-  ]
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "react-jsx",
+    "lib": ["ESNext"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noImplicitUseStrict": false,
+    "noStrictGenericChecks": false,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ESNext",
+    "verbatimModuleSyntax": true
+  }
 }
