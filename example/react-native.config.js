@@ -1,11 +1,21 @@
+const path = require('path');
+const pkg = require('../package.json');
+
 module.exports = {
-  // dependencies: {
-  //   // 'react-native-watch-connectivity': {
-  //   //   platforms: {
-  //   //     android: null,
-  //   //     ios: null,
-  //   //   },
-  //   // },
-  // },
-  assets: ['./assets/fonts/', './assets/images/'],
+  project: {
+    ios: {
+      automaticPodsInstallation: true,
+    },
+  },
+  dependencies: {
+    [pkg.name]: {
+      root: path.join(__dirname, '..'),
+      platforms: {
+        // Codegen script incorrectly fails without this
+        // So we explicitly specify the platforms with empty object
+        ios: {},
+        android: {},
+      },
+    },
+  },
 };

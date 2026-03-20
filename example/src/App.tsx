@@ -1,35 +1,35 @@
-import * as React from 'react';
-import Drawer from './navigators/drawer';
-import {NavigationContainer} from '@react-navigation/native';
-import {TestRunnerProvider} from './lib/testing/TestRunner/context';
-import {useMemo} from 'react';
-import TestRunner from './lib/testing/TestRunner';
-import {configure} from 'mobx';
-import 'bluebird-global';
-
-Promise.config({
-  longStackTraces: true,
-  warnings: {
-    // async/await seems to screw with bluebird and generate false warnings...
-    wForgottenReturn: false,
-  },
-});
-
-import 'mobx-react-lite/batchingForReactNative';
-import tests from './lib/testing/tests';
-
-configure({
-  enforceActions: 'observed',
-});
+import { Text, View, StyleSheet } from 'react-native';
+import {
+  useReachability,
+  usePaired,
+  useInstalled,
+} from 'react-native-watch-connectivity';
 
 export default function App() {
-  const testRunner = useMemo(() => new TestRunner(tests), []);
+  const reachable = useReachability();
+  const paired = usePaired();
+  const installed = useInstalled();
 
   return (
-    <TestRunnerProvider value={testRunner}>
-      <NavigationContainer>
-        <Drawer />
-      </NavigationContainer>
-    </TestRunnerProvider>
+    <View style={styles.container}>
+      <Text style={styles.title}>Watch Connectivity</Text>
+      <Text>Paired: {paired ? 'Yes' : 'No'}</Text>
+      <Text>Installed: {installed ? 'Yes' : 'No'}</Text>
+      <Text>Reachable: {reachable ? 'Yes' : 'No'}</Text>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+});
