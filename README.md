@@ -6,7 +6,7 @@ Communicate with your Apple Watch apps over the React Native bridge.
 
 ## Documentation
 
-http://mtford.co.uk/react-native-watch-connectivity/
+https://watch-connectivity.github.io/react-native-watch-connectivity/
 
 ## Install
 
