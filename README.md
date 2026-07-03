@@ -69,3 +69,11 @@ To run the watch app, open `example/ios/WatchConnectivityExample.xcworkspace` in
 ## Expo Support
 
 This library has been successfully used in Expo apps (Bare Workflow with EAS Build).
+
+## Sponsors
+
+<a href="https://www.tiwtor.app">
+  <img src="https://www.tiwtor.app/landing/parrot-app-icon-gears.svg" alt="Tiwtor — learn Welsh your way" width="120" />
+</a>
+
+Development of this library is currently sponsored by [Tiwtor](https://www.tiwtor.app) - a language learning toolkit for self-driven learners, currently focused on Welsh
