@@ -3,6 +3,7 @@
 #import "FileTransferEvent.h"
 #import "util.h"
 
+#import <WatchConnectivity/WCError.h>
 #import <WatchConnectivity/WCSession.h>
 #import <WatchConnectivity/WCSessionFile.h>
 #import <WatchConnectivity/WCSessionUserInfoTransfer.h>
@@ -21,7 +22,6 @@ static NSString *EVENT_ACTIVATION_ERROR = @"WatchActivationError";
 static NSString *EVENT_WATCH_REACHABILITY_CHANGED = @"WatchReachabilityChanged";
 static NSString *EVENT_WATCH_USER_INFO_RECEIVED = @"WatchUserInfoReceived";
 static NSString *EVENT_APPLICATION_CONTEXT_RECEIVED = @"WatchApplicationContextReceived";
-static NSString *EVENT_APPLICATION_CONTEXT_RECEIVED_ERROR = @"WatchApplicationContextReceivedError";
 static NSString *EVENT_SESSION_DID_DEACTIVATE = @"WatchSessionDidDeactivate";
 static NSString *EVENT_SESSION_BECAME_INACTIVE = @"WatchSessionBecameInactive";
 static NSString *EVENT_PAIR_STATUS_CHANGED = @"WatchPairStatusChanged";
@@ -30,6 +30,11 @@ static NSString *EVENT_WATCH_USER_INFO_ERROR = @"WatchUserInfoError";
 static NSString *EVENT_WATCH_APPLICATION_CONTEXT_ERROR = @"WatchApplicationContextError";
 
 static WatchConnectivity *sharedInstance;
+
+// JS maps the NSError code and domain to a stable WatchErrorCode.
+static void rejectWithError(RCTPromiseRejectBlock reject, NSError *error) {
+  reject([@(error.code) stringValue], error.localizedDescription, error);
+}
 
 @implementation WatchConnectivity {
   BOOL hasObservers;
@@ -82,7 +87,6 @@ static WatchConnectivity *sharedInstance;
     EVENT_WATCH_REACHABILITY_CHANGED,
     EVENT_WATCH_USER_INFO_RECEIVED,
     EVENT_APPLICATION_CONTEXT_RECEIVED,
-    EVENT_APPLICATION_CONTEXT_RECEIVED_ERROR,
     EVENT_PAIR_STATUS_CHANGED,
     EVENT_INSTALL_STATUS_CHANGED,
     EVENT_SESSION_BECAME_INACTIVE,
@@ -127,21 +131,56 @@ activationDidCompleteWithState:(WCSessionActivationState)activationState
                          error:(NSError *)error {
   if (error) {
     [self dispatchEventWithName:EVENT_ACTIVATION_ERROR body:@{@"error": dictionaryFromError(error)}];
+    return;
   }
+
+  // After a watch switch the session describes a different watch, so report its state afresh.
+  [self dispatchEventWithName:EVENT_PAIR_STATUS_CHANGED body:@{@"paired": @(session.isPaired)}];
+  [self dispatchEventWithName:EVENT_INSTALL_STATUS_CHANGED body:@{@"installed": @(session.isWatchAppInstalled)}];
+  [self dispatchEventWithName:EVENT_WATCH_REACHABILITY_CHANGED body:@{@"reachability": @(session.reachable)}];
 }
 
+// Apple requires the iOS app to reactivate the session once the previous watch's callbacks have finished, so that
+// the session serves the newly selected watch.
 - (void)sessionDidDeactivate:(WCSession *)session {
   [self dispatchEventWithName:EVENT_SESSION_DID_DEACTIVATE body:@{}];
+  [session activateSession];
 }
 
 - (void)sessionDidBecomeInactive:(WCSession *)session {
   [self dispatchEventWithName:EVENT_SESSION_BECAME_INACTIVE body:@{}];
 }
 
-#pragma mark - Complication User Info
+#pragma mark - Support
+
+- (NSNumber *)isSupported {
+  return @([WCSession isSupported]);
+}
+
+// WCSession is nil where WatchConnectivity is unsupported (iPads). Messaging nil never calls back, so a send would
+// leave its promise pending for ever.
+- (BOOL)rejectIfUnsupported:(RCTPromiseRejectBlock)reject {
+  if (self.session != nil) {
+    return NO;
+  }
+  rejectWithError(reject, sessionNotSupportedError());
+  return YES;
+}
+
+#pragma mark - Complications
 
 - (void)transferCurrentComplicationUserInfo:(NSDictionary *)userInfo {
   [self.session transferCurrentComplicationUserInfo:userInfo];
+}
+
+- (void)getIsComplicationEnabled:(RCTPromiseResolveBlock)resolve
+                          reject:(RCTPromiseRejectBlock)reject {
+  resolve(@(self.session.isComplicationEnabled));
+}
+
+- (void)getRemainingComplicationUserInfoTransfers:(RCTPromiseResolveBlock)resolve
+                                           reject:(RCTPromiseRejectBlock)reject {
+  resolve(@(self.session.remainingComplicationUserInfoTransfers));
 }
 
 #pragma mark - Reachability
@@ -175,13 +214,16 @@ activationDidCompleteWithState:(WCSessionActivationState)activationState
 - (void)sendMessage:(NSDictionary *)message
             resolve:(RCTPromiseResolveBlock)resolve
              reject:(RCTPromiseRejectBlock)reject {
+  if ([self rejectIfUnsupported:reject]) {
+    return;
+  }
   [self.session
       sendMessage:message
      replyHandler:^(NSDictionary<NSString *, id> *_Nonnull replyMessage) {
        resolve(replyMessage);
      }
      errorHandler:^(NSError *_Nonnull error) {
-       reject([@(error.code) stringValue], error.localizedDescription, error);
+       rejectWithError(reject, error);
      }
   ];
 }
@@ -217,6 +259,9 @@ didReceiveMessage:(NSDictionary<NSString *, id> *)message
                encoding:(double)encoding
                 resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject {
+  if ([self rejectIfUnsupported:reject]) {
+    return;
+  }
   NSData *data = [str dataUsingEncoding:(NSStringEncoding)[@(encoding) integerValue]];
   [self.session sendMessageData:data
                    replyHandler:^(NSData *_Nonnull replyMessageData) {
@@ -224,7 +269,7 @@ didReceiveMessage:(NSDictionary<NSString *, id> *)message
                      resolve(responseData);
                    }
                    errorHandler:^(NSError *_Nonnull error) {
-                     reject([@(error.code) stringValue], error.localizedDescription, error);
+                     rejectWithError(reject, error);
                    }];
 }
 
@@ -240,6 +285,9 @@ didReceiveMessageData:(NSData *)messageData
             metaData:(NSDictionary *)metaData
              resolve:(RCTPromiseResolveBlock)resolve
               reject:(RCTPromiseRejectBlock)reject {
+  if ([self rejectIfUnsupported:reject]) {
+    return;
+  }
   double startTime = jsTimestamp();
 
   NSMutableDictionary *mutableMetaData;
@@ -380,7 +428,7 @@ didReceiveMessageData:(NSData *)messageData
 
   if (error) {
     NSLog(@"Copying received file error: %@ %@", error, error.userInfo);
-    [self dispatchEventWithName:EVENT_WATCH_FILE_ERROR body:@{@"fileInfo": fileInfo, @"error": error, @"errorUserInfo": error.userInfo}];
+    [self dispatchEventWithName:EVENT_WATCH_FILE_ERROR body:@{@"fileInfo": fileInfo, @"error": dictionaryFromError(error)}];
     return;
   }
 
@@ -423,36 +471,41 @@ didFinishFileTransfer:(WCSessionFileTransfer *)fileTransfer
 
 #pragma mark - Context
 
-- (void)updateApplicationContext:(NSDictionary *)context {
-  NSError *error = nil;
-  [self.session updateApplicationContext:context error:&error];
-  if (error) {
-    NSLog(@"Application context update error: %@ %@", error, [error userInfo]);
-    [self dispatchEventWithName:EVENT_WATCH_APPLICATION_CONTEXT_ERROR body:@{@"context": context, @"error": dictionaryFromError(error)}];
+- (void)updateApplicationContext:(NSDictionary *)context
+                         resolve:(RCTPromiseResolveBlock)resolve
+                          reject:(RCTPromiseRejectBlock)reject {
+  if ([self rejectIfUnsupported:reject]) {
+    return;
   }
+  NSError *error = nil;
+  BOOL isUpdated = [self.session updateApplicationContext:context error:&error];
+  if (!isUpdated || error) {
+    NSError *failure = error ?: [NSError errorWithDomain:WCErrorDomain code:WCErrorCodeGenericError userInfo:nil];
+    NSLog(@"Application context update error: %@ %@", failure, [failure userInfo]);
+    [self dispatchEventWithName:EVENT_WATCH_APPLICATION_CONTEXT_ERROR body:@{@"context": context, @"error": dictionaryFromError(failure)}];
+    rejectWithError(reject, failure);
+    return;
+  }
+  resolve(nil);
 }
 
 - (void)getApplicationContext:(RCTPromiseResolveBlock)resolve
                        reject:(RCTPromiseRejectBlock)reject {
   NSDictionary<NSString *, id> *applicationContext = self.session.applicationContext;
-  if (applicationContext == nil) {
-    resolve([NSNull null]);
-  } else {
-    resolve(applicationContext);
-  }
+  resolve(applicationContext.count ? applicationContext : [NSNull null]);
 }
 
+- (void)getReceivedApplicationContext:(RCTPromiseResolveBlock)resolve
+                               reject:(RCTPromiseRejectBlock)reject {
+  NSDictionary<NSString *, id> *receivedApplicationContext = self.session.receivedApplicationContext;
+  resolve(receivedApplicationContext.count ? receivedApplicationContext : [NSNull null]);
+}
+
+// Only report the context. Writing it back with updateApplicationContext would send the watch's own context back
+// to it and overwrite the context this phone sends.
 - (void)             session:(WCSession *)session
 didReceiveApplicationContext:(NSDictionary<NSString *, id> *)applicationContext {
-  NSError *error = nil;
-  [self.session updateApplicationContext:applicationContext error:&error];
-
-  if (error) {
-    NSLog(@"Application context receive error: %@", error);
-    [self dispatchEventWithName:EVENT_APPLICATION_CONTEXT_RECEIVED_ERROR body:@{@"error": dictionaryFromError(error)}];
-  } else {
-    [self dispatchEventWithName:EVENT_APPLICATION_CONTEXT_RECEIVED body:applicationContext];
-  }
+  [self dispatchEventWithName:EVENT_APPLICATION_CONTEXT_RECEIVED body:applicationContext];
 }
 
 #pragma mark - User Info

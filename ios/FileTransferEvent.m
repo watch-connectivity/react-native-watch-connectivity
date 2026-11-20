@@ -1,5 +1,6 @@
 #import "FileTransferEvent.h"
 #import "FileTransferInfo.h"
+#import "util.h"
 
 @implementation FileTransferEvent
 
@@ -16,7 +17,7 @@
     @"throughput": [self nullify:self.throughput],
     @"bytesTotal": [self nullify:self.bytesTotal],
     @"uri": [self nullify:self.uri],
-    @"error": [self nullify:self.error],
+    @"error": self.error ? dictionaryFromError(self.error) : [NSNull null],
     @"metadata": [self nullify:self.metadata],
     @"startTime": [self nullify:self.startTime],
     @"endTime": [self nullify:self.endTime],
