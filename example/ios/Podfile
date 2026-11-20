@@ -25,6 +25,10 @@ target 'WatchConnectivityExample' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  target 'WatchConnectivityExampleTests' do
+    inherit! :complete
+  end
+
   post_install do |installer|
     react_native_post_install(
       installer,
