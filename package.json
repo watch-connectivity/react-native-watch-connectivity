@@ -8,7 +8,8 @@
     ".": {
       "source": "./src/index.tsx",
       "types": "./lib/typescript/src/index.d.ts",
-      "default": "./lib/module/index.js"
+      "react-native": "./lib/module/index.js",
+      "default": "./lib/module/unsupported.js"
     },
     "./package.json": "./package.json"
   },
