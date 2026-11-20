@@ -36,8 +36,15 @@ static void rejectWithError(RCTPromiseRejectBlock reject, NSError *error) {
   reject([@(error.code) stringValue], error.localizedDescription, error);
 }
 
+// Events for a name JS is not listening to yet wait here. The cap stops events that the app never listens to
+// (file progress, for example) from growing without limit.
+static const NSUInteger MAX_PENDING_EVENTS = 1000;
+
 @implementation WatchConnectivity {
-  BOOL hasObservers;
+  // WCSession calls its delegate on a background queue while JS calls the module on its method queue, so the event
+  // buffer, the received queues and the reply handlers are only touched while holding this lock.
+  NSObject *stateLock;
+  NSMutableSet<NSString *> *observedEventNames;
   NSMutableArray<NSDictionary *> *pendingEvents;
 }
 
@@ -56,12 +63,13 @@ static void rejectWithError(RCTPromiseRejectBlock reject, NSError *error) {
 
 - (instancetype)init {
   sharedInstance = [super init];
-  self.replyHandlers = [NSCache new];
+  self.replyHandlers = [NSMutableDictionary new];
   self.fileTransfers = [NSMutableDictionary new];
   self.queuedFiles = [NSMutableDictionary new];
   self.queuedUserInfo = [NSMutableDictionary new];
 
-  hasObservers = NO;
+  stateLock = [NSObject new];
+  observedEventNames = [NSMutableSet set];
   pendingEvents = [NSMutableArray array];
 
   if ([WCSession isSupported]) {
@@ -96,17 +104,31 @@ static void rejectWithError(RCTPromiseRejectBlock reject, NSError *error) {
   ];
 }
 
-- (void)startObserving {
-  hasObservers = YES;
+// Hand JS only the buffered events of the name it now listens to. The rest keep waiting for their own listener,
+// so a message received at launch is not lost to a reachability listener that subscribed first.
+- (void)addListener:(NSString *)eventName {
+  [super addListener:eventName];
 
-  for (NSDictionary *event in pendingEvents) {
-    [self sendEventWithName:[event objectForKey:@"name"] body:[event objectForKey:@"body"]];
+  NSArray<NSDictionary *> *ready;
+  @synchronized(stateLock) {
+    [observedEventNames addObject:eventName];
+    NSIndexSet *indexes = [pendingEvents indexesOfObjectsPassingTest:^BOOL(NSDictionary *event, NSUInteger idx, BOOL *stop) {
+      return [event[@"name"] isEqualToString:eventName];
+    }];
+    ready = [pendingEvents objectsAtIndexes:indexes];
+    [pendingEvents removeObjectsAtIndexes:indexes];
   }
-  [pendingEvents removeAllObjects];
+
+  for (NSDictionary *event in ready) {
+    [self sendEventWithName:event[@"name"] body:event[@"body"]];
+  }
 }
 
+// JS only says how many listeners it removed, not for which events, so buffer everything again once none are left.
 - (void)stopObserving {
-  hasObservers = NO;
+  @synchronized(stateLock) {
+    [observedEventNames removeAllObjects];
+  }
 }
 
 - (void)dealloc {
@@ -230,8 +252,11 @@ activationDidCompleteWithState:(WCSessionActivationState)activationState
 
 - (void)replyToMessageWithId:(NSString *)messageId
                      message:(NSDictionary *)message {
-  void (^replyHandler)(NSDictionary<NSString *, id> *_Nonnull)
-      = [self.replyHandlers objectForKey:messageId];
+  void (^replyHandler)(NSDictionary<NSString *, id> *_Nonnull);
+  @synchronized(stateLock) {
+    replyHandler = self.replyHandlers[messageId];
+    [self.replyHandlers removeObjectForKey:messageId];
+  }
   if (replyHandler != nil) {
     replyHandler(message);
   }
@@ -248,7 +273,9 @@ didReceiveMessage:(NSDictionary<NSString *, id> *)message
   NSString *messageId = uuid();
   NSMutableDictionary *mutableMessage = [message mutableCopy];
   mutableMessage[@"id"] = messageId;
-  [self.replyHandlers setObject:replyHandler forKey:messageId];
+  @synchronized(stateLock) {
+    self.replyHandlers[messageId] = replyHandler;
+  }
 
   [self dispatchEventWithName:EVENT_RECEIVE_MESSAGE body:mutableMessage];
 }
@@ -347,23 +374,31 @@ didReceiveMessageData:(NSData *)messageData
 
 - (void)getQueuedFiles:(RCTPromiseResolveBlock)resolve
                 reject:(RCTPromiseRejectBlock)reject {
-  resolve(self.queuedFiles);
-  [self.queuedFiles removeAllObjects];
+  NSDictionary *queued;
+  @synchronized(stateLock) {
+    queued = [self.queuedFiles copy];
+    [self.queuedFiles removeAllObjects];
+  }
+  resolve(queued);
 }
 
 - (void)clearFilesQueue:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject {
-  self.queuedFiles = [NSMutableDictionary new];
+  @synchronized(stateLock) {
+    [self.queuedFiles removeAllObjects];
+  }
   resolve([NSNull null]);
 }
 
 - (void)dequeueFile:(NSArray<NSString *> *)ids {
-  for (NSString *fileId in ids) {
-    [self.queuedFiles removeObjectForKey:fileId];
+  NSDictionary *remaining;
+  @synchronized(stateLock) {
+    [self.queuedFiles removeObjectsForKeys:ids ?: @[]];
+    remaining = [self.queuedFiles copy];
   }
 
   if (!ids || !ids.count) {
-    [self dispatchEventWithName:EVENT_WATCH_FILE_RECEIVED body:self.queuedFiles];
+    [self dispatchEventWithName:EVENT_WATCH_FILE_RECEIVED body:remaining];
   }
 }
 
@@ -432,7 +467,9 @@ didReceiveMessageData:(NSData *)messageData
     return;
   }
 
-  [self.queuedFiles setValue:fileInfo forKey:fileId];
+  @synchronized(stateLock) {
+    self.queuedFiles[fileId] = fileInfo;
+  }
   [self dispatchEventWithName:EVENT_WATCH_FILE_RECEIVED body:fileInfo];
 }
 
@@ -512,8 +549,12 @@ didReceiveApplicationContext:(NSDictionary<NSString *, id> *)applicationContext 
 
 - (void)getQueuedUserInfo:(RCTPromiseResolveBlock)resolve
                    reject:(RCTPromiseRejectBlock)reject {
-  resolve(self.queuedUserInfo);
-  [self.queuedUserInfo removeAllObjects];
+  NSDictionary *queued;
+  @synchronized(stateLock) {
+    queued = [self.queuedUserInfo copy];
+    [self.queuedUserInfo removeAllObjects];
+  }
+  resolve(queued);
 }
 
 - (void)transferUserInfo:(NSDictionary *)userInfo {
@@ -522,17 +563,21 @@ didReceiveApplicationContext:(NSDictionary<NSString *, id> *)applicationContext 
 
 - (void)clearUserInfoQueue:(RCTPromiseResolveBlock)resolve
                     reject:(RCTPromiseRejectBlock)reject {
-  self.queuedUserInfo = [NSMutableDictionary new];
+  @synchronized(stateLock) {
+    [self.queuedUserInfo removeAllObjects];
+  }
   resolve([NSNull null]);
 }
 
 - (void)dequeueUserInfo:(NSArray<NSString *> *)ids {
-  for (NSString *ident in ids) {
-    [self.queuedUserInfo removeObjectForKey:ident];
+  NSDictionary *remaining;
+  @synchronized(stateLock) {
+    [self.queuedUserInfo removeObjectsForKeys:ids ?: @[]];
+    remaining = [self.queuedUserInfo copy];
   }
 
   if (!ids || !ids.count) {
-    [self dispatchEventWithName:EVENT_WATCH_USER_INFO_RECEIVED body:self.queuedUserInfo];
+    [self dispatchEventWithName:EVENT_WATCH_USER_INFO_RECEIVED body:remaining];
   }
 }
 
@@ -547,7 +592,9 @@ didReceiveApplicationContext:(NSDictionary<NSString *, id> *)applicationContext 
 didReceiveUserInfo:(NSDictionary<NSString *, id> *)userInfo {
   double ts = jsTimestamp();
   NSString *timestamp = [@(ts) stringValue];
-  [self.queuedUserInfo setValue:userInfo forKey:timestamp];
+  @synchronized(stateLock) {
+    self.queuedUserInfo[timestamp] = userInfo;
+  }
   [self dispatchEventWithName:EVENT_WATCH_USER_INFO_RECEIVED body:@{@"userInfo": userInfo, @"timestamp": @(ts), @"id": timestamp}];
 }
 
@@ -555,11 +602,16 @@ didReceiveUserInfo:(NSDictionary<NSString *, id> *)userInfo {
 
 - (void)dispatchEventWithName:(NSString *)name
                          body:(NSDictionary<NSString *, id> *)body {
-  if (!hasObservers) {
-    [pendingEvents addObject:@{@"name": name, @"body": body}];
-  } else {
-    [self sendEventWithName:name body:body];
+  @synchronized(stateLock) {
+    if (![observedEventNames containsObject:name]) {
+      [pendingEvents addObject:@{@"name": name, @"body": body}];
+      if (pendingEvents.count > MAX_PENDING_EVENTS) {
+        [pendingEvents removeObjectAtIndex:0];
+      }
+      return;
+    }
   }
+  [self sendEventWithName:name body:body];
 }
 
 @end

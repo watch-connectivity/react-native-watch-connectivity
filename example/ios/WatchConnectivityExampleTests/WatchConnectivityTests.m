@@ -1,5 +1,6 @@
 #import <XCTest/XCTest.h>
 #import <WatchConnectivity/WatchConnectivity.h>
+#import <objc/runtime.h>
 
 // The module's header is private to its pod, so the tests reach the module through the runtime. These are the
 // selectors under test.
@@ -17,7 +18,45 @@ typedef void (^RejectBlock)(NSString *code, NSString *message, NSError *error);
 - (void)updateApplicationContext:(NSDictionary *)context resolve:(ResolveBlock)resolve reject:(RejectBlock)reject;
 - (void)getApplicationContext:(ResolveBlock)resolve reject:(RejectBlock)reject;
 - (void)getReceivedApplicationContext:(ResolveBlock)resolve reject:(RejectBlock)reject;
+- (void)addListener:(NSString *)eventName;
+- (void)removeListeners:(double)count;
+- (void)session:(id)session didReceiveMessage:(NSDictionary *)message;
+- (void)session:(id)session didReceiveMessage:(NSDictionary *)message replyHandler:(void (^)(NSDictionary *))replyHandler;
+- (void)replyToMessageWithId:(NSString *)messageId message:(NSDictionary *)message;
+- (void)session:(id)session didReceiveUserInfo:(NSDictionary *)userInfo;
+- (void)session:(id)session didReceiveFile:(id)file;
+- (void)getQueuedUserInfo:(ResolveBlock)resolve reject:(RejectBlock)reject;
+- (void)getQueuedFiles:(ResolveBlock)resolve reject:(RejectBlock)reject;
 @end
+
+// Stands in for WCSessionFile.
+@interface FakeSessionFile : NSObject
+@property (nonatomic, strong) NSURL *fileURL;
+@property (nonatomic, copy) NSDictionary *metadata;
+@end
+
+@implementation FakeSessionFile
+@end
+
+static const void *kSentEventsKey = &kSentEventsKey;
+
+// A subclass of the module that records the events it sends to JS. RCTEventEmitter asserts without a JS runtime.
+static Class RecordingModuleClass(void) {
+  static Class recordingClass;
+  static dispatch_once_t once;
+  dispatch_once(&once, ^{
+    recordingClass = objc_allocateClassPair(NSClassFromString(@"WatchConnectivity"), "RecordingWatchConnectivity", 0);
+    IMP send = imp_implementationWithBlock(^(id module, NSString *name, id body) {
+      NSMutableArray *sent = objc_getAssociatedObject(module, kSentEventsKey);
+      @synchronized(sent) {
+        [sent addObject:@{@"name": name, @"body": body ?: [NSNull null]}];
+      }
+    });
+    class_addMethod(recordingClass, @selector(sendEventWithName:body:), send, "v@:@@");
+    objc_registerClassPair(recordingClass);
+  });
+  return recordingClass;
+}
 
 // Stands in for WCSession, which cannot be paired with a watch in a test.
 @interface FakeSession : NSObject
@@ -69,8 +108,9 @@ typedef void (^RejectBlock)(NSString *code, NSString *message, NSError *error);
 @implementation WatchConnectivityTests
 
 - (void)setUp {
-  self.module = [NSClassFromString(@"WatchConnectivity") new];
-  XCTAssertNotNil(self.module, @"The WatchConnectivity module is not linked into the host app");
+  XCTAssertNotNil(NSClassFromString(@"WatchConnectivity"), @"The WatchConnectivity module is not linked");
+  self.module = [RecordingModuleClass() new];
+  objc_setAssociatedObject(self.module, kSentEventsKey, [NSMutableArray array], OBJC_ASSOCIATION_RETAIN);
   self.realSession = [self.module valueForKey:@"session"];
   self.fakeSession = [FakeSession new];
   [self.module setValue:self.fakeSession forKey:@"session"];
@@ -83,7 +123,14 @@ typedef void (^RejectBlock)(NSString *code, NSString *message, NSError *error);
 }
 
 - (NSArray<NSDictionary *> *)pendingEvents {
-  return [self.module valueForKey:@"pendingEvents"];
+  return [[self.module valueForKey:@"pendingEvents"] copy];
+}
+
+- (NSArray<NSString *> *)sentEventNames {
+  NSMutableArray *sent = objc_getAssociatedObject(self.module, kSentEventsKey);
+  @synchronized(sent) {
+    return [[sent valueForKey:@"name"] copy];
+  }
 }
 
 - (NSArray<NSString *> *)pendingEventNames {
@@ -240,6 +287,104 @@ typedef void (^RejectBlock)(NSString *code, NSString *message, NSError *error);
     @{@"name": @"WatchInstallStatusChanged", @"body": @{@"installed": @NO}},
     @{@"name": @"WatchReachabilityChanged", @"body": @{@"reachability": @NO}},
   ]));
+}
+
+#pragma mark - Event buffering
+
+- (void)testBufferedEventsWaitForAListenerOfTheirOwnName {
+  [self.module session:self.fakeSession didReceiveMessage:@{@"hello": @"phone"}];
+
+  [self.module addListener:@"WatchReachabilityChanged"];
+  XCTAssertFalse([[self sentEventNames] containsObject:@"WatchReceiveMessage"]);
+  XCTAssertTrue([[self pendingEventNames] containsObject:@"WatchReceiveMessage"]);
+
+  [self.module addListener:@"WatchReceiveMessage"];
+  XCTAssertEqualObjects([self sentEventNames], @[@"WatchReceiveMessage"]);
+  XCTAssertFalse([[self pendingEventNames] containsObject:@"WatchReceiveMessage"]);
+}
+
+- (void)testEventsWithAListenerAreSentAtOnce {
+  [self.module addListener:@"WatchReceiveMessage"];
+
+  [self.module session:self.fakeSession didReceiveMessage:@{@"hello": @"phone"}];
+
+  XCTAssertEqualObjects([self sentEventNames], @[@"WatchReceiveMessage"]);
+  XCTAssertEqual([self pendingEvents].count, 0u);
+}
+
+- (void)testEventsBufferAgainOnceEveryListenerIsRemoved {
+  [self.module addListener:@"WatchReceiveMessage"];
+  [self.module removeListeners:1];
+
+  [self.module session:self.fakeSession didReceiveMessage:@{@"hello": @"phone"}];
+
+  XCTAssertEqual([self sentEventNames].count, 0u);
+  XCTAssertEqualObjects([self pendingEventNames], @[@"WatchReceiveMessage"]);
+}
+
+- (void)testEventsFromTheSessionQueueDuringTheFirstListenerAreNeitherLostNorACrash {
+  NSInteger count = 500;
+  dispatch_group_t group = dispatch_group_create();
+  dispatch_group_async(group, dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+    for (NSInteger i = 0; i < count; i++) {
+      [self.module session:self.fakeSession didReceiveMessage:@{@"n": @(i)}];
+    }
+  });
+  dispatch_group_async(group, dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+    for (NSInteger i = 0; i < 200; i++) {
+      [self.module addListener:@"WatchReachabilityChanged"];
+    }
+    [self.module addListener:@"WatchReceiveMessage"];
+  });
+  dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+
+  NSUInteger delivered = [[self sentEventNames] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF == 'WatchReceiveMessage'"]].count;
+  NSUInteger stillBuffered = [[self pendingEventNames] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF == 'WatchReceiveMessage'"]].count;
+  XCTAssertEqual(delivered, (NSUInteger)count);
+  XCTAssertEqual(stillBuffered, 0u);
+}
+
+#pragma mark - Queues
+
+- (void)testQueuedUserInfoResolvesTheItemsBeforeClearingThem {
+  [self.module session:self.fakeSession didReceiveUserInfo:@{@"n": @1}];
+  __block NSDictionary *queued;
+
+  [self.module getQueuedUserInfo:^(id result) { queued = result; } reject:nil];
+
+  XCTAssertEqual(queued.count, 1u);
+  XCTAssertEqualObjects(queued.allValues.firstObject, (@{@"n": @1}));
+}
+
+- (void)testQueuedFilesResolveTheItemsBeforeClearingThem {
+  NSURL *url = [[NSURL fileURLWithPath:NSTemporaryDirectory()] URLByAppendingPathComponent:[NSUUID UUID].UUIDString];
+  [@"hello" writeToURL:url atomically:YES encoding:NSUTF8StringEncoding error:nil];
+  FakeSessionFile *file = [FakeSessionFile new];
+  file.fileURL = url;
+  file.metadata = @{@"kind": @"test"};
+  [self.module session:self.fakeSession didReceiveFile:file];
+  __block NSDictionary *queued;
+
+  [self.module getQueuedFiles:^(id result) { queued = result; } reject:nil];
+
+  XCTAssertEqual(queued.count, 1u);
+  XCTAssertEqualObjects(queued.allValues.firstObject[@"metadata"], (@{@"kind": @"test"}));
+}
+
+#pragma mark - Reply handlers
+
+- (void)testReplyHandlersAnswerOnceAndAreThenReleased {
+  __block NSInteger replies = 0;
+  [self.module session:self.fakeSession
+     didReceiveMessage:@{@"q": @"?"}
+          replyHandler:^(NSDictionary *reply) { replies += 1; }];
+  NSString *messageId = [self pendingEvents].lastObject[@"body"][@"id"];
+
+  [self.module replyToMessageWithId:messageId message:@{@"a": @"!"}];
+  [self.module replyToMessageWithId:messageId message:@{@"a": @"!"}];
+
+  XCTAssertEqual(replies, 1);
+  XCTAssertEqual([[self.module valueForKey:@"replyHandlers"] count], 0u);
 }
 
 @end
