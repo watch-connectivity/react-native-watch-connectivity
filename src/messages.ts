@@ -1,13 +1,13 @@
 import type { WatchPayload } from './native-module';
 import { NativeModule } from './native-module';
+import { toWatchError } from './errors';
+import type { WatchError } from './errors';
 
 type SendMessageReplyCallback<
   MessageFromWatch extends WatchPayload = WatchPayload
 > = (reply: MessageFromWatch) => void;
 
-type SendMessageErrorCallback = (
-  error: Error & { code?: string; domain?: string }
-) => void;
+type SendMessageErrorCallback = (error: WatchError) => void;
 
 export function sendMessage<
   MessageFromWatch extends WatchPayload = WatchPayload,
@@ -23,11 +23,12 @@ export function sendMessage<
         replyCb(reply as unknown as MessageFromWatch);
       }
     })
-    .catch((err: Error) => {
+    .catch((err: unknown) => {
+      const error = toWatchError(err);
       if (errCb) {
-        errCb(err);
+        errCb(error);
       } else {
-        console.warn('Unhandled sendMessage error', err);
+        console.warn('Unhandled sendMessage error', error);
       }
     });
 }

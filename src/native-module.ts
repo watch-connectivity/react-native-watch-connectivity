@@ -25,11 +25,18 @@ export type QueuedFile = {
   url: string;
 };
 
+/** How the native side sends an `NSError` with an event. */
+export interface NativeErrorDictionary {
+  code: number;
+  domain: string;
+  message: string;
+}
+
 export interface NativeFileTransfer {
   bytesTotal: number;
   bytesTransferred: number;
   endTime: number | null;
-  error: Error | null;
+  error: NativeErrorDictionary | null;
   estimatedTimeRemaining: number | null;
   fractionCompleted: number;
   id: string;
@@ -58,7 +65,6 @@ export const nativeWatchEventEmitter = new NativeEventEmitter(
 export enum WatchEvent {
   EVENT_ACTIVATION_ERROR = 'WatchActivationError',
   EVENT_APPLICATION_CONTEXT_RECEIVED = 'WatchApplicationContextReceived',
-  EVENT_APPLICATION_CONTEXT_RECEIVED_ERROR = 'WatchApplicationContextReceivedError',
   EVENT_FILE_TRANSFER = 'WatchFileTransfer',
   EVENT_INSTALL_STATUS_CHANGED = 'WatchInstallStatusChanged',
   EVENT_PAIR_STATUS_CHANGED = 'WatchPairStatusChanged',
@@ -95,13 +101,21 @@ export interface EventPayloads {
   [WatchEvent.EVENT_INSTALL_STATUS_CHANGED]: {
     installed: boolean;
   };
-  [WatchEvent.EVENT_WATCH_APPLICATION_CONTEXT_ERROR]: Error;
-  [WatchEvent.EVENT_WATCH_USER_INFO_ERROR]: Error;
-  [WatchEvent.EVENT_WATCH_FILE_ERROR]: Error;
-  [WatchEvent.EVENT_ACTIVATION_ERROR]: Error;
-  [WatchEvent.EVENT_SESSION_BECAME_INACTIVE]: Error;
-  [WatchEvent.EVENT_SESSION_DID_DEACTIVATE]: Error;
-  [WatchEvent.EVENT_APPLICATION_CONTEXT_RECEIVED_ERROR]: Error;
+  [WatchEvent.EVENT_WATCH_APPLICATION_CONTEXT_ERROR]: {
+    context: WatchPayload;
+    error: NativeErrorDictionary;
+  };
+  [WatchEvent.EVENT_WATCH_USER_INFO_ERROR]: {
+    userInfo: WatchPayload;
+    error: NativeErrorDictionary;
+  };
+  [WatchEvent.EVENT_WATCH_FILE_ERROR]: {
+    fileInfo: QueuedFile;
+    error: NativeErrorDictionary;
+  };
+  [WatchEvent.EVENT_ACTIVATION_ERROR]: { error: NativeErrorDictionary };
+  [WatchEvent.EVENT_SESSION_BECAME_INACTIVE]: Record<string, never>;
+  [WatchEvent.EVENT_SESSION_DID_DEACTIVATE]: Record<string, never>;
 }
 
 export function _addListener<E extends WatchEvent, Payload = EventPayloads[E]>(

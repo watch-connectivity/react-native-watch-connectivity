@@ -2,12 +2,19 @@ import type { TurboModule } from 'react-native';
 import { TurboModuleRegistry } from 'react-native';
 
 export interface Spec extends TurboModule {
+  // Synchronous: false where WatchConnectivity is unavailable (iPads)
+  isSupported(): boolean;
+
   // Reachability
   getReachability(): Promise<boolean>;
 
   // Pairing & installation
   getIsPaired(): Promise<boolean>;
   getIsWatchAppInstalled(): Promise<boolean>;
+
+  // Complications
+  getIsComplicationEnabled(): Promise<boolean>;
+  getRemainingComplicationUserInfoTransfers(): Promise<number>;
 
   // Messages (converted from callbacks to Promises for TurboModule compat)
   sendMessage(message: Object): Promise<Object>;
@@ -31,8 +38,9 @@ export interface Spec extends TurboModule {
   dequeueUserInfo(ids: ReadonlyArray<string>): void;
 
   // Application context
-  updateApplicationContext(context: Object): void;
+  updateApplicationContext(context: Object): Promise<void>;
   getApplicationContext(): Promise<Object | null>;
+  getReceivedApplicationContext(): Promise<Object | null>;
 
   // Event emitter (required for RCTEventEmitter compatibility)
   addListener(eventName: string): void;
