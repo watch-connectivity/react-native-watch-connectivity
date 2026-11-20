@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.0] - Unreleased
+
+[Compare with 2.0.0](https://github.com/watch-connectivity/react-native-watch-connectivity/compare/2.0.0...3.0.0)
+
+### Breaking changes
+- `useApplicationContext` now returns the context the watch sent. It used to return the context this phone last sent.
+- Promise rejections, the `sendMessage` error callback and error events now give a `WatchError`. Its `code` is a stable `WatchErrorCode` string such as `'not-reachable'`. It used to be a bare native code such as `'7007'`, which never matched `ERROR_CODE_SESSION_UNREACHABLE`.
+- Error events have new payloads:
+  - `activation-error`: `{ error }`
+  - `application-context-error`: `{ context, error }`
+  - `user-info-error`: `{ userInfo, error }`
+  - `file-received-error`: `{ fileInfo, error }`
+- `session-became-inactive` and `session-did-deactivate` listeners now take no arguments.
+- A failed file transfer's `error` is now a `WatchError`.
+- `ERROR_CODE_SESSION_UNREACHABLE` is now `'not-reachable'` and is deprecated. Compare `error.code` with `'not-reachable'` instead.
+- `updateApplicationContext` now returns a promise. It rejects with a `WatchError` when the system refuses the context, for example `payload-unsupported-types` for a `null` value. The `application-context-error` event still fires.
+- `getApplicationContext` now resolves `null` when this phone has not sent a context. It used to resolve `{}`.
+- The `application-context-received-error` event is removed. It reported failures of the echo described under Fixed.
+- `_getMissedUserInfo` is no longer exported. It was internal.
+- On Android, the web and other platforms the package exports the full API as a no-op implementation. `isSupported()` returns `false`, sends reject with `session-not-supported`, and state queries resolve `false`, `0`, `null` or `{}`. Android used to export only the four hooks.
+
+### Added
+- `isSupported()`: a synchronous check. It is `false` where WatchConnectivity is unavailable, such as iPads.
+- `getReceivedApplicationContext()`: the context the watch last sent, including one that arrived while the app was not running.
+- `getIsComplicationEnabled()` and `getRemainingComplicationUserInfoTransfers()`.
+- `WatchError`, `isWatchError(error, code?)`, `WATCH_ERROR_CODES` and the `WatchErrorCode` type.
+- Jest tests for the JS API, and XCTest tests for the native module in the example app.
+
+### Fixed
+- A context received from the watch is no longer sent back to the watch. The module used to call `updateApplicationContext` with every received context, which also replaced the context this phone sends.
+- Sends no longer hang on devices without WatchConnectivity. `sendMessage`, `sendMessageData`, `startFileTransfer` and `updateApplicationContext` reject with `session-not-supported`.
+- The session reactivates after the user switches to another paired watch. Paired, installed and reachability events then report the new watch.
+- Importing the package on the web no longer crashes.
+- The Android module builds. It implements the spec and reports that WatchConnectivity is not supported.
+- Error events and failed file transfers no longer send an `NSError` object, which the bridge cannot serialise.
+
+---
+
 ## [2.0.0] - 2026-03-20
 
 [Compare with 1.1.0](https://github.com/watch-connectivity/react-native-watch-connectivity/compare/1.1.0...2.0.0)

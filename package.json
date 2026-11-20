@@ -1,6 +1,6 @@
 {
   "name": "react-native-watch-connectivity",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Communicate with your Apple Watch apps over the React Native bridge",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
