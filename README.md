@@ -100,6 +100,8 @@ The phone and the watch each keep the latest context the other sent.
 | `getIsComplicationEnabled()` | `Promise<boolean>`: whether the complication is on the active watch face |
 | `getRemainingComplicationUserInfoTransfers()` | `Promise<number>`: how many more complication transfers the system will deliver at once today. At 0 they arrive as ordinary user info. |
 
+Both return `false` and `0` until the session finishes activating, which happens shortly after launch. Read them again after a `paired` or `reachability` event.
+
 ### Files
 
 | Function | Does |
