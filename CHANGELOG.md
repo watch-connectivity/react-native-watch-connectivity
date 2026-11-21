@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.2] - 2026-11-21
+
+[Compare with 3.0.1](https://github.com/mtford90/react-native-watch-connectivity/compare/3.0.1...3.0.2)
+
+### Changed
+
+- The iOS pod is now named `RNWatchConnectivity`, not `WatchConnectivity`. Apps that use autolinking need no change. If your Podfile names the pod, change `pod 'WatchConnectivity'` to `pod 'RNWatchConnectivity'`.
+
+### Fixed
+
+- The iOS module builds with `use_frameworks!`. The pod's name clashed with Apple's WatchConnectivity framework, so `WatchConnectivity/WCSession.h` was not found. (#134)
+- A `user-info` listener receives user info that arrived before it listened once, not twice. (#87)
+- User info received in the same millisecond as the previous one is no longer dropped from the queue.
+- The Android module builds with AGP 9. It no longer applies the Kotlin plugin when AGP already registers the `kotlin` extension. (#136)
+
 ## [3.0.1] - 2026-11-21
 
 [Compare with 3.0.0](https://github.com/mtford90/react-native-watch-connectivity/compare/3.0.0...3.0.1)
