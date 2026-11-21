@@ -1785,7 +1785,7 @@ PODS:
     - React-utils (= 0.84.0)
     - ReactNativeDependencies
   - ReactNativeDependencies (0.84.0)
-  - WatchConnectivity (3.0.0):
+  - RNWatchConnectivity (3.0.1):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -1883,7 +1883,7 @@ DEPENDENCIES:
   - ReactCodegen (from `build/generated/ios/ReactCodegen`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - ReactNativeDependencies (from `../node_modules/react-native/third-party-podspecs/ReactNativeDependencies.podspec`)
-  - WatchConnectivity (from `../..`)
+  - RNWatchConnectivity (from `../..`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 EXTERNAL SOURCES:
@@ -2032,7 +2032,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   ReactNativeDependencies:
     :podspec: "../node_modules/react-native/third-party-podspecs/ReactNativeDependencies.podspec"
-  WatchConnectivity:
+  RNWatchConnectivity:
     :path: "../.."
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
@@ -2110,7 +2110,7 @@ SPEC CHECKSUMS:
   ReactCodegen: 27937747ddc743fcb66a8dc19e8edf60188d94cc
   ReactCommon: cc0e38600f82487c5fe5d29150abb6fa9d981986
   ReactNativeDependencies: 44d7bf60a7550e02c80a424589b49b422f8c8bfe
-  WatchConnectivity: c0e3783db0f57c4e9895b65d1f8d5b2708807c01
+  RNWatchConnectivity: 3ad9a72354bf4532388be460d3fdba8849243107
   Yoga: 772166513f9cd2d61a6251d0dacbbfaa5b537479
 
 PODFILE CHECKSUM: f5eee1bb08da2819b24ab9d3f81aed4215306005
