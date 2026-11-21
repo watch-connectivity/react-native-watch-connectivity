@@ -46,6 +46,7 @@ static const NSUInteger MAX_PENDING_EVENTS = 1000;
   NSObject *stateLock;
   NSMutableSet<NSString *> *observedEventNames;
   NSMutableArray<NSDictionary *> *pendingEvents;
+  double lastUserInfoTimestamp;
 }
 
 + (NSString *)moduleName
@@ -590,9 +591,13 @@ didReceiveApplicationContext:(NSDictionary<NSString *, id> *)applicationContext 
 
 - (void)   session:(WCSession *)session
 didReceiveUserInfo:(NSDictionary<NSString *, id> *)userInfo {
-  double ts = jsTimestamp();
-  NSString *timestamp = [@(ts) stringValue];
+  double ts;
+  NSString *timestamp;
   @synchronized(stateLock) {
+    // The timestamp is the item's id, so one received in the same millisecond as the last takes the next one.
+    ts = MAX(jsTimestamp(), lastUserInfoTimestamp + 1);
+    lastUserInfoTimestamp = ts;
+    timestamp = [@(ts) stringValue];
     self.queuedUserInfo[timestamp] = userInfo;
   }
   [self dispatchEventWithName:EVENT_WATCH_USER_INFO_RECEIVED body:@{@"userInfo": userInfo, @"timestamp": @(ts), @"id": timestamp}];
