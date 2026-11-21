@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.1] - 2026-11-21
+
+[Compare with 3.0.0](https://github.com/mtford90/react-native-watch-connectivity/compare/3.0.0...3.0.1)
+
+### Added
+
+- `Encoding` and `FileTransferEventType` are exported, so `sendMessageData`'s encoding and file-transfer event types can be named. `QueuedFile` is exported as a type.
+
+### Fixed
+
+- The README gives the real minimum iOS version, 15.1 (React Native's own), not 13.4.
+
 ## [3.0.0] - 2026-11-21
 
 [Compare with 2.0.0](https://github.com/mtford90/react-native-watch-connectivity/compare/2.0.0...3.0.0)

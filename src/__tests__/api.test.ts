@@ -17,6 +17,8 @@ import {
   transferCurrentComplicationUserInfo,
   updateApplicationContext,
   watchEvents,
+  Encoding,
+  FileTransferEventType,
 } from '../RNWatch.ios';
 import type { WatchError } from '../errors';
 
@@ -246,3 +248,10 @@ function fileTransferPayload() {
 function flushPromises() {
   return new Promise((resolve) => setImmediate(resolve));
 }
+
+describe('exported enums', () => {
+  it('exports Encoding and FileTransferEventType for sendMessageData and file events', () => {
+    expect(Encoding.NSUTF8StringEncoding).toBe(4);
+    expect(FileTransferEventType.PROGRESS).toBe('progress');
+  });
+});

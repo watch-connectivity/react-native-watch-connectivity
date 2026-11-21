@@ -33,6 +33,8 @@ export {
   isWatchError,
 } from './errors';
 export type { WatchErrorCode } from './errors';
-export type { WatchPayload } from './native-module';
+export type { WatchPayload, QueuedFile } from './native-module';
+export { Encoding } from './encoding';
+export { FileTransferEventType } from './file-transfer-event-type';
 export { default as watchEvents } from './events';
 export type { WatchEvent } from './events/definitions';

@@ -71,5 +71,7 @@ export {
 export type { WatchErrorCode } from './errors';
 export type { WatchMessageListener } from './messages';
 export type { FileTransfer } from './files';
-export type { WatchPayload } from './native-module';
+export type { WatchPayload, QueuedFile } from './native-module';
+export { Encoding } from './encoding';
+export { FileTransferEventType } from './file-transfer-event-type';
 export type { WatchEvent } from './events/definitions';

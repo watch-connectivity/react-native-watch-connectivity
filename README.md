@@ -25,7 +25,7 @@ cd ios && pod install
 ### Requirements
 
 - React Native 0.76+
-- iOS 13.4+
+- iOS 15.1+ (React Native's own minimum)
 
 ## Quick Start
 

@@ -11,4 +11,11 @@ describe('importing on web', () => {
       code: 'session-not-supported',
     });
   });
+
+  it('exports the encoding and file-transfer enums without loading react-native', () => {
+    const watch = require('../index');
+
+    expect(watch.Encoding.NSUTF8StringEncoding).toBe(4);
+    expect(watch.FileTransferEventType.FINISHED).toBe('finished');
+  });
 });

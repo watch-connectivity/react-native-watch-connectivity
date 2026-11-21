@@ -1,6 +1,9 @@
 import { NativeEventEmitter } from 'react-native';
 import NativeWatchConnectivity from './NativeWatchConnectivity';
 import type { Spec } from './NativeWatchConnectivity';
+import { FileTransferEventType } from './file-transfer-event-type';
+
+export { FileTransferEventType };
 
 export type WatchPayload = Record<string, unknown>;
 
@@ -44,13 +47,6 @@ export interface NativeFileTransfer {
   startTime: number;
   throughput: number | null;
   uri: string;
-}
-
-export enum FileTransferEventType {
-  ERROR = 'error',
-  FINISHED = 'finished',
-  PROGRESS = 'progress',
-  STARTED = 'started',
 }
 
 export interface NativeFileTransferEvent extends NativeFileTransfer {
