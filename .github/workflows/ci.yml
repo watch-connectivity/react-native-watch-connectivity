@@ -31,6 +31,9 @@ jobs:
       - name: Typecheck files
         run: yarn typecheck
 
+      - name: Run tests
+        run: yarn test
+
 
   build-library:
     runs-on: ubuntu-latest

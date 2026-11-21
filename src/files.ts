@@ -5,12 +5,14 @@ import type {
   WatchPayload,
 } from './native-module';
 import { NativeModule } from './native-module';
+import { toWatchError } from './errors';
+import type { WatchError } from './errors';
 
 export interface FileTransfer {
   bytesTotal: number;
   bytesTransferred: number;
   endTime: Date | null;
-  error: Error | null;
+  error: WatchError | null;
   estimatedTimeRemaining: number | null;
   fractionCompleted: number;
   id: string;
@@ -24,7 +26,11 @@ export function startFileTransfer(
   uri: string,
   metadata: WatchPayload = {}
 ): Promise<string> {
-  return NativeModule.transferFile(uri, metadata as unknown as Object);
+  return NativeModule.transferFile(uri, metadata as unknown as Object).catch(
+    (error: unknown) => {
+      throw toWatchError(error);
+    }
+  );
 }
 
 /**
@@ -33,10 +39,11 @@ export function startFileTransfer(
 export function _transformFilePayload<
   NFT extends NativeFileTransfer,
   FT extends FileTransfer
->({ startTime, endTime, ...rest }: NFT): FT {
+>({ startTime, endTime, error, ...rest }: NFT): FT {
   return {
     startTime: new Date(startTime),
     endTime: endTime ? new Date(endTime) : null,
+    error: error ? toWatchError(error) : null,
     ...rest,
   } as unknown as FT;
 }

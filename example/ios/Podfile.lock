@@ -1785,7 +1785,7 @@ PODS:
     - React-utils (= 0.84.0)
     - ReactNativeDependencies
   - ReactNativeDependencies (0.84.0)
-  - WatchConnectivity (2.0.0):
+  - WatchConnectivity (3.0.0):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2110,9 +2110,9 @@ SPEC CHECKSUMS:
   ReactCodegen: 27937747ddc743fcb66a8dc19e8edf60188d94cc
   ReactCommon: cc0e38600f82487c5fe5d29150abb6fa9d981986
   ReactNativeDependencies: 44d7bf60a7550e02c80a424589b49b422f8c8bfe
-  WatchConnectivity: 08e921258ffc38237e401e30e588a9ae028f9728
+  WatchConnectivity: c0e3783db0f57c4e9895b65d1f8d5b2708807c01
   Yoga: 772166513f9cd2d61a6251d0dacbbfaa5b537479
 
-PODFILE CHECKSUM: c81e38211a77b97c5df4ca4d1d91b58f2ddf082c
+PODFILE CHECKSUM: f5eee1bb08da2819b24ab9d3f81aed4215306005
 
 COCOAPODS: 1.16.2

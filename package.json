@@ -1,6 +1,6 @@
 {
   "name": "react-native-watch-connectivity",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Communicate with your Apple Watch apps over the React Native bridge",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
@@ -8,7 +8,8 @@
     ".": {
       "source": "./src/index.tsx",
       "types": "./lib/typescript/src/index.d.ts",
-      "default": "./lib/module/index.js"
+      "react-native": "./lib/module/index.js",
+      "default": "./lib/module/unsupported.js"
     },
     "./package.json": "./package.json"
   },
@@ -35,7 +36,8 @@
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
     "prepare": "bob build",
     "typecheck": "tsc",
-    "lint": "eslint \"**/*.{js,ts,tsx}\""
+    "lint": "eslint \"**/*.{js,ts,tsx}\"",
+    "test": "jest"
   },
   "keywords": [
     "react-native",
@@ -77,15 +79,20 @@
     "@eslint/js": "^9.35.0",
     "@react-native/babel-preset": "0.84.0",
     "@react-native/eslint-config": "0.83.0",
+    "@testing-library/react-native": "^13.3.3",
+    "@types/jest": "^29.5.14",
     "@types/react": "^19.2.0",
+    "@types/react-test-renderer": "^19",
     "del-cli": "^6.0.0",
     "eslint": "^9.35.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
+    "jest": "^29.7.0",
     "prettier": "^2.8.8",
     "react": "19.2.3",
     "react-native": "0.84.0",
     "react-native-builder-bob": "^0.40.18",
+    "react-test-renderer": "19.2.3",
     "turbo": "^2.5.6",
     "typescript": "^5.9.2"
   },
@@ -140,5 +147,34 @@
       "eslint"
     ],
     "version": "0.57.2"
+  },
+  "jest": {
+    "projects": [
+      {
+        "displayName": "ios",
+        "preset": "react-native",
+        "testMatch": [
+          "<rootDir>/src/**/*.test.ts?(x)"
+        ],
+        "modulePathIgnorePatterns": [
+          "<rootDir>/example/node_modules",
+          "<rootDir>/lib/"
+        ]
+      },
+      {
+        "displayName": "web",
+        "testEnvironment": "node",
+        "testMatch": [
+          "<rootDir>/src/**/*.web-test.ts"
+        ],
+        "moduleNameMapper": {
+          "^react-native$": "<rootDir>/src/__tests__/react-native-unavailable.ts"
+        },
+        "modulePathIgnorePatterns": [
+          "<rootDir>/example/node_modules",
+          "<rootDir>/lib/"
+        ]
+      }
+    ]
   }
 }

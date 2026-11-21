@@ -3,6 +3,7 @@
 #import "FileTransferEvent.h"
 #import "util.h"
 
+#import <WatchConnectivity/WCError.h>
 #import <WatchConnectivity/WCSession.h>
 #import <WatchConnectivity/WCSessionFile.h>
 #import <WatchConnectivity/WCSessionUserInfoTransfer.h>
@@ -21,7 +22,6 @@ static NSString *EVENT_ACTIVATION_ERROR = @"WatchActivationError";
 static NSString *EVENT_WATCH_REACHABILITY_CHANGED = @"WatchReachabilityChanged";
 static NSString *EVENT_WATCH_USER_INFO_RECEIVED = @"WatchUserInfoReceived";
 static NSString *EVENT_APPLICATION_CONTEXT_RECEIVED = @"WatchApplicationContextReceived";
-static NSString *EVENT_APPLICATION_CONTEXT_RECEIVED_ERROR = @"WatchApplicationContextReceivedError";
 static NSString *EVENT_SESSION_DID_DEACTIVATE = @"WatchSessionDidDeactivate";
 static NSString *EVENT_SESSION_BECAME_INACTIVE = @"WatchSessionBecameInactive";
 static NSString *EVENT_PAIR_STATUS_CHANGED = @"WatchPairStatusChanged";
@@ -31,8 +31,20 @@ static NSString *EVENT_WATCH_APPLICATION_CONTEXT_ERROR = @"WatchApplicationConte
 
 static WatchConnectivity *sharedInstance;
 
+// JS maps the NSError code and domain to a stable WatchErrorCode.
+static void rejectWithError(RCTPromiseRejectBlock reject, NSError *error) {
+  reject([@(error.code) stringValue], error.localizedDescription, error);
+}
+
+// Events for a name JS is not listening to yet wait here. The cap stops events that the app never listens to
+// (file progress, for example) from growing without limit.
+static const NSUInteger MAX_PENDING_EVENTS = 1000;
+
 @implementation WatchConnectivity {
-  BOOL hasObservers;
+  // WCSession calls its delegate on a background queue while JS calls the module on its method queue, so the event
+  // buffer, the received queues and the reply handlers are only touched while holding this lock.
+  NSObject *stateLock;
+  NSMutableSet<NSString *> *observedEventNames;
   NSMutableArray<NSDictionary *> *pendingEvents;
 }
 
@@ -51,12 +63,13 @@ static WatchConnectivity *sharedInstance;
 
 - (instancetype)init {
   sharedInstance = [super init];
-  self.replyHandlers = [NSCache new];
+  self.replyHandlers = [NSMutableDictionary new];
   self.fileTransfers = [NSMutableDictionary new];
   self.queuedFiles = [NSMutableDictionary new];
   self.queuedUserInfo = [NSMutableDictionary new];
 
-  hasObservers = NO;
+  stateLock = [NSObject new];
+  observedEventNames = [NSMutableSet set];
   pendingEvents = [NSMutableArray array];
 
   if ([WCSession isSupported]) {
@@ -82,7 +95,6 @@ static WatchConnectivity *sharedInstance;
     EVENT_WATCH_REACHABILITY_CHANGED,
     EVENT_WATCH_USER_INFO_RECEIVED,
     EVENT_APPLICATION_CONTEXT_RECEIVED,
-    EVENT_APPLICATION_CONTEXT_RECEIVED_ERROR,
     EVENT_PAIR_STATUS_CHANGED,
     EVENT_INSTALL_STATUS_CHANGED,
     EVENT_SESSION_BECAME_INACTIVE,
@@ -92,17 +104,31 @@ static WatchConnectivity *sharedInstance;
   ];
 }
 
-- (void)startObserving {
-  hasObservers = YES;
+// Hand JS only the buffered events of the name it now listens to. The rest keep waiting for their own listener,
+// so a message received at launch is not lost to a reachability listener that subscribed first.
+- (void)addListener:(NSString *)eventName {
+  [super addListener:eventName];
 
-  for (NSDictionary *event in pendingEvents) {
-    [self sendEventWithName:[event objectForKey:@"name"] body:[event objectForKey:@"body"]];
+  NSArray<NSDictionary *> *ready;
+  @synchronized(stateLock) {
+    [observedEventNames addObject:eventName];
+    NSIndexSet *indexes = [pendingEvents indexesOfObjectsPassingTest:^BOOL(NSDictionary *event, NSUInteger idx, BOOL *stop) {
+      return [event[@"name"] isEqualToString:eventName];
+    }];
+    ready = [pendingEvents objectsAtIndexes:indexes];
+    [pendingEvents removeObjectsAtIndexes:indexes];
   }
-  [pendingEvents removeAllObjects];
+
+  for (NSDictionary *event in ready) {
+    [self sendEventWithName:event[@"name"] body:event[@"body"]];
+  }
 }
 
+// JS only says how many listeners it removed, not for which events, so buffer everything again once none are left.
 - (void)stopObserving {
-  hasObservers = NO;
+  @synchronized(stateLock) {
+    [observedEventNames removeAllObjects];
+  }
 }
 
 - (void)dealloc {
@@ -127,21 +153,56 @@ activationDidCompleteWithState:(WCSessionActivationState)activationState
                          error:(NSError *)error {
   if (error) {
     [self dispatchEventWithName:EVENT_ACTIVATION_ERROR body:@{@"error": dictionaryFromError(error)}];
+    return;
   }
+
+  // After a watch switch the session describes a different watch, so report its state afresh.
+  [self dispatchEventWithName:EVENT_PAIR_STATUS_CHANGED body:@{@"paired": @(session.isPaired)}];
+  [self dispatchEventWithName:EVENT_INSTALL_STATUS_CHANGED body:@{@"installed": @(session.isWatchAppInstalled)}];
+  [self dispatchEventWithName:EVENT_WATCH_REACHABILITY_CHANGED body:@{@"reachability": @(session.reachable)}];
 }
 
+// Apple requires the iOS app to reactivate the session once the previous watch's callbacks have finished, so that
+// the session serves the newly selected watch.
 - (void)sessionDidDeactivate:(WCSession *)session {
   [self dispatchEventWithName:EVENT_SESSION_DID_DEACTIVATE body:@{}];
+  [session activateSession];
 }
 
 - (void)sessionDidBecomeInactive:(WCSession *)session {
   [self dispatchEventWithName:EVENT_SESSION_BECAME_INACTIVE body:@{}];
 }
 
-#pragma mark - Complication User Info
+#pragma mark - Support
+
+- (NSNumber *)isSupported {
+  return @([WCSession isSupported]);
+}
+
+// WCSession is nil where WatchConnectivity is unsupported (iPads). Messaging nil never calls back, so a send would
+// leave its promise pending for ever.
+- (BOOL)rejectIfUnsupported:(RCTPromiseRejectBlock)reject {
+  if (self.session != nil) {
+    return NO;
+  }
+  rejectWithError(reject, sessionNotSupportedError());
+  return YES;
+}
+
+#pragma mark - Complications
 
 - (void)transferCurrentComplicationUserInfo:(NSDictionary *)userInfo {
   [self.session transferCurrentComplicationUserInfo:userInfo];
+}
+
+- (void)getIsComplicationEnabled:(RCTPromiseResolveBlock)resolve
+                          reject:(RCTPromiseRejectBlock)reject {
+  resolve(@(self.session.isComplicationEnabled));
+}
+
+- (void)getRemainingComplicationUserInfoTransfers:(RCTPromiseResolveBlock)resolve
+                                           reject:(RCTPromiseRejectBlock)reject {
+  resolve(@(self.session.remainingComplicationUserInfoTransfers));
 }
 
 #pragma mark - Reachability
@@ -175,21 +236,27 @@ activationDidCompleteWithState:(WCSessionActivationState)activationState
 - (void)sendMessage:(NSDictionary *)message
             resolve:(RCTPromiseResolveBlock)resolve
              reject:(RCTPromiseRejectBlock)reject {
+  if ([self rejectIfUnsupported:reject]) {
+    return;
+  }
   [self.session
       sendMessage:message
      replyHandler:^(NSDictionary<NSString *, id> *_Nonnull replyMessage) {
        resolve(replyMessage);
      }
      errorHandler:^(NSError *_Nonnull error) {
-       reject([@(error.code) stringValue], error.localizedDescription, error);
+       rejectWithError(reject, error);
      }
   ];
 }
 
 - (void)replyToMessageWithId:(NSString *)messageId
                      message:(NSDictionary *)message {
-  void (^replyHandler)(NSDictionary<NSString *, id> *_Nonnull)
-      = [self.replyHandlers objectForKey:messageId];
+  void (^replyHandler)(NSDictionary<NSString *, id> *_Nonnull);
+  @synchronized(stateLock) {
+    replyHandler = self.replyHandlers[messageId];
+    [self.replyHandlers removeObjectForKey:messageId];
+  }
   if (replyHandler != nil) {
     replyHandler(message);
   }
@@ -206,7 +273,9 @@ didReceiveMessage:(NSDictionary<NSString *, id> *)message
   NSString *messageId = uuid();
   NSMutableDictionary *mutableMessage = [message mutableCopy];
   mutableMessage[@"id"] = messageId;
-  [self.replyHandlers setObject:replyHandler forKey:messageId];
+  @synchronized(stateLock) {
+    self.replyHandlers[messageId] = replyHandler;
+  }
 
   [self dispatchEventWithName:EVENT_RECEIVE_MESSAGE body:mutableMessage];
 }
@@ -217,6 +286,9 @@ didReceiveMessage:(NSDictionary<NSString *, id> *)message
                encoding:(double)encoding
                 resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject {
+  if ([self rejectIfUnsupported:reject]) {
+    return;
+  }
   NSData *data = [str dataUsingEncoding:(NSStringEncoding)[@(encoding) integerValue]];
   [self.session sendMessageData:data
                    replyHandler:^(NSData *_Nonnull replyMessageData) {
@@ -224,7 +296,7 @@ didReceiveMessage:(NSDictionary<NSString *, id> *)message
                      resolve(responseData);
                    }
                    errorHandler:^(NSError *_Nonnull error) {
-                     reject([@(error.code) stringValue], error.localizedDescription, error);
+                     rejectWithError(reject, error);
                    }];
 }
 
@@ -240,6 +312,9 @@ didReceiveMessageData:(NSData *)messageData
             metaData:(NSDictionary *)metaData
              resolve:(RCTPromiseResolveBlock)resolve
               reject:(RCTPromiseRejectBlock)reject {
+  if ([self rejectIfUnsupported:reject]) {
+    return;
+  }
   double startTime = jsTimestamp();
 
   NSMutableDictionary *mutableMetaData;
@@ -299,23 +374,31 @@ didReceiveMessageData:(NSData *)messageData
 
 - (void)getQueuedFiles:(RCTPromiseResolveBlock)resolve
                 reject:(RCTPromiseRejectBlock)reject {
-  resolve(self.queuedFiles);
-  [self.queuedFiles removeAllObjects];
+  NSDictionary *queued;
+  @synchronized(stateLock) {
+    queued = [self.queuedFiles copy];
+    [self.queuedFiles removeAllObjects];
+  }
+  resolve(queued);
 }
 
 - (void)clearFilesQueue:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject {
-  self.queuedFiles = [NSMutableDictionary new];
+  @synchronized(stateLock) {
+    [self.queuedFiles removeAllObjects];
+  }
   resolve([NSNull null]);
 }
 
 - (void)dequeueFile:(NSArray<NSString *> *)ids {
-  for (NSString *fileId in ids) {
-    [self.queuedFiles removeObjectForKey:fileId];
+  NSDictionary *remaining;
+  @synchronized(stateLock) {
+    [self.queuedFiles removeObjectsForKeys:ids ?: @[]];
+    remaining = [self.queuedFiles copy];
   }
 
   if (!ids || !ids.count) {
-    [self dispatchEventWithName:EVENT_WATCH_FILE_RECEIVED body:self.queuedFiles];
+    [self dispatchEventWithName:EVENT_WATCH_FILE_RECEIVED body:remaining];
   }
 }
 
@@ -380,11 +463,13 @@ didReceiveMessageData:(NSData *)messageData
 
   if (error) {
     NSLog(@"Copying received file error: %@ %@", error, error.userInfo);
-    [self dispatchEventWithName:EVENT_WATCH_FILE_ERROR body:@{@"fileInfo": fileInfo, @"error": error, @"errorUserInfo": error.userInfo}];
+    [self dispatchEventWithName:EVENT_WATCH_FILE_ERROR body:@{@"fileInfo": fileInfo, @"error": dictionaryFromError(error)}];
     return;
   }
 
-  [self.queuedFiles setValue:fileInfo forKey:fileId];
+  @synchronized(stateLock) {
+    self.queuedFiles[fileId] = fileInfo;
+  }
   [self dispatchEventWithName:EVENT_WATCH_FILE_RECEIVED body:fileInfo];
 }
 
@@ -423,44 +508,53 @@ didFinishFileTransfer:(WCSessionFileTransfer *)fileTransfer
 
 #pragma mark - Context
 
-- (void)updateApplicationContext:(NSDictionary *)context {
-  NSError *error = nil;
-  [self.session updateApplicationContext:context error:&error];
-  if (error) {
-    NSLog(@"Application context update error: %@ %@", error, [error userInfo]);
-    [self dispatchEventWithName:EVENT_WATCH_APPLICATION_CONTEXT_ERROR body:@{@"context": context, @"error": dictionaryFromError(error)}];
+- (void)updateApplicationContext:(NSDictionary *)context
+                         resolve:(RCTPromiseResolveBlock)resolve
+                          reject:(RCTPromiseRejectBlock)reject {
+  if ([self rejectIfUnsupported:reject]) {
+    return;
   }
+  NSError *error = nil;
+  BOOL isUpdated = [self.session updateApplicationContext:context error:&error];
+  if (!isUpdated || error) {
+    NSError *failure = error ?: [NSError errorWithDomain:WCErrorDomain code:WCErrorCodeGenericError userInfo:nil];
+    NSLog(@"Application context update error: %@ %@", failure, [failure userInfo]);
+    [self dispatchEventWithName:EVENT_WATCH_APPLICATION_CONTEXT_ERROR body:@{@"context": context, @"error": dictionaryFromError(failure)}];
+    rejectWithError(reject, failure);
+    return;
+  }
+  resolve(nil);
 }
 
 - (void)getApplicationContext:(RCTPromiseResolveBlock)resolve
                        reject:(RCTPromiseRejectBlock)reject {
   NSDictionary<NSString *, id> *applicationContext = self.session.applicationContext;
-  if (applicationContext == nil) {
-    resolve([NSNull null]);
-  } else {
-    resolve(applicationContext);
-  }
+  resolve(applicationContext.count ? applicationContext : [NSNull null]);
 }
 
+- (void)getReceivedApplicationContext:(RCTPromiseResolveBlock)resolve
+                               reject:(RCTPromiseRejectBlock)reject {
+  NSDictionary<NSString *, id> *receivedApplicationContext = self.session.receivedApplicationContext;
+  resolve(receivedApplicationContext.count ? receivedApplicationContext : [NSNull null]);
+}
+
+// Only report the context. Writing it back with updateApplicationContext would send the watch's own context back
+// to it and overwrite the context this phone sends.
 - (void)             session:(WCSession *)session
 didReceiveApplicationContext:(NSDictionary<NSString *, id> *)applicationContext {
-  NSError *error = nil;
-  [self.session updateApplicationContext:applicationContext error:&error];
-
-  if (error) {
-    NSLog(@"Application context receive error: %@", error);
-    [self dispatchEventWithName:EVENT_APPLICATION_CONTEXT_RECEIVED_ERROR body:@{@"error": dictionaryFromError(error)}];
-  } else {
-    [self dispatchEventWithName:EVENT_APPLICATION_CONTEXT_RECEIVED body:applicationContext];
-  }
+  [self dispatchEventWithName:EVENT_APPLICATION_CONTEXT_RECEIVED body:applicationContext];
 }
 
 #pragma mark - User Info
 
 - (void)getQueuedUserInfo:(RCTPromiseResolveBlock)resolve
                    reject:(RCTPromiseRejectBlock)reject {
-  resolve(self.queuedUserInfo);
-  [self.queuedUserInfo removeAllObjects];
+  NSDictionary *queued;
+  @synchronized(stateLock) {
+    queued = [self.queuedUserInfo copy];
+    [self.queuedUserInfo removeAllObjects];
+  }
+  resolve(queued);
 }
 
 - (void)transferUserInfo:(NSDictionary *)userInfo {
@@ -469,17 +563,21 @@ didReceiveApplicationContext:(NSDictionary<NSString *, id> *)applicationContext 
 
 - (void)clearUserInfoQueue:(RCTPromiseResolveBlock)resolve
                     reject:(RCTPromiseRejectBlock)reject {
-  self.queuedUserInfo = [NSMutableDictionary new];
+  @synchronized(stateLock) {
+    [self.queuedUserInfo removeAllObjects];
+  }
   resolve([NSNull null]);
 }
 
 - (void)dequeueUserInfo:(NSArray<NSString *> *)ids {
-  for (NSString *ident in ids) {
-    [self.queuedUserInfo removeObjectForKey:ident];
+  NSDictionary *remaining;
+  @synchronized(stateLock) {
+    [self.queuedUserInfo removeObjectsForKeys:ids ?: @[]];
+    remaining = [self.queuedUserInfo copy];
   }
 
   if (!ids || !ids.count) {
-    [self dispatchEventWithName:EVENT_WATCH_USER_INFO_RECEIVED body:self.queuedUserInfo];
+    [self dispatchEventWithName:EVENT_WATCH_USER_INFO_RECEIVED body:remaining];
   }
 }
 
@@ -494,7 +592,9 @@ didReceiveApplicationContext:(NSDictionary<NSString *, id> *)applicationContext 
 didReceiveUserInfo:(NSDictionary<NSString *, id> *)userInfo {
   double ts = jsTimestamp();
   NSString *timestamp = [@(ts) stringValue];
-  [self.queuedUserInfo setValue:userInfo forKey:timestamp];
+  @synchronized(stateLock) {
+    self.queuedUserInfo[timestamp] = userInfo;
+  }
   [self dispatchEventWithName:EVENT_WATCH_USER_INFO_RECEIVED body:@{@"userInfo": userInfo, @"timestamp": @(ts), @"id": timestamp}];
 }
 
@@ -502,11 +602,16 @@ didReceiveUserInfo:(NSDictionary<NSString *, id> *)userInfo {
 
 - (void)dispatchEventWithName:(NSString *)name
                          body:(NSDictionary<NSString *, id> *)body {
-  if (!hasObservers) {
-    [pendingEvents addObject:@{@"name": name, @"body": body}];
-  } else {
-    [self sendEventWithName:name body:body];
+  @synchronized(stateLock) {
+    if (![observedEventNames containsObject:name]) {
+      [pendingEvents addObject:@{@"name": name, @"body": body}];
+      if (pendingEvents.count > MAX_PENDING_EVENTS) {
+        [pendingEvents removeObjectAtIndex:0];
+      }
+      return;
+    }
   }
+  [self sendEventWithName:name body:body];
 }
 
 @end

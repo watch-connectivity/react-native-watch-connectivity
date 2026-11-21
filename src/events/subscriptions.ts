@@ -7,6 +7,7 @@ import type {
 } from '../native-module';
 import { _getMissedFile, _transformFilePayload } from '../files';
 import { _getMissedUserInfo } from '../user-info';
+import { toWatchError } from '../errors';
 
 export type AddListenerFn = typeof _addListener;
 
@@ -182,47 +183,50 @@ export function _subscribeNativeApplicationContextErrorEvent(
   cb: WatchEventCallbacks['application-context-error'],
   addListener: AddListenerFn = _addListener
 ) {
-  return addListener(WatchEvent.EVENT_WATCH_APPLICATION_CONTEXT_ERROR, cb);
-}
-
-export function _subscribeNativeApplicationContextReceivedErrorEvent(
-  cb: WatchEventCallbacks['application-context-received-error'],
-  addListener: AddListenerFn = _addListener
-) {
-  return addListener(WatchEvent.EVENT_APPLICATION_CONTEXT_RECEIVED_ERROR, cb);
+  return addListener(
+    WatchEvent.EVENT_WATCH_APPLICATION_CONTEXT_ERROR,
+    ({ context, error }) => cb({ context, error: toWatchError(error) })
+  );
 }
 
 export function _subscribeNativeUserInfoErrorEvent(
   cb: WatchEventCallbacks['user-info-error'],
   addListener: AddListenerFn = _addListener
 ) {
-  return addListener(WatchEvent.EVENT_WATCH_USER_INFO_ERROR, cb);
+  return addListener(
+    WatchEvent.EVENT_WATCH_USER_INFO_ERROR,
+    ({ userInfo, error }) => cb({ userInfo, error: toWatchError(error) })
+  );
 }
 
 export function _subscribeNativeFileReceivedErrorEvent(
   cb: WatchEventCallbacks['file-received-error'],
   addListener: AddListenerFn = _addListener
 ) {
-  return addListener(WatchEvent.EVENT_WATCH_FILE_ERROR, cb);
+  return addListener(WatchEvent.EVENT_WATCH_FILE_ERROR, ({ fileInfo, error }) =>
+    cb({ fileInfo, error: toWatchError(error) })
+  );
 }
 
 export function _subscribeNativeActivationErrorEvent(
   cb: WatchEventCallbacks['activation-error'],
   addListener: AddListenerFn = _addListener
 ) {
-  return addListener(WatchEvent.EVENT_ACTIVATION_ERROR, cb);
+  return addListener(WatchEvent.EVENT_ACTIVATION_ERROR, ({ error }) =>
+    cb({ error: toWatchError(error) })
+  );
 }
 
-export function _subscribeNativeSesssionBecameInactiveErrorEvent(
+export function _subscribeNativeSessionBecameInactiveEvent(
   cb: WatchEventCallbacks['session-became-inactive'],
   addListener: AddListenerFn = _addListener
 ) {
-  return addListener(WatchEvent.EVENT_SESSION_BECAME_INACTIVE, cb);
+  return addListener(WatchEvent.EVENT_SESSION_BECAME_INACTIVE, () => cb());
 }
 
-export function _subscribeNativeSessionDidDeactivateErrorEvent(
+export function _subscribeNativeSessionDidDeactivateEvent(
   cb: WatchEventCallbacks['session-did-deactivate'],
   addListener: AddListenerFn = _addListener
 ) {
-  return addListener(WatchEvent.EVENT_SESSION_DID_DEACTIVATE, cb);
+  return addListener(WatchEvent.EVENT_SESSION_DID_DEACTIVATE, () => cb());
 }

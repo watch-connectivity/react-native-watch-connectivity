@@ -57,6 +57,19 @@ Running "WatchConnectivityExample" with {"fabric":true,"initialProps":{"concurre
 
 Note the `"fabric":true` and `"concurrentRoot":true` properties.
 
+Run the unit tests:
+
+```sh
+yarn test
+```
+
+Run the native iOS tests (they build the example app and run on a simulator):
+
+```sh
+cd example/ios
+xcodebuild test -workspace WatchConnectivityExample.xcworkspace -scheme WatchConnectivityExample -destination 'platform=iOS Simulator,name=iPhone 17'
+```
+
 Make sure your code passes TypeScript:
 
 ```sh
@@ -82,6 +95,7 @@ yarn lint --fix
 The `package.json` file contains various scripts for common tasks:
 
 - `yarn`: setup project by installing dependencies.
+- `yarn test`: run the Jest tests.
 - `yarn typecheck`: type-check files with TypeScript.
 - `yarn lint`: lint files with [ESLint](https://eslint.org/).
 - `yarn example start`: start the Metro server for the example app.

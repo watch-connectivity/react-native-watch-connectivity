@@ -7,6 +7,7 @@ extern "C" {
 double jsTimestamp(void);
 NSString *uuid(void);
 NSDictionary *dictionaryFromError(NSError *error);
+NSError *sessionNotSupportedError(void);
 
 #ifdef __cplusplus
 }

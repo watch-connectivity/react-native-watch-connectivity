@@ -1,4 +1,5 @@
 #import <Foundation/Foundation.h>
+#import <WatchConnectivity/WCError.h>
 #import "util.h"
 
 double jsTimestamp(void) {
@@ -12,12 +13,18 @@ NSString *uuid(void) {
   return uuidString;
 }
 
+// The full userInfo can hold values the bridge cannot serialise (URLs, nested
+// errors), so events carry only what JS needs to build a WatchError.
 NSDictionary *dictionaryFromError(NSError *error) {
-  NSMutableDictionary *result = NSMutableDictionary.new;
-  result[@"code"] = @(error.code);
-  result[@"domain"] = error.domain;
-  if (error.userInfo) {
-    result[@"userInfo"] = error.userInfo;
-  }
-  return (NSDictionary *)result;
+  return @{
+    @"code": @(error.code),
+    @"domain": error.domain,
+    @"message": error.localizedDescription ?: @""
+  };
+}
+
+NSError *sessionNotSupportedError(void) {
+  return [NSError errorWithDomain:WCErrorDomain
+                             code:WCErrorCodeSessionNotSupported
+                         userInfo:@{NSLocalizedDescriptionKey: @"WatchConnectivity is not supported on this device"}];
 }

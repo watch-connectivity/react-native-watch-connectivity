@@ -36,8 +36,8 @@
 - [x] **Add GitHub Actions CI**
   Full CI workflow: lint, typecheck, build library, build iOS example, build Android example.
 
-- [ ] **Add tests**
-  Zero test coverage. Jest configured but unused. At minimum: unit tests for the TS layer (message encoding, event system, hooks). Native module testing is harder but the TS surface is very testable.
+- [x] **Add tests**
+  Jest covers the JS API, error mapping, hooks, the unsupported implementation and the web import (`yarn test`). XCTest covers the iOS module in the example app's `WatchConnectivityExampleTests` target. A real paired watch is still needed for end-to-end checks.
 
 - [x] **Fix dead homepage link**
   Homepage now points to GitHub repo.

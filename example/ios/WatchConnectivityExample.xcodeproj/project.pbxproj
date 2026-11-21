@@ -8,22 +8,35 @@
 
 /* Begin PBXBuildFile section */
 		0C80B921A6F3F58F76C31292 /* libPods-WatchConnectivityExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-WatchConnectivityExample.a */; };
+		1295E4109C672745EEC32019 /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B80798F40111CFAB53FBA440 /* WatchConnectivity.framework */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		283BCDA9CB3C6FCA5B5EC5E8 /* libPods-WatchConnectivityExample-WatchConnectivityExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B62308D2725BCDF32D19DE2 /* libPods-WatchConnectivityExample-WatchConnectivityExampleTests.a */; };
+		38E2874514DAD9553E64DBB8 /* WatchConnectivityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 004441CD7645540909E1B107 /* WatchConnectivityTests.m */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		79F7370DD39E19B64E6C3977 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		C27466BDCC3A7E1F616154B6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB8561B24022546F30B88CC3 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		004441CD7645540909E1B107 /* WatchConnectivityTests.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = WatchConnectivityTests.m; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* WatchConnectivityExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WatchConnectivityExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = WatchConnectivityExample/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = WatchConnectivityExample/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = WatchConnectivityExample/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		281294D10C9D3A97B65FC2CC /* Pods-WatchConnectivityExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchConnectivityExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-WatchConnectivityExampleTests/Pods-WatchConnectivityExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-WatchConnectivityExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchConnectivityExample.debug.xcconfig"; path = "Target Support Files/Pods-WatchConnectivityExample/Pods-WatchConnectivityExample.debug.xcconfig"; sourceTree = "<group>"; };
+		40B5E897A9285FC2A7BEDB7A /* Pods-WatchConnectivityExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchConnectivityExampleTests.release.xcconfig"; path = "Target Support Files/Pods-WatchConnectivityExampleTests/Pods-WatchConnectivityExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-WatchConnectivityExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchConnectivityExample.release.xcconfig"; path = "Target Support Files/Pods-WatchConnectivityExample/Pods-WatchConnectivityExample.release.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-WatchConnectivityExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-WatchConnectivityExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		67C1287388831DCE986DA62C /* Pods-WatchConnectivityExample-WatchConnectivityExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchConnectivityExample-WatchConnectivityExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-WatchConnectivityExample-WatchConnectivityExampleTests/Pods-WatchConnectivityExample-WatchConnectivityExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
+		6B62308D2725BCDF32D19DE2 /* libPods-WatchConnectivityExample-WatchConnectivityExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-WatchConnectivityExample-WatchConnectivityExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = WatchConnectivityExample/AppDelegate.swift; sourceTree = "<group>"; };
+		79D3EA499A24DB03BE731AB9 /* Pods-WatchConnectivityExample-WatchConnectivityExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchConnectivityExample-WatchConnectivityExampleTests.release.xcconfig"; path = "Target Support Files/Pods-WatchConnectivityExample-WatchConnectivityExampleTests/Pods-WatchConnectivityExample-WatchConnectivityExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = WatchConnectivityExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		B80798F40111CFAB53FBA440 /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = System/Library/Frameworks/WatchConnectivity.framework; sourceTree = SDKROOT; };
+		CB8561B24022546F30B88CC3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		CBF07F4BC2C76BF2DC5BEE17 /* WatchConnectivityExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WatchConnectivityExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -33,6 +46,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C80B921A6F3F58F76C31292 /* libPods-WatchConnectivityExample.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		897DC85546BDF36D45AC853A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C27466BDCC3A7E1F616154B6 /* Foundation.framework in Frameworks */,
+				1295E4109C672745EEC32019 /* WatchConnectivity.framework in Frameworks */,
+				283BCDA9CB3C6FCA5B5EC5E8 /* libPods-WatchConnectivityExample-WatchConnectivityExampleTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,8 +79,19 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				5DCACB8F33CDC322A6C60F78 /* libPods-WatchConnectivityExample.a */,
+				3CA6CFAFAAD1FF603AD497E3 /* iOS */,
+				B80798F40111CFAB53FBA440 /* WatchConnectivity.framework */,
+				6B62308D2725BCDF32D19DE2 /* libPods-WatchConnectivityExample-WatchConnectivityExampleTests.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3CA6CFAFAAD1FF603AD497E3 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				CB8561B24022546F30B88CC3 /* Foundation.framework */,
+			);
+			name = iOS;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -75,6 +109,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				F7AECC50C0E77985AB6815A7 /* WatchConnectivityExampleTests */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -85,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* WatchConnectivityExample.app */,
+				CBF07F4BC2C76BF2DC5BEE17 /* WatchConnectivityExampleTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -94,8 +130,21 @@
 			children = (
 				3B4392A12AC88292D35C810B /* Pods-WatchConnectivityExample.debug.xcconfig */,
 				5709B34CF0A7D63546082F79 /* Pods-WatchConnectivityExample.release.xcconfig */,
+				40B5E897A9285FC2A7BEDB7A /* Pods-WatchConnectivityExampleTests.release.xcconfig */,
+				281294D10C9D3A97B65FC2CC /* Pods-WatchConnectivityExampleTests.debug.xcconfig */,
+				79D3EA499A24DB03BE731AB9 /* Pods-WatchConnectivityExample-WatchConnectivityExampleTests.release.xcconfig */,
+				67C1287388831DCE986DA62C /* Pods-WatchConnectivityExample-WatchConnectivityExampleTests.debug.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		F7AECC50C0E77985AB6815A7 /* WatchConnectivityExampleTests */ = {
+			isa = PBXGroup;
+			children = (
+				004441CD7645540909E1B107 /* WatchConnectivityTests.m */,
+			);
+			name = WatchConnectivityExampleTests;
+			path = WatchConnectivityExampleTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -121,6 +170,26 @@
 			productName = WatchConnectivityExample;
 			productReference = 13B07F961A680F5B00A75B9A /* WatchConnectivityExample.app */;
 			productType = "com.apple.product-type.application";
+		};
+		9E7EC10AFD8F0C0B0D9B8AD0 /* WatchConnectivityExampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 71AE8B27E41A56639D2C0167 /* Build configuration list for PBXNativeTarget "WatchConnectivityExampleTests" */;
+			buildPhases = (
+				B8D853E54760200E3111B878 /* [CP] Check Pods Manifest.lock */,
+				55591A44E50CD1A1782E6277 /* Sources */,
+				897DC85546BDF36D45AC853A /* Frameworks */,
+				1747CA5893FBC15E8B6C42D5 /* Resources */,
+				85B745AC496742D034A8A6C0 /* [CP] Embed Pods Frameworks */,
+				B1546A74E0E600F8C084B191 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WatchConnectivityExampleTests;
+			productName = WatchConnectivityExampleTests;
+			productReference = CBF07F4BC2C76BF2DC5BEE17 /* WatchConnectivityExampleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -149,6 +218,7 @@
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* WatchConnectivityExample */,
+				9E7EC10AFD8F0C0B0D9B8AD0 /* WatchConnectivityExampleTests */,
 			);
 		};
 /* End PBXProject section */
@@ -161,6 +231,13 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				79F7370DD39E19B64E6C3977 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1747CA5893FBC15E8B6C42D5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,6 +275,62 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-WatchConnectivityExample/Pods-WatchConnectivityExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		85B745AC496742D034A8A6C0 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-WatchConnectivityExample-WatchConnectivityExampleTests/Pods-WatchConnectivityExample-WatchConnectivityExampleTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-WatchConnectivityExample-WatchConnectivityExampleTests/Pods-WatchConnectivityExample-WatchConnectivityExampleTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-WatchConnectivityExample-WatchConnectivityExampleTests/Pods-WatchConnectivityExample-WatchConnectivityExampleTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B1546A74E0E600F8C084B191 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-WatchConnectivityExample-WatchConnectivityExampleTests/Pods-WatchConnectivityExample-WatchConnectivityExampleTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-WatchConnectivityExample-WatchConnectivityExampleTests/Pods-WatchConnectivityExample-WatchConnectivityExampleTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-WatchConnectivityExample-WatchConnectivityExampleTests/Pods-WatchConnectivityExample-WatchConnectivityExampleTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B8D853E54760200E3111B878 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-WatchConnectivityExample-WatchConnectivityExampleTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */ = {
@@ -247,6 +380,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				761780ED2CA45674006654EE /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		55591A44E50CD1A1782E6277 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				38E2874514DAD9553E64DBB8 /* WatchConnectivityTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,6 +451,20 @@
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
+		};
+		43A01AEA12CC89C2011FB2AB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 67C1287388831DCE986DA62C /* Pods-WatchConnectivityExample-WatchConnectivityExampleTests.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.WatchConnectivityExampleTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
 		};
 		83CBBA201A601CBA00E9B192 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -467,6 +622,21 @@
 			};
 			name = Release;
 		};
+		ADC4D9A97D81344117E12627 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 79D3EA499A24DB03BE731AB9 /* Pods-WatchConnectivityExample-WatchConnectivityExampleTests.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.WatchConnectivityExampleTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -475,6 +645,15 @@
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
 				13B07F951A680F5B00A75B9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		71AE8B27E41A56639D2C0167 /* Build configuration list for PBXNativeTarget "WatchConnectivityExampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ADC4D9A97D81344117E12627 /* Release */,
+				43A01AEA12CC89C2011FB2AB /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
