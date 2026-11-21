@@ -206,6 +206,51 @@ describe('session lifecycle', () => {
   });
 });
 
+describe('user info', () => {
+  // The native side keeps a received user info in its queue and also buffers its event until JS listens, so a
+  // new listener reads the item from the queue and then gets the buffered event for it.
+  function queueUserInfoReceivedBeforeListening() {
+    fakeNativeModule.getQueuedUserInfo.mockResolvedValue({ '1000': { n: 1 } });
+    return { id: '1000', timestamp: 1000, userInfo: { n: 1 } };
+  }
+
+  it('delivers a queued user info once when its buffered event arrives first', async () => {
+    const event = queueUserInfoReceivedBeforeListening();
+    const received: unknown[] = [];
+
+    watchEvents.on('user-info', (infos) => received.push(...infos));
+    emitNativeEvent('WatchUserInfoReceived', event);
+    await flushPromises();
+
+    expect(received).toEqual([{ n: 1 }]);
+  });
+
+  it('delivers a queued user info once when its buffered event arrives last', async () => {
+    const event = queueUserInfoReceivedBeforeListening();
+    const received: unknown[] = [];
+
+    watchEvents.on('user-info', (infos) => received.push(...infos));
+    await flushPromises();
+    emitNativeEvent('WatchUserInfoReceived', event);
+
+    expect(received).toEqual([{ n: 1 }]);
+  });
+
+  it('delivers user info received after listening', async () => {
+    const received: unknown[] = [];
+
+    watchEvents.on('user-info', (infos) => received.push(...infos));
+    await flushPromises();
+    emitNativeEvent('WatchUserInfoReceived', {
+      id: '2000',
+      timestamp: 2000,
+      userInfo: { n: 2 },
+    });
+
+    expect(received).toEqual([{ n: 2 }]);
+  });
+});
+
 describe('complications', () => {
   it('reports whether the complication is enabled', async () => {
     fakeNativeModule.getIsComplicationEnabled.mockResolvedValue(false);

@@ -70,15 +70,17 @@ export function _subscribeNativeUserInfoEvent<
   cb: WatchEventCallbacks<UserInfo>['user-info'],
   addListener: AddListenerFn = _addListener
 ) {
-  let initialized = false;
-  const xtra: UserInfo[] = [];
+  let missedIds: Set<string> | null = null;
+  const early: QueuedUserInfo<UserInfo>[] = [];
 
-  _getMissedUserInfo<UserInfo>().then((info) => {
-    const combined = [...xtra, ...info];
+  // Native buffers the event for an item it also keeps in its queue, so an item can arrive both ways.
+  _getMissedUserInfo<UserInfo>().then((missed) => {
+    const ids = new Set(missed.map((item) => item.id));
+    const combined = [...early.filter((item) => !ids.has(item.id)), ...missed];
     if (combined.length) {
-      cb(combined);
+      cb(combined.map((item) => item.userInfo));
     }
-    initialized = true;
+    missedIds = ids;
   });
 
   return addListener<
@@ -86,10 +88,10 @@ export function _subscribeNativeUserInfoEvent<
     QueuedUserInfo<UserInfo>
   >(WatchEvent.EVENT_WATCH_USER_INFO_RECEIVED, (item) => {
     _dequeueUserInfo(item);
-    if (initialized) {
+    if (!missedIds) {
+      early.push(item);
+    } else if (!missedIds.has(item.id)) {
       cb([item.userInfo]);
-    } else {
-      xtra.push(item.userInfo);
     }
   });
 }
