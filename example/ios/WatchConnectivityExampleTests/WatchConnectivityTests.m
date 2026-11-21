@@ -356,6 +356,17 @@ static Class RecordingModuleClass(void) {
   XCTAssertEqualObjects(queued.allValues.firstObject, (@{@"n": @1}));
 }
 
+- (void)testUserInfoReceivedInTheSameMillisecondIsAllQueued {
+  for (NSInteger n = 0; n < 100; n++) {
+    [self.module session:self.fakeSession didReceiveUserInfo:@{@"n": @(n)}];
+  }
+  __block NSDictionary *queued;
+
+  [self.module getQueuedUserInfo:^(id result) { queued = result; } reject:nil];
+
+  XCTAssertEqual(queued.count, 100u);
+}
+
 - (void)testQueuedFilesResolveTheItemsBeforeClearingThem {
   NSURL *url = [[NSURL fileURLWithPath:NSTemporaryDirectory()] URLByAppendingPathComponent:[NSUUID UUID].UUIDString];
   [@"hello" writeToURL:url atomically:YES encoding:NSUTF8StringEncoding error:nil];
